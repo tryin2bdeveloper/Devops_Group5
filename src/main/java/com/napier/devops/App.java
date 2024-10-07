@@ -34,7 +34,7 @@ public class App
                 // Wait a bit for db to start
                 Thread.sleep(30000);
                 // Connect to database
-                con = DriverManager.getConnection("jdbc:mysql://db:3306/employees?useSSL=false&allowPublicKeyRetrieval=true", "root", "example");
+                con = DriverManager.getConnection("jdbc:mysql://db:3306/world?useSSL=false&allowPublicKeyRetrieval=true", "root", "group-5");
                 System.out.println("Successfully connected");
                 break;
             }
@@ -124,11 +124,11 @@ public class App
         App a = new App();
         // Connect to database
         a.connect();
-        // Get Employee
-        Employee emp = a.getEmployee(255530);
-        // Display results
-        a.displayEmployee(emp);
-        // Disconnect from database
+//        // Get Employee
+//        Employee emp = a.getEmployee(255530);
+//        // Display results
+//        a.displayEmployee(emp);
+//        // Disconnect from database
         a.disconnect();
     }
 }
