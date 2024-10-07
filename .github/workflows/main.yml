@@ -1,9 +1,9 @@
-name: A workflow for my Hello World App
+name: Workflow for Devops coursework java application.
 on: push
 
 jobs:
   build:
-    name: Hello world action
+    name: Coursework
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
