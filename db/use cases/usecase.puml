@@ -1,0 +1,70 @@
+@startuml
+
+left to right direction
+
+actor User as "Actor"
+
+rectangle "Population Report System" {
+
+    usecase "Generate World Population Report by City and Non-City Distribution" as UC1
+    usecase "Generate Continent-Specific Population Report by City and Non-City Distribution" as UC2
+    usecase "Generate World Population Report by Country with City and Non-City Breakdown" as UC3
+    usecase "Generate Population Report for the Top Populated Country" as UC4
+    usecase "Generate Report on Most Populated Countries by Continent with Focus on Asia" as UC5
+    usecase "Modify Command to Retrieve Population Data for the Most Populous Country in a Specific Region of Eastern Asia" as UC6
+    usecase "Generate World Population Report Ordered from Largest to Smallest by Country" as UC7
+    usecase "Generate Report of Cities in a Continent Organized by Population Size" as UC8
+    usecase "Generate Report of Cities in a Country Sorted by Population" as UC10
+    usecase "Generate the World Population Ranking Report by Country" as UC11
+    usecase "Generate the World Population Report Ranked by Cities" as UC12
+    usecase "Generate Ranked Population Continent by Cities" as UC13
+    usecase "Generate Ranked Population Region by Cities" as UC14
+    usecase "Generate Detailed Population Ranking Report for Countries" as UC15
+    usecase "Compile the World Population Statistics Report by Country" as UC16
+    usecase "Generate Capital Cities Population Report Ranked by Population" as UC17
+    usecase "Generate Capital Cities Population Report for Continent Ranked by Population" as UC18
+    usecase "Generate Capital Cities Population Report for Region Ranked by Population" as UC19
+    usecase "Produce Comprehensive Population Report for Countries" as UC20
+    usecase "Create the World Population Ranking Report for Countries" as UC21
+    usecase "Generate Report of Most Populated Capital Cities by Region" as UC22
+    usecase "Generate Population Report by Continent Detailing City and Non-City Populations" as UC23
+    usecase "Generate Population Report by Region Detailing City and Non-City Populations" as UC24
+    usecase "Population Report Generation for All Countries" as UC25
+    usecase "Continent Population Report Generation" as UC27
+    usecase "Regional Population Report Generation" as UC29
+    usecase "Country Population Report for Specific Region" as UC30
+    usecase "District Population Report" as UC31
+    usecase "World Language Distribution Report" as UC32
+}
+
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+User --> UC6
+User --> UC7
+User --> UC8
+User --> UC10
+User --> UC11
+User --> UC12
+User --> UC13
+User --> UC14
+User --> UC15
+User --> UC16
+User --> UC17
+User --> UC18
+User --> UC19
+User --> UC20
+User --> UC21
+User --> UC22
+User --> UC23
+User --> UC24
+User --> UC25
+User --> UC27
+User --> UC29
+User --> UC30
+User --> UC31
+User --> UC32
+
+@enduml
