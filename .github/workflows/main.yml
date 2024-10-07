@@ -1,5 +1,8 @@
-name: Workflow for Devops coursework java application.
-on: push
+name: Workflow for DevOps coursework Java application.
+on:
+  push:
+    branches:
+      - develop
 
 jobs:
   build:
