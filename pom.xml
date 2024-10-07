@@ -7,7 +7,10 @@
     <groupId>com.napier.devops</groupId>
     <artifactId>devopsethods</artifactId>
     <version>0.1.0.1</version>
-
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.mongodb</groupId>
