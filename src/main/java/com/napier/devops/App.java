@@ -140,7 +140,7 @@ public class App {
         List<Country> Top_10_ByRegion = getPopulatedCountries(con, "Region", "Caribbean", 10); // Fetch top 10 populated countries
         printCountries(Top_10_ByRegion, "---------------------Top 10 most populated countries [Region][Caribbean]---------------------");
     }
-
+//
     public static void main(String[] args) {
         // Create new Application instance
         App app = new App();
