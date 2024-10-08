@@ -81,7 +81,7 @@ public class App {
                 "FROM city JOIN country ON city.CountryCode = country.Code ";
 
         if (key != null && value != null) {
-            if (key.equals("Country") || key.equals("Continent") || key.equals("Region")) {
+            if (key.equals("Name") || key.equals("Continent") || key.equals("Region")) {
                 sql_query += "WHERE country." + key + " = '" + value + "' ";
             } else {
                 sql_query += "WHERE city." + key + " = '" + value + "' ";
@@ -214,7 +214,7 @@ public class App {
         printCities(cityByContinent, "---------------------Most populated cities [Continent][Africa]---------------------");
         List<City> cityByRegion = getPopulatedCity(con, "Region","Middle East",0);
         printCities(cityByRegion, "---------------------Most populated cities [Region][Middle East]---------------------");
-        List<City> cityByCountry = getPopulatedCity(con, "Country","Russian Federation",0);
+        List<City> cityByCountry = getPopulatedCity(con, "Name","Russian Federation",0);
         printCities(cityByCountry, "---------------------Most populated cities [Country][Russia]---------------------");
         List<City> cityByDistrict = getPopulatedCity(con, "District","Gelderland",0);
         printCities(cityByDistrict, "---------------------Most populated cities [District][Gelderland]---------------------");
