@@ -68,12 +68,33 @@ public class App {
         // Ensure a positive limit value for the query
         if (limit > 0) {
             Country_query += "ORDER BY country.Population DESC LIMIT " + limit;
+
         } else {
             Country_query += "ORDER BY country.Population DESC"; // No limit if zero or negative
         }
 
-
         return getCountryList(con, Country_query);
+    }
+
+    public static List<City> getPopulatedCity(Connection con, String key, String value, int limit) {
+        String sql_query = "SELECT city.Name, country.Name AS CountryName, city.District, city.Population " +
+                "FROM city JOIN country ON city.CountryCode = country.Code ";
+
+        if (key != null && value != null) {
+            if (key.equals("Country") || key.equals("Continent") || key.equals("Region")) {
+                sql_query += "WHERE country." + key + " = '" + value + "' ";
+            } else {
+                sql_query += "WHERE city." + key + " = '" + value + "' ";
+            }
+        }
+
+
+        if (limit > 0) {
+            sql_query += "ORDER BY city.Population DESC LIMIT " + limit;
+        }else {
+          sql_query += "ORDER BY city.Population DESC";
+        }
+        return getCityList(con, sql_query);
     }
 
     // Helper function to execute the query and return a list of countries
@@ -126,19 +147,78 @@ public class App {
         }
     }
 
+
+    // Helper function to execute the query and return a list of cities
+    private static List<City> getCityList(Connection con, String sql_query) {
+        List<City> cities = new ArrayList<>();
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rset = stmt.executeQuery(sql_query);
+
+            // Populate city list (From Largest to Lowest)
+            while (rset.next()) {
+                String name = rset.getString("Name");
+                String countryName = rset.getString("CountryName"); // Country name from joined country table
+                String district = rset.getString("District");
+                int population = rset.getInt("Population");
+
+                City city = new City(name, countryName, district, population);
+                cities.add(city);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return cities;
+    }
+
+    // Function to print cities in a table format
+    public static void printCities(List<City> cities, String header) {
+        System.out.println("\n\n######## " + header + " ########");
+        System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
+        System.out.printf("| %-34s | %-39s | %-27s | %-10s |\n",
+                "City Name", "Country Name", "District", "Population");
+        System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
+
+        for (City city : cities) {
+            System.out.printf("| %-34s | %-39s | %-27s | %-10s |\n",
+                    city.getName(), city.getCountryName(), city.getDistrict(), city.getPopulation());
+        }
+
+        System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
+
+        // Check if countries were retrieved
+        if (cities.isEmpty()) {
+            System.out.println("No countries found.");
+        } else {
+            System.out.println(cities.size() + " countries found.");
+        }
+    }
+
     public void Table_display(){
         List<Country> countryByWorld = getPopulatedCountries(con, null, null, 0); // Fetch top 10 populated countries
         printCountries(countryByWorld, "---------------------Most populated countries [World]---------------------");
-        List<Country> countryByContient = getPopulatedCountries(con, "Continent", "Europe", 0); // Fetch top 10 populated countries
-        printCountries(countryByContient, "---------------------Most populated countries [Continent] [Europe]---------------------");
+        List<Country> countryByContinent = getPopulatedCountries(con, "Continent", "Europe", 0); // Fetch top 10 populated countries
+        printCountries(countryByContinent, "---------------------Most populated countries [Continent] [Europe]---------------------");
         List<Country> countryByRegion = getPopulatedCountries(con, "Region", "Southern and Central Asia", 0); // Fetch top 10 populated countries
         printCountries(countryByRegion, "---------------------World most populated countries [Region] [Southern and Central Asia]---------------------");
         List<Country> Top_10_ByWorld = getPopulatedCountries(con, null, null, 10); // Fetch top 10 populated countries
         printCountries(Top_10_ByWorld, "---------------------Top 10 most populated countries [World]---------------------");
-        List<Country> Top_10_ByContient = getPopulatedCountries(con, "Continent", "North America", 10); // Fetch top 10 populated countries
-        printCountries(Top_10_ByContient, "---------------------Top 10 most populated countries [Continent][South ]---------------------");
+        List<Country> Top_10_ByContinent = getPopulatedCountries(con, "Continent", "North America", 10); // Fetch top 10 populated countries
+        printCountries(Top_10_ByContinent, "---------------------Top 10 most populated countries [Continent][North America ]---------------------");
         List<Country> Top_10_ByRegion = getPopulatedCountries(con, "Region", "Caribbean", 10); // Fetch top 10 populated countries
         printCountries(Top_10_ByRegion, "---------------------Top 10 most populated countries [Region][Caribbean]---------------------");
+
+        List<City> cityByWorld = getPopulatedCity(con, null,null,0);
+        printCities(cityByWorld, "---------------------Most populated cities [World]---------------------");
+        List<City> cityByContinent = getPopulatedCity(con, "Continent","Africa",0);
+        printCities(cityByContinent, "---------------------Most populated cities [Continent][Africa]---------------------");
+        List<City> cityByRegion = getPopulatedCity(con, "Region","Middle East",0);
+        printCities(cityByRegion, "---------------------Most populated cities [Region][Middle East]---------------------");
+        List<City> cityByCountry = getPopulatedCity(con, "Country","Russian Federation",0);
+        printCities(cityByCountry, "---------------------Most populated cities [Country][Russia]---------------------");
+        List<City> cityByDistrict = getPopulatedCity(con, "District","Gelderland",0);
+        printCities(cityByDistrict, "---------------------Most populated cities [District][Gelderland]---------------------");
+
     }
 //
     public static void main(String[] args) {
