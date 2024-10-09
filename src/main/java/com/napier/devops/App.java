@@ -87,14 +87,52 @@ public class App {
                 sql_query += "WHERE city." + key + " = '" + value + "' ";
             }
         }
-
-
         if (limit > 0) {
             sql_query += "ORDER BY city.Population DESC LIMIT " + limit;
         }else {
           sql_query += "ORDER BY city.Population DESC";
         }
         return getCityList(con, sql_query);
+    }
+
+    public static List<Capital> getPopulatedCapital(Connection con, String key, String value, int limit) {
+        String Capital_query = "SELECT city.Name AS capital, country.Name , country.Population " +
+                "FROM country JOIN city ON country.Capital = city.ID ";
+
+        if (key != null && value != null) {
+            Capital_query += "WHERE country." + key + " = '" + value + "' ";
+        }
+
+        // Ensure a positive limit value for the query
+        if (limit > 0) {
+            Capital_query += "ORDER BY country.Population DESC LIMIT " + limit;
+
+        } else {
+            Capital_query += "ORDER BY country.Population DESC"; // No limit if zero or negative
+        }
+
+        return getCapitalList(con, Capital_query);
+    }
+
+    public static List<Capital> getCapitalList(Connection con, String Capital_query){
+        List<Capital> capitals = new ArrayList<>();
+
+        try{
+            Statement stmt = con.createStatement();
+            ResultSet rset = stmt.executeQuery(Capital_query);
+
+            while (rset.next()){
+                String countryName = rset.getString("Name");
+                int population = rset.getInt("Population");
+                String capitalName = rset.getString("Capital");
+
+                Capital capital = new Capital(countryName, population, capitalName);
+                capitals.add(capital);
+            }
+        } catch (SQLException e) {
+            System.out.println("SQL Exception: " + e.getMessage());
+        }
+        return capitals;
     }
 
     // Helper function to execute the query and return a list of countries
@@ -123,6 +161,20 @@ public class App {
         return countries;
     }
 
+    public static void printCapitals(List<Capital> capitals, String header){
+        System.out.println("\n\n######## " + header + " ########");
+        System.out.println("+-----------------------------------+-----------------------------------------+------------+");
+        System.out.printf("|%-33s | %-39s | %-10s |\n",
+                "Name","Country Name","Population");
+        System.out.println("+-----------------------------------+-----------------------------------------+------------+");
+
+        for(Capital capital : capitals){
+            System.out.printf("|%-33s | %-39s | %-10s |\n",
+                    capital.getCapital(), capital.getName(), capital.getPopulation());
+        }
+        System.out.println("+-----------------------------------+-----------------------------------------+------------+");
+    }
+
     // Function to print countries in a table format
     public static void printCountries(List<Country> countries, String header) {
         System.out.println("\n\n######## " + header + " ########");
@@ -136,9 +188,7 @@ public class App {
                     country.getCountryCode(), country.getName(), country.getContinent(),
                     country.getRegion(), country.getPopulation(), country.getCapital());
         }
-
         System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
-
         // Check if countries were retrieved
         if (countries.isEmpty()) {
             System.out.println("No countries found.");
@@ -229,6 +279,21 @@ public class App {
         printCities(TopByCountry, "---------------------Top 10 populated cities [Country][Myanmar]---------------------");
         List<City> TopByDistrict = getPopulatedCity(con, "District","México",10);
         printCities(TopByDistrict, "---------------------Top 10 populated cities [District][México]---------------------");
+
+        List<Capital>CapitalByWorld = getPopulatedCapital(con, null,null,0);
+        printCapitals(CapitalByWorld, "---------------------Most populated Capital [World]---------------------");
+        List<Capital>CapitalByContinent = getPopulatedCapital(con, "Continent","South America",0);
+        printCapitals(CapitalByContinent, "---------------------Most populated Capital [Continent][]---------------------");
+        List<Capital>CapitalByRegion = getPopulatedCapital(con, "Region","Polynesia",0);
+        printCapitals(CapitalByRegion,"---------------------Most populated Capital [Region][Polynesia]---------------------");
+
+        List<Capital>Top10CapitalByWorld = getPopulatedCapital(con, null,null,5);
+        printCapitals(Top10CapitalByWorld, "---------------------Top 5 populated cities [Continent][]---------------------");
+        List<Capital>Top10CapitalByContinent = getPopulatedCapital(con, "Continent","North America",5);
+        printCapitals(Top10CapitalByContinent, "---------------------Top 5 populated Capital [Continent][]---------------------");
+        List<Capital>Top10CapitalByRegion = getPopulatedCapital(con, "Region","Caribbean",5);
+        printCapitals(Top10CapitalByRegion, "---------------------Top 5 populated Capital [Region][Caribbean]---------------------");
+
     }
 //
     public static void main(String[] args) {

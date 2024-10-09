@@ -42,29 +42,4 @@ public class Country {
     public String getCapital() {
         return capital;
     }
-
-    // Setters for all fields
-    public void setCountryCode(String countryCode) {
-        this.Code = countryCode;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setContinent(String continent) {
-        this.continent = continent;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
-    public void setPopulation(int population) {
-        this.population = population;
-    }
-
-    public void setCapital(String capital) {
-        this.capital = capital;
-    }
 }
