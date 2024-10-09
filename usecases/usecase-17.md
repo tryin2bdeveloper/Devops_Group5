@@ -2,8 +2,8 @@
 
 ### CHARACTERISTIC INFORMATION
 ## Goal in Context
-As an analyst, I want to create a report listing all the capital cities of the world at ordered by population from largest to smallest.
-So that I can assist in the organization's financial analysis related to population data.
+As an analyst, I want to create a report listing all the capital cities of the world at ranked by population from largest to smallest.
+So that I can assist in the organization's analysis to population data.
 
 ## Scope
 Small organizations.
@@ -27,16 +27,16 @@ Analytics team.
 A request is made for data from the analyst to generate the desired outcome.
 
 ### MAIN SUCCESS SCENARIO
-The analyst receives the data request.
+The analyst receives the data request for the world organised.
 A list of individuals living in capital cities as well as those residing outside of cities is compiled from all countries.
-The data is sorted and displayed clearly for the analyst.
+The system is sorted and displayed clearly for the analyst of data.
 The output is presented effectively for analysis.
 
 ### EXTENSIONS
 Data for the analyst is unavailable.
 
 ### SUB-VARIATIONS
-None.
+None
 
 ## SCHEDULE
 Due Date: Release 1.0

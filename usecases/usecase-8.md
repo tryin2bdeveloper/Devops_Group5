@@ -12,7 +12,7 @@ For small organizations.
 Primary task.
 
 ## Preconditions
-Access to an updated of the worlds database containing population information.
+Access to a current of the worlds database containing population information.
 
 ## Success End Condition
 The report should show the population of cities and non-city dwellers in all countries for analysis.
@@ -21,21 +21,21 @@ The report should show the population of cities and non-city dwellers in all cou
 Failure to produce the report.
 
 ## Primary Actor
-Analytics team.
+Analytics team
 
 ## Trigger
 A request for a population data report is initiated by the analyst.
 
 ### MAIN SUCCESS SCENARIO
-The data requested by the analyst is correctly retrieved.
+The data requested by the analyst is correctly retrieved .
 The population data for city and non-city dwellers is organized for all countries.
-The data is sorted and well-displayed for easy analysis.
+The data is sorted and well-displayed for easy develop.
 
 ### EXTENSIONS
 Data requested by the analyst does not exist.
 
 ### SUB-VARIATIONS
-None.
+None
 
 ## SCHEDULE
 Due Date: Release 1.0

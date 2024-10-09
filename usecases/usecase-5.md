@@ -11,17 +11,17 @@ Small organizations.
 Primary task.
 
 ## Preconditions
-Access to up-to-date world population databases and statistics.
+Access to contain the world population databases and statistics.
 
 ## Success End Condition
 A report is successfully generated that highlights the top populated countries in each continent especially in Asia.
-The data will show the population of urban and rural areas.
+The data will show the population of countries.
 
 ## Failed End Condition
-The report fails to be generated.
+The report fails to be generated
 
 ## Primary Actor
-Analytics team.
+Analytics team
 
 ## Trigger
 The analyst’s request for detailed population data.
@@ -29,7 +29,7 @@ The analyst’s request for detailed population data.
 ### MAIN SUCCESS SCENARIO
 The analyst requests population data.
 A list is compiled showing the population distribution (urban and rural) for the top countries in each continent.
-The data is sorted by population size, with Asia’s leading country highlighted.
+The system is sorted for data by population with Asia’s leading country highlighted.
 A detailed at organized report is produced and presented for review.
 
 ### EXTENSIONS

@@ -26,16 +26,16 @@ Analytics team.
 A data request is received from an analyst for the specified outcome.
 
 ### MAIN SUCCESS SCENARIO
-The analyst’s data request is successfully received.
+The analyst’s data request is successfully received for country of the United States.
 The report contains population lists of both people living in cities and those residing outside of cities from every country.
-The data is retrieved, sorted, and presented effectively.
-The report is displayed in a format that makes it easy for the analyst to interpret the data.
+The system is retrieved, sorted, and presented effectively for all data.
+The report is displayed in a format that makes it easy for the analysis to interpret the data.
 
 ### EXTENSIONS
 The requested data does not exist.
 
 ### SUB-VARIATIONS
-None.
+None
 
 ## SCHEDULE
 Due Date: Release 1.0

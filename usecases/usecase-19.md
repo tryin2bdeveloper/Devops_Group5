@@ -26,16 +26,16 @@ Analytics team.
 A request is made for data from the analyst to generate the desired outcome.
 
 ### MAIN SUCCESS SCENARIO
-The analyst receives the data request.
-A list of individuals living in capital cities as well as those residing outside of cities is compiled from all countries.
-The data is sorted and displayed clearly for the analyst.
-The output is presented effectively for analysis.
+The analyst receives the data request for a region organised.
+The system is compiled a list of individuals living in capital cities as well as those residing outside of cities from all countries.
+The system is sorted and displayed clearly for the analyst data.
+The output is presented effectively for the analysis view.
 
 ### EXTENSIONS
 Data requested by the analyst does not exist.
 
 ### SUB-VARIATIONS
-None.
+None
 
 ## SCHEDULE
 Due Date: Release 1.0

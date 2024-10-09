@@ -9,7 +9,7 @@ So that I will help support analysis concerning population distribution in vario
 Targeted towards small organizations.
 
 ## Level
-Primary task.
+Primary task
 
 ## Preconditions
 Access to a database with current and accurate information on the world’s cities and populations.
@@ -18,25 +18,25 @@ Access to a database with current and accurate information on the world’s citi
 A report is generated that shows both the number of people living in cities and those outside of cities in each country.
 
 ## Failed End Condition
-The report is not produced.
+The report is not produced
 
 ## Primary Actor
-Analytics team.
+Analytics team
 
 ## Trigger
 The request for the report is initiated by the analyst to detailing the required outcome.
 
 ### MAIN SUCCESS SCENARIO
-The analyst's data request is successfully processed.
-The population of both urban and non-urban residents in all countries is retrieved.
-The data is sorted by population and presented clearly.
-The final report provides a good overview for the analyst to assess the populations.
+The analyst's data request is successfully processed for the countries organised.
+The population of both in the cities and non-cities residents in all countries is retrieved.
+The system is sorted by population and presented clearly for all data.
+The final report provides a good overview for develop to assess the populations.
 
 ### EXTENSIONS
 Data requested by the analyst does not exist.
 
 ### SUB-VARIATIONS
-None.
+None
 
 ## SCHEDULE
 Due Date: Release 1.0

@@ -27,16 +27,16 @@ Analytics team.
 A request for the data is submitted by an analyst at prompting the report generation.
 
 ### MAIN SUCCESS SCENARIO
-The data request is successfully received.
-The report includes the population for both cities and rural areas in all countries.
-The data is organized and sorted properly.
+The data request is successfully received for all region.
+The report includes the population for both cities and not on the cities areas in all countries.
+The system is organized and sorted properly for this data.
 The final report is well-presented for easy analysis.
 
 ### EXTENSIONS
 Data requested by the analyst does not exist.
 
 ### SUB-VARIATIONS
-None.
+None
 
 ## SCHEDULE
 Due Date: Release 1.0

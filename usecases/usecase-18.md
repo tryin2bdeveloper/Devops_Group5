@@ -27,15 +27,15 @@ Analytics team.
 A request is submitted by the analyst to retrieve and organize the population data.
 
 ### MAIN SUCCESS SCENARIO
-The data request is received by the system.
-Data for people living in both cities and non-city areas across all countries is retrieved.
+The data request for a country organised is received by the system.
+The system is retrieved the data for people living in both cities and non-city areas across all countries.
 The data is sorted accordingly and displayed for further analysis.
 
 ### EXTENSIONS
 Data forData requested by the analyst does not exist.
 
 ### SUB-VARIATIONS
-None.
+None
 
 ## SCHEDULE
 Due Date: Release 1.0

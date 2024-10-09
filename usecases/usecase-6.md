@@ -1,4 +1,4 @@
-### USE CASE: 6 Modify Command to Retrieve Population Data for the Most Populous Country in a Specific Region of Eastern Asia
+### USE CASE: 6 Generate to Retrieve Population Data for the Most Populous Country in a Specific Region of Eastern Asia
 
 ### CHARACTERISTIC INFORMATION### CHARACTERISTIC INFORMATION
 ## Goal in Context

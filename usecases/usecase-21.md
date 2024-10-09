@@ -1,4 +1,4 @@
-### USE CASE: 21 Create The World Population Ranking Report for Countries
+### USE CASE: 21 Generated The World Population Ranking Report for Countries
 
 ### CHARACTERISTIC INFORMATION
 ## Goal in Context
@@ -26,16 +26,16 @@ Analytics team.
 A report request is made at detailing specific data outcome requirements.
 
 ### MAIN SUCCESS SCENARIO
-The analyst requests the necessary data.
-The population data for cities and non-city areas for all countries is gathered.
-The data is then sorted according to population size from largest to smallest.
-The report is well-presented and meets the needs of the analyst.
+The analyst requests the necessary data of the capital cities in a continent.
+The population data for cities and non-city areas for all countries is gathered at the system.
+The system is then sorted according to population size from largest to smallest for all data.
+The report is well-presented and meets the needs of the analyst view.
 
 ### EXTENSIONS
 Data requested by the analyst does not exist.
 
 ### SUB-VARIATIONS
-None.
+None
 
 ## SCHEDULE
 Due Date: Release 1.0

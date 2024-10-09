@@ -38,7 +38,7 @@ The report is displayed clearly for analysis purposes.
 Data requested by the analyst does not exist.
 
 ### SUB-VARIATIONS
-None.
+None
 
 ## SCHEDULE
 Due Date: Release 1.0

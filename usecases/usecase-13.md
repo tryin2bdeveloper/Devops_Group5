@@ -27,16 +27,16 @@ Analytics team.
 The analyst inputs a request for population data to be compiled into the specified format.
 
 ### MAIN SUCCESS SCENARIO
-The data request is correctly processed.
+The data request is correctly processed for it continent.
 The report includes populations of city and non-city residents across all countries.
-The data is organized and sorted appropriately.
-The analytics team can easily access and review the data.
+The system is organized and sorted appropriately for all data.
+The analytics team can easily access and review to outcome the data.
 
 ### EXTENSIONS
 Data requested by the analyst does not exist.
 
 ### SUB-VARIATIONS
-None.
+None
 
 ## SCHEDULE
 Due Date: Release 1.0

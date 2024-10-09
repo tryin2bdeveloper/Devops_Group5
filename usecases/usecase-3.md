@@ -1,4 +1,4 @@
-### USE CASE: 3 World Population Report by Country with Living on the City and Non-City Breakdown
+### USE CASE: 3 
 
 ### CHARACTERISTIC INFORMATION
 ## Goal in Context  
@@ -28,9 +28,9 @@ A data request from the analyst to produce the required report.
 
 ### MAIN SUCCESS SCENARIO
 The analyst requests the necessary data.
-A list of people living both in cities and non-urban areas is retrieved from each country.
+A list of people living both in cities and non-cities areas is retrieved from each country.
 The data is sorted accordingly.
-The final report is presented in a clear format for review by the analyst.
+The final report is presented in a clear format for review by to develop.
 
 ### EXTENSIONS
 Data requested by the analyst does not exist.

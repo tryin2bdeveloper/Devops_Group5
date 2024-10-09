@@ -1,4 +1,4 @@
-### USE CASE: 20 Produce Comprehensive Population Report for Countries
+### USE CASE: 20 
 
 ### CHARACTERISTIC INFORMATION
 ## Goal in Context
@@ -11,7 +11,7 @@ Small organizations.
 Primary task.
 
 ## Preconditions
-Access to an up-to-date database with the world's data information for all necessary data.
+Access to contain of the database with the world's data information for all necessary data.
 
 ## Success End Condition
 A report is available for analysis showing the population of people living in cities and those not living in cities.
@@ -26,16 +26,16 @@ Analytics team.
 A request is made for the data and the expected outcome is specified.
 
 ### MAIN SUCCESS SCENARIO
-The request for the data is received and processed successfully.
-Lists are generated showing both the populations of people living in cities and those not living in cities for all countries.
-The data is organized and sorted properly.
+The request for the data is received and processed successfully for the capital cities in the world.
+The system are generated showing to lists both the populations of people living in cities and those not living in cities for all countries.
+The system is organized and sorted properly for the data.
 The analyst receives a well-displayed report with all the required information.
 
 ### EXTENSIONS
 Data requested by the analyst does not exist.
 
 ### SUB-VARIATIONS
-None.
+None
 
 ## SCHEDULE
 Due Date: Release 1.0

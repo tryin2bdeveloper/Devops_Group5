@@ -3,7 +3,7 @@
 ### CHARACTERISTIC INFORMATION
 ## Goal in Context
 As an analyst, I want to generate a report detailing the population distribution by region for including people living in cities and those not living in cities.
-So that I can support the organization’s analysis related to regional urbanization trends.
+So that I can support the organization’s analysis related to regional of the cities trends.
 
 ## Scope
 Small organizations.
@@ -27,8 +27,8 @@ Analytics team.
 A request is made to the analyst for regional population data with a focus on city and non-city living.
 
 ### MAIN SUCCESS SCENARIO
-The analyst receives the data request.
-Population data by region with including those living in cities and outside cities is compiled.
+The analyst receives the data request for the cities in each region.
+The system is gathering to compiled population data by region with including those living in cities and outside cities.
 The data is sorted and clearly organized.
 The output is prepared and presented for further analysis.
 
@@ -36,7 +36,7 @@ The output is prepared and presented for further analysis.
 Data requested by the analyst does not exist.
 
 ### SUB-VARIATIONS
-None.
+None
 
 ## SCHEDULE
 Due Date: Release 1.0

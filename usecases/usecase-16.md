@@ -3,7 +3,7 @@
 ### CHARACTERISTIC INFORMATION
 ## Goal in Context
 As an analyst, I need to generate a report that lists countries in the world at ranked by the top 1 population cities in United  stat. 
-So that I can to support the organization's financial population data analysis.
+So that I can to support the organization's population data analysis.
 
 ## Scope
 Applicable for smaller organizations.
@@ -12,7 +12,7 @@ Applicable for smaller organizations.
 Primary task.
 
 ## Preconditions
-Access to an up-to-date world population database.
+Access to a current with contain the world population database.
 
 ## Success End Condition
 A report that clearly presents population statistics distinguishing between people living in cities and those who do not.
@@ -27,15 +27,16 @@ Analytics team.
 Data request from an analyst, specifying the desired output.
 
 ### MAIN SUCCESS SCENARIO
-The data request is properly received.
-Population data is retrieved with both for people residing in cities and those outside of cities for all countries.
-Data is sorted and displayed in a structured format that analysts in understanding the global population distribution.
+The data request is properly received for the district.
+The system is retrieved with both for people residing in cities and those outside of cities for all countries of the population data.
+The system is sorted and displayed in a structured format that analysts in understanding the world population distribution.
+The report is displayed in a format that makes it easy for the analysis to interpret the data.
 
 ### EXTENSIONS
 Data for the analyst request is unavailable.
 
 ### SUB-VARIATIONS
-None.
+None
 
 ## SCHEDULE
 Due Date: Release 1.0

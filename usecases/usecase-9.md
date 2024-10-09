@@ -9,7 +9,7 @@ I want to support reports related to population trends for the organization.
 Targeted towards small organizations.
 
 ## Level
-Primary task.
+Primary task
 
 ## Preconditions
 Access to a current  as well as comprehensive database containing population information from various regions of the world.
@@ -21,7 +21,7 @@ A detailed report is generated that provides an analysis of both city population
 Report is not created.
 
 ## Primary Actor
-Analytics team.
+Analytics team
 
 ## Trigger
 A data request for a specific report is initiated by an analyst.
@@ -29,14 +29,14 @@ A data request for a specific report is initiated by an analyst.
 ### MAIN SUCCESS SCENARIO
 A data request is successfully received from the analyst.
 The report lists both the populations living within cities and those not living in cities from various countries.
-All relevant data is fetched and sorted appropriately.
-The final report is clearly displayed for the analyst to review.
+All relevant data is fetched and sorted appropriately for the system.
+The final report is clearly displayed for the develop to review.
 
 ### EXTENSIONS
 Data requested by the analyst is unavailable.
 
 ### SUB-VARIATIONS
-None.
+None
 
 ## SCHEDULE
 Due Date: Release 1.0
