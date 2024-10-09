@@ -219,6 +219,16 @@ public class App {
         List<City> cityByDistrict = getPopulatedCity(con, "District","Gelderland",0);
         printCities(cityByDistrict, "---------------------Most populated cities [District][Gelderland]---------------------");
 
+        List<City> TopByWorld = getPopulatedCity(con, null,null,10);
+        printCities(TopByWorld, "---------------------Top 10 populated cities [World]---------------------");
+        List<City> TopByContinent = getPopulatedCity(con, "Continent","Asia",10);
+        printCities(TopByContinent, "---------------------Top 10 populated cities [Continent][Asia]---------------------");
+        List<City> TopByRegion = getPopulatedCity(con, "Region","British Islands",10);
+        printCities(TopByRegion, "---------------------Top 10 populated cities [Region][British Islands]---------------------");
+        List<City> TopByCountry = getPopulatedCity(con, "Name","Myanmar",10);
+        printCities(TopByCountry, "---------------------Top 10 populated cities [Country][Myanmar]---------------------");
+        List<City> TopByDistrict = getPopulatedCity(con, "District","México",10);
+        printCities(TopByDistrict, "---------------------Top 10 populated cities [District][México]---------------------");
     }
 //
     public static void main(String[] args) {
