@@ -32,12 +32,21 @@ public class App {
                 System.out.println("Successfully connected");
                 break;
             } catch (SQLException sqle) {
-                System.out.println("Failed to connect to database attempt " + Integer.toString(i));
+                System.out.println("Failed to connect to database attempt ");
                 System.out.println(sqle.getMessage());
             } catch (InterruptedException ie) {
                 System.out.println("Thread interrupted? Should not happen.");
             }
         }
+    }
+
+    /**
+     * Getter for the database connection.
+     *
+     * @return The Connection object if connected, null if not connected.
+     */
+    public Connection getConnection() {
+        return con;  // Return the connection object
     }
 
     /**
@@ -113,6 +122,11 @@ public class App {
     public static List<Capital> getCapitalList(Connection con, String Capital_query){
         List<Capital> capitals = new ArrayList<>();
 
+        if (con == null) {
+            System.out.println("No database connection.");
+            return capitals;  // Return an empty list if there's no connection
+        }
+
         try{
             Statement stmt = con.createStatement();
             ResultSet rset = stmt.executeQuery(Capital_query);
@@ -134,6 +148,12 @@ public class App {
     // Helper function to execute the query and return a list of countries
     private static List<Country> getCountryList(Connection con, String Country_query) {
         List<Country> countries = new ArrayList<>();
+
+        if (con == null) {
+            System.out.println("No database connection.");
+            return countries;  // Return an empty list if there's no connection
+        }
+
         try {
             Statement stmt = con.createStatement();
             ResultSet rset = stmt.executeQuery(Country_query);
@@ -160,6 +180,11 @@ public class App {
     // Helper function to execute the query and return a list of cities
     private static List<City> getCityList(Connection con, String sql_query) {
         List<City> cities = new ArrayList<>();
+
+        if (con == null) {
+            System.out.println("No database connection.");
+            return cities;  // Return an empty list if there's no connection
+        }
         try {
             Statement stmt = con.createStatement();
             ResultSet rset = stmt.executeQuery(sql_query);
@@ -395,9 +420,9 @@ public class App {
 
         // Connect to database
         if(args.length < 1){
-            app.connect("localhost:33060", 30000);
+            app.connect("localhost:33060", 0);
         }else{
-            app.connect(args[0], Integer.parseInt(args[1]));
+            app.connect("db:3306", 30000);
         }
 
         // Set the limit to a positive number to retrieve results

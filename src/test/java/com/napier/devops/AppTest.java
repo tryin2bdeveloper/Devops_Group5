@@ -1,9 +1,6 @@
 package com.napier.devops;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +12,15 @@ public class AppTest
 {
     static App app;
 
+
     @BeforeAll
     static void init()
     {
         app = new App();
+        app.connect("localhost:33060", 0);
     }
 
-    @AfterEach
+    @AfterAll
     public void tearDown() {
         app.disconnect();
     }
@@ -59,14 +58,12 @@ public class AppTest
     }
 
     @Test
-    void testPrintCitiesWithNull()
-    {
+    void testPrintCitiesWithNull() {
         app.printCities(null, "Header");
     }
 
     @Test
-    void testPrintCitiesWithEmptyList()
-    {
+    void testPrintCitiesWithEmptyList() {
         List<City> emptyList = new ArrayList<>();
         app.printCities(emptyList, "Empty List");
 
@@ -74,8 +71,7 @@ public class AppTest
     }
 
     @Test
-    void testPrintCitiesWithData()
-    {
+    void testPrintCitiesWithData() {
         // Create a list with sample city data
         List<City> cities = new ArrayList<>();
         cities.add(new City("New York", "United States", "New York", 8175133));
@@ -87,14 +83,12 @@ public class AppTest
     }
 
     @Test
-    void testPrintCapitalsWithNull()
-    {
+    void testPrintCapitalsWithNull() {
         app.printCapitals(null, "Header");
     }
 
     @Test
-    void testPrintCapitalsWithEmptyList()
-    {
+    void testPrintCapitalsWithEmptyList() {
         List<Capital> emptyList = new ArrayList<>();
         app.printCapitals(emptyList, "Empty List");
 
@@ -102,8 +96,7 @@ public class AppTest
     }
 
     @Test
-    void testPrintCapitalsWithData()
-    {
+    void testPrintCapitalsWithData() {
         // Create a list with sample capital data
         List<Capital> capitals = new ArrayList<>();
         capitals.add(new Capital("Washington D.C.", 331002651, "United States"));
@@ -115,8 +108,78 @@ public class AppTest
     }
 
     @Test
-    void testGetCountry(){
+    void testGetCountryWithNullConnection() {
+        // Test getPopulatedCountries with a null connection
+        List<Country> countries = app.getPopulatedCountries(null, null, null, 0);
+        assertNotNull(countries, "Countries list should not be null");
+        assertTrue(countries.isEmpty(), "Countries list should be empty when connection is null");
+    }
+
+    @Test
+    void testGetCityWithNullConnection() {
+        // Test getPopulatedCity with a null connection
+        List<City> cities = app.getPopulatedCity(null, null, null, 0);
+        assertNotNull(cities, "Cities list should not be null");
+        assertTrue(cities.isEmpty(), "Cities list should be empty when connection is null");
+    }
+
+    @Test
+    void testGetCapitalWithNullConnection() {
+        // Test getPopulatedCapital with a null connection
+        List<Capital> capitals = app.getPopulatedCapital(null, null, null, 0);
+        assertNotNull(capitals, "Capitals list should not be null");
+        assertTrue(capitals.isEmpty(), "Capitals list should be empty when connection is null");
+    }
+
+    @Test
+    void testGetCountryWithFilter() {
+        // Test getPopulatedCountries with filters
+        List<Country> countries = app.getPopulatedCountries(app.getConnection(), "Continent", "Europe", 5);
+        app.printCountries(countries, "Test Data");
 
     }
 
+    @Test
+    void testGetCityWithFilter() {
+        // Test getPopulatedCity with filters
+        List<City> cities = app.getPopulatedCity(app.getConnection(), "Name", "Russian Federation", 5);
+        app.printCities(cities, "Test Data");
+
+    }
+
+    @Test
+    void testGetCapitalWithFilter() {
+        // Test getPopulatedCapital with filters
+        List<Capital> capitals = app.getPopulatedCapital(app.getConnection(), "Continent", "Asia", 5);
+        app.printCapitals(capitals, "Test Data");
+    }
+
+
+
+    @Test
+    void testGetCountryWithInvalidFilter() {
+        // Test getPopulatedCountries with an invalid filter
+        List<Country> countries = app.getPopulatedCountries(app.getConnection(), "InvalidKey", "InvalidValue", 5);
+        assertNotNull(countries, "Countries list should not be null");
+        assertTrue(countries.isEmpty(), "Countries list should be empty when using an invalid filter");
+    }
+
+    @Test
+    void testGetCityWithInvalidFilter() {
+        // Test getPopulatedCity with an invalid filter
+        List<City> cities = app.getPopulatedCity(app.getConnection(), "InvalidKey", "InvalidValue", 5);
+        assertNotNull(cities, "Cities list should not be null");
+        assertTrue(cities.isEmpty(), "Cities list should be empty when using an invalid filter");
+    }
+
+    @Test
+    void testGetCapitalWithInvalidFilter() {
+        // Test getPopulatedCapital with an invalid filter
+        List<Capital> capitals = app.getPopulatedCapital(app.getConnection(), "InvalidKey", "InvalidValue", 5);
+        assertNotNull(capitals, "Capitals list should not be null");
+        assertTrue(capitals.isEmpty(), "Capitals list should be empty when using an invalid filter");
+    }
+
+
 }
+
