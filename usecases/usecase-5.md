@@ -28,7 +28,7 @@ The analyst’s request for detailed population data.
 
 ### MAIN SUCCESS SCENARIO
 The analyst requests population data.
-A list is compiled showing the population distribution (urban and rural) for the top countries in each continent.
+The system of a list is compiled showing the population distribution (urban and rural) for the top 1 country in each continent.
 The system is sorted for data by population with Asia’s leading country highlighted.
 A detailed at organized report is produced and presented for review.
 
@@ -36,7 +36,7 @@ A detailed at organized report is produced and presented for review.
 Data requested by the analyst does not exist.
 
 ### SUB-VARIATIONS
-None.
+None
 
 ## SCHEDULE
 Due Date: Release 1.0
