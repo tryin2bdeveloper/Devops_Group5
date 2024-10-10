@@ -272,146 +272,55 @@ public class App {
     // Function to print cities in a table format
     public void Table_display() {
         List<Country> countryByWorld = getPopulatedCountries(con, null, null, 0); // Fetch top 10 populated countries
-        if (countryByWorld != null) {
-            printCountries(countryByWorld, "---------------------Most populated countries [World]---------------------");
-        } else {
-            System.out.println("No value in variable");
-        }
+        printCountries(countryByWorld, "---------------------Most populated countries [World]---------------------");
         List<Country> countryByContinent = getPopulatedCountries(con, "Continent", "Europe", 0); // Fetch top 10 populated countries
-        if (countryByContinent != null) {
-            printCountries(countryByContinent, "---------------------Most populated countries [Continent] [Europe]---------------------");
-        } else {
-            System.out.println("No value in variable");
-        }
+        printCountries(countryByContinent, "---------------------Most populated countries [Continent] [Europe]---------------------");
         List<Country> countryByRegion = getPopulatedCountries(con, "Region", "Southern and Central Asia", 0); // Fetch top 10 populated countries
-        if (countryByRegion != null) {
-            printCountries(countryByRegion, "---------------------World most populated countries [Region] [Southern and Central Asia]---------------------");
-        }else {
-            System.out.println("No value in variable");
-        }
+        printCountries(countryByRegion, "---------------------World most populated countries [Region] [Southern and Central Asia]---------------------");
 
         List<Country> Top_10_ByWorld = getPopulatedCountries(con, null, null, 10); // Fetch top 10 populated countries
-        if (Top_10_ByWorld != null) {
-            printCountries(Top_10_ByWorld, "---------------------Top 10 most populated countries [World]---------------------");
-        }
-        else {
-            System.out.println("No value in variable");
-        }
+        printCountries(Top_10_ByWorld, "---------------------Top 10 most populated countries [World]---------------------");
         List<Country> Top_10_ByContinent = getPopulatedCountries(con, "Continent", "North America", 10); // Fetch top 10 populated countries
-        if (Top_10_ByContinent != null) {
-            printCountries(Top_10_ByContinent, "---------------------Top 10 most populated countries [Continent][North America ]---------------------");
-        }
-        else {
-            System.out.println("No value in variable");
-        }
+        printCountries(Top_10_ByContinent, "---------------------Top 10 most populated countries [Continent][North America ]---------------------");
         List<Country> Top_10_ByRegion = getPopulatedCountries(con, "Region", "Caribbean", 10); // Fetch top 10 populated countries
-        if (Top_10_ByRegion != null) {
-            printCountries(Top_10_ByRegion, "---------------------Top 10 most populated countries [Region][Caribbean]---------------------");
-        }
-        else {
-            System.out.println("No value in variable");
-        }
+        printCountries(Top_10_ByRegion, "---------------------Top 10 most populated countries [Region][Caribbean]---------------------");
+
         List<City> cityByWorld = getPopulatedCity(con, null, null, 0);
-        if (cityByWorld != null) {
-            printCities(cityByWorld, "---------------------Most populated cities [World]---------------------");
-        }
-        else {
-            System.out.println("No value in variable");
-        }
+        printCities(cityByWorld, "---------------------Most populated cities [World]---------------------");
         List<City> cityByContinent = getPopulatedCity(con, "Continent", "Africa", 0);
-        if (cityByContinent != null) {
-            printCities(cityByContinent, "---------------------Most populated cities [Continent][Africa]---------------------");
-        }
-        else {
-            System.out.println("No value in variable");
-        }
+        printCities(cityByContinent, "---------------------Most populated cities [Continent][Africa]---------------------");
         List<City> cityByRegion = getPopulatedCity(con, "Region", "Middle East", 0);
-        if (cityByRegion != null) {
-            printCities(cityByRegion, "---------------------Most populated cities [Region][Middle East]---------------------");
-        }else {
-            System.out.println("No value in variable");
-        }
+        printCities(cityByRegion, "---------------------Most populated cities [Region][Middle East]---------------------");
         List<City> cityByCountry = getPopulatedCity(con, "Name","Russian Federation",0);
-        if (cityByCountry != null) {
-            printCities(cityByCountry, "---------------------Most populated cities [Country][Russia]---------------------");
-        }else {
-            System.out.println("No value in variable");
-        }
+        printCities(cityByCountry, "---------------------Most populated cities [Country][Russia]---------------------");
         List<City> cityByDistrict = getPopulatedCity(con, "District","Gelderland",0);
-        if (cityByDistrict != null) {
-            printCities(cityByDistrict, "---------------------Most populated cities [District][Gelderland]---------------------");
-        }else {
-            System.out.println("No value in variable");
-        }
+        printCities(cityByDistrict, "---------------------Most populated cities [District][Gelderland]---------------------");
+
         List<City> TopByWorld = getPopulatedCity(con, null,null,10);
-        if (TopByWorld != null) {
-            printCities(TopByWorld, "---------------------Top 10 populated cities [World]---------------------");
-        }else {
-            System.out.println("No value in variable");
-        }
+        printCities(TopByWorld, "---------------------Top 10 populated cities [World]---------------------");
         List<City> TopByContinent = getPopulatedCity(con, "Continent","Asia",10);
-        if (TopByContinent != null) {
-            printCities(TopByContinent, "---------------------Top 10 populated cities [Continent][Asia]---------------------");
-        }else {
-            System.out.println("No value in variable");
-        }
+        printCities(TopByContinent, "---------------------Top 10 populated cities [Continent][Asia]---------------------");
         List<City> TopByRegion = getPopulatedCity(con, "Region","British Islands",10);
-        if (TopByRegion != null) {
-            printCities(TopByRegion, "---------------------Top 10 populated cities [Region][British Islands]---------------------");
-        }else {
-            System.out.println("No value in variable");
-        }
+        printCities(TopByRegion, "---------------------Top 10 populated cities [Region][British Islands]---------------------");
         List<City> TopByCountry = getPopulatedCity(con, "Name","Myanmar",10);
-        if (TopByCountry != null) {
-            printCities(TopByCountry, "---------------------Top 10 populated cities [Country][Myanmar]---------------------");
-        }else {
-            System.out.println("No value in variable");
-        }
+        printCities(TopByCountry, "---------------------Top 10 populated cities [Country][Myanmar]---------------------");
         List<City> TopByDistrict = getPopulatedCity(con, "District","México",10);
-        if (TopByDistrict != null) {
-            printCities(TopByDistrict, "---------------------Top 10 populated cities [District][México]---------------------");
-        }else {
-            System.out.println("No value in variable");
-        }
+        printCities(TopByDistrict, "---------------------Top 10 populated cities [District][México]---------------------");
+
         List<Capital>CapitalByWorld = getPopulatedCapital(con, null,null,0);
-        if (CapitalByWorld != null) {
-            printCapitals(CapitalByWorld, "---------------------Most populated Capital [World]---------------------");
-        }else {
-            System.out.println("No value in variable");
-        }
+        printCapitals(CapitalByWorld, "---------------------Most populated Capital [World]---------------------");
         List<Capital>CapitalByContinent = getPopulatedCapital(con, "Continent","South America",0);
-        if (CapitalByContinent != null) {
-            printCapitals(CapitalByContinent, "---------------------Most populated Capital [Continent][]---------------------");
-        }else {
-            System.out.println("No value in variable");
-        }
+        printCapitals(CapitalByContinent, "---------------------Most populated Capital [Continent][]---------------------");
         List<Capital>CapitalByRegion = getPopulatedCapital(con, "Region","Polynesia",0);
-        if (CapitalByRegion != null) {
-            printCapitals(CapitalByRegion, "---------------------Most populated Capital [Region][Polynesia]---------------------");
-        }else {
-            System.out.println("No value in variable");
-        }
+        printCapitals(CapitalByRegion, "---------------------Most populated Capital [Region][Polynesia]---------------------");
+
 
         List<Capital>TopCapitalByWorld = getPopulatedCapital(con, null,null,5);
-        if (TopCapitalByWorld != null) {
-            printCapitals(TopCapitalByWorld, "---------------------Top 5 populated cities [Continent][]---------------------");
-        }else {
-            System.out.println("No value in variable");
-        }
-
+        printCapitals(TopCapitalByWorld, "---------------------Top 5 populated cities [Continent][]---------------------");
         List<Capital>TopCapitalByContinent = getPopulatedCapital(con, "Continent","North America",5);
-        if (TopCapitalByContinent != null) {
-            printCapitals(TopCapitalByContinent, "---------------------Top 5 populated Capital [Continent][]---------------------");
-        }else {
-            System.out.println("No value in variable");
-        }
-
+        printCapitals(TopCapitalByContinent, "---------------------Top 5 populated Capital [Continent][]---------------------");
         List<Capital>TopCapitalByRegion = getPopulatedCapital(con, "Region","Caribbean",5);
-        if (TopCapitalByRegion != null) {
-            printCapitals(TopCapitalByRegion, "---------------------Top 5 populated Capital [Region][Caribbean]---------------------");
-        }else {
-            System.out.println("No value in variable");
-        }
+        printCapitals(TopCapitalByRegion, "---------------------Top 5 populated Capital [Region][Caribbean]---------------------");
     }
 //
     public static void main(String[] args) {
