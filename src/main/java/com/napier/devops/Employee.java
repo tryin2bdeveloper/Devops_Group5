@@ -39,6 +39,7 @@ public class Employee
      * Employee's manager
      */
     public String manager;
+    public int salaries;
 
     public int getEmp_no() {
         return emp_no;
