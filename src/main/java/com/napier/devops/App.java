@@ -297,7 +297,11 @@ public class App {
         App app = new App();
 
         // Connect to database
-        app.connect("localhost:33060", 30000);
+        if(args.length < 1){
+            app.connect("localhost:33060", 30000);
+        }else{
+            app.connect(args[0], Integer.parseInt(args[1]));
+        }
 
         // Set the limit to a positive number to retrieve results
         app.Table_display();
