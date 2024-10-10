@@ -6,13 +6,13 @@ actor User as "Actor"
 
 rectangle "Population Report System" {
 
-    usecase "Generate World Population Report by City and Non-City Distribution" as UC1
-    usecase "Generate Continent-Specific Population Report by City and Non-City Distribution" as UC2
-    usecase "Generate World Population Report by Country with City and Non-City Breakdown" as UC3
+    usecase "Generate World Population Report by All Countries Database from largest to smallest" as UC1
+    usecase "Generate Continent-Specific Population Report by by All Countries Database largest and smallest Distribution" as UC2
+    usecase "Generate World Population Report by All the Countries with largest to smallest for Database" as UC3
     usecase "Generate Population Report for the Top Populated Country" as UC4
     usecase "Generate Report on Most Populated Countries by Continent with Focus on Asia" as UC5
     usecase "Generate to Retrieve Population Data for the Most Populous Country in a Specific Region of Eastern Asia" as UC6
-    usecase "Generate World Population Report Ordered from Largest to Smallest by Country" as UC7
+    usecase "Generate the World Population Report Ordered from Largest to Smallest by Country" as UC7
     usecase "Generate Report of Cities in a Continent Organized by Population Size" as UC8
     usecase "Generate Report of Cities in a Country Sorted by Population" as UC10
     usecase "Generate the World Population Ranking Report by Country" as UC11
