@@ -13,7 +13,7 @@ public class App {
     /**
      * Connect to the MySQL database.
      */
-    public void connect() {
+    public void connect(String location, int delay) {
         try {
             // Load Database driver
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -21,15 +21,14 @@ public class App {
             System.out.println("Could not load SQL driver");
             System.exit(-1);
         }
-
         int retries = 10;
         for (int i = 0; i < retries; ++i) {
             System.out.println("Connecting to database...");
             try {
                 // Wait a bit for db to start
-                Thread.sleep(30000);
+                Thread.sleep(delay);
                 // Connect to database
-                con = DriverManager.getConnection("jdbc:mysql://db:3306/world?useSSL=false&allowPublicKeyRetrieval=true", "root", "group-5");
+                con = DriverManager.getConnection("jdbc:mysql://" + location + "/world?useSSL=false&allowPublicKeyRetrieval=true", "root", "group-5");
                 System.out.println("Successfully connected");
                 break;
             } catch (SQLException sqle) {
@@ -156,7 +155,7 @@ public class App {
     }
 
     public static void printCapitals(List<Capital> capitals, String header){
-        if (capitals.isEmpty()) {
+        if (capitals == null) {
             System.out.println("No countries found.");
         } else {
             System.out.println("\n\n######## " + header + " ########");
@@ -177,7 +176,7 @@ public class App {
     // Function to print countries in a table format
     public static void printCountries(List<Country> countries, String header) {
         // Check if countries were retrieved
-        if (countries.isEmpty()) {
+        if (countries == null) {
             System.out.println("No countries found.");
         } else {
             System.out.println("\n\n######## " + header + " ########");
@@ -198,7 +197,7 @@ public class App {
 
     public static void printCities(List<City> cities, String header) {
         // Check if countries were retrieved
-        if (cities.isEmpty()) {
+        if (cities == null) {
             System.out.println("No countries found.");
         } else {
             System.out.println("\n\n######## " + header + " ########");
@@ -298,7 +297,7 @@ public class App {
         App app = new App();
 
         // Connect to database
-        app.connect();
+        app.connect("localhost:33060", 30000);
 
         // Set the limit to a positive number to retrieve results
         app.Table_display();
