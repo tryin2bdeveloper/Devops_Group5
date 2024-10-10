@@ -1,4 +1,4 @@
-name: Workflow for DevOps coursework Java application.
+name: Workflow for Population report Java application.
 on:
   push:
     branches:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: Coursework
+    name: Population report
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
@@ -22,4 +22,13 @@ jobs:
         run: mvn package
       - name: Run docker compose
         run: docker compose up --abort-on-container-exit
+      - name: Unit Tests
+        run: mvn -Dtest=com.napier.devops.AppTest test
+      - name: Package and Run docker compose
+        run: |
+          mvn package -DskipTests
+          docker compose up --abort-on-container-exit
+
+      
+           
 
