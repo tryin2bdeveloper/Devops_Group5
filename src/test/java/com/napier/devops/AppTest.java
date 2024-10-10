@@ -1,5 +1,6 @@
 package com.napier.devops;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -18,6 +19,11 @@ public class AppTest
     static void init()
     {
         app = new App();
+    }
+
+    @AfterEach
+    public void tearDown() {
+        app.disconnect();
     }
 
     @Test
@@ -107,4 +113,10 @@ public class AppTest
         app.printCapitals(capitals, "Test Data");
         assertEquals(2, capitals.size());
     }
+
+    @Test
+    void testGetCountry(){
+
+    }
+
 }
