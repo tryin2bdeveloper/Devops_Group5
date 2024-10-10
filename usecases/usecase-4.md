@@ -14,7 +14,7 @@ Primary task.
 Access to a current world population database is required.
 
 ## Success End Condition
-A report is generated to showing populations in cities and non-cities areas for each country at supporting analysis.
+A report is generated to showing populations from largest to smallest for each country at supporting analysis.
 
 ## Failed End Condition
 The report is not generated.
@@ -27,8 +27,8 @@ A request is made for a report that shows population data and the analyst inputs
 
 ### MAIN SUCCESS SCENARIO
 The request for population data is received.
-The report includes the number of people living in cities and rural areas for every country.
-The data is sorted correctly by population.
+The system includes the number from largest to smallest for every country report.
+The system is sorted correctly by population of data.
 The information is presented clearly for analysts to review.
 
 ### EXTENSIONS

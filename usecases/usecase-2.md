@@ -1,4 +1,4 @@
-### USE CASE: 2 Generate Continent-Specific Population Report by the City and the Non-City Distribution
+### USE CASE: 2 Generate Continent-Specific Population Report from Largest to Smallest Distribution
 
 ## CHARACTERISTIC INFORMATION
 ## Goal in Context
@@ -29,8 +29,8 @@ A request for population data analysis is submitted.
 
 ## MAIN SUCCESS SCENARIO
 The analyst requests the population data.  
-A list of populations is fetched for all countries in the specified continent.  
-The data is sorted by population size from largest to smallest.  
+The system to a list of populations is fetched for all countries in the specified continent.  
+The system is sorted by population size from largest to smallest for data.  
 The report is successfully displayed for the analyst, differentiating between city and rural populations where applicable.
 
 ## EXTENSIONS

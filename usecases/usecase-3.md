@@ -1,8 +1,8 @@
-### USE CASE: 3 
+### USE CASE: 3 Generate World Population Report by All the Countries With Largest to Smallest
 
 ### CHARACTERISTIC INFORMATION
 ## Goal in Context  
-As an analyst, I need to generate a report showing all the countries in the world, ranked by population from largest to smallest. 
+As an analyst, I need to generate a report showing all the countries in the world ranked by population from largest to smallest. 
 This is to aid in reporting related to population data for the organization.
 
 ## Scope  
@@ -15,7 +15,7 @@ Primary task.
 A current database with information on the world populations is available.
 
 ## Success End Condition  
-A report is successfully generated that distinguishes between populations living in cities and those not living in cities.
+A report is successfully generated that distinguishes between populations from largest to smallest.
 
 ## Failed End Condition 
 The report is not generated the necessary data.
@@ -28,8 +28,8 @@ A data request from the analyst to produce the required report.
 
 ### MAIN SUCCESS SCENARIO
 The analyst requests the necessary data.
-A list of people living both in cities and non-cities areas is retrieved from each country.
-The data is sorted accordingly.
+The system of a list from largest to smallest is retrieved from each country.
+The system is sorted accordingly for all database.
 The final report is presented in a clear format for review by to develop.
 
 ### EXTENSIONS
