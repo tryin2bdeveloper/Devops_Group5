@@ -1,4 +1,4 @@
-### USE CASE: 1 Generate the World Population Report by City and Non-City Distribution
+### USE CASE: 1 Generate the World Population Report by Largest to Smallest Distribution
 
 ## CHARACTERISTIC INFORMATION
 ## Goal in Context
@@ -27,7 +27,7 @@ Report request for data of analyst's to descried output is entered
 
 ## MAIN SUCCESS SCENARIO
 Analyst for request to data is as well received
-The lists of people are both living at the cities and not living at the cities in there have from all the countries.
+The lists of people are both largest and smallest in there have from all the countries.
 The data is sorted this all fetched data.
 The data will be good display for the analyst to all the data
 
