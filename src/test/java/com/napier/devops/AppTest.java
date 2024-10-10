@@ -111,7 +111,7 @@ public class AppTest
     void testGetCountryWithNullConnection() {
         // Test getPopulatedCountries with a null connection
         List<Country> countries = app.getPopulatedCountries(null, null, null, 0);
-        assertNotNull(countries, "Countries list should not be null");
+        assertNotNull(countries, "Connection to database is not establish");
         assertTrue(countries.isEmpty(), "Countries list should be empty when connection is null");
     }
 
@@ -180,6 +180,29 @@ public class AppTest
         assertTrue(capitals.isEmpty(), "Capitals list should be empty when using an invalid filter");
     }
 
+    @Test
+    void testTableDisplayWithValidData() {
+        // For valid data, assuming you know what the database returns
+        assertDoesNotThrow(() -> app.Table_display(), "Table_display should not throw exceptions for valid data.");
+    }
+
+    @Test
+    void testTableDisplayWithNullConnection() {
+        // Disconnect the database or simulate a null connection
+        app.disconnect(); // This will set `con` to null
+
+        // Ensure that the method handles a null connection without throwing an exception
+        assertDoesNotThrow(() -> app.Table_display(), "Table_display should handle a null connection gracefully.");
+    }
+
+    @Test
+    void testTableDisplayWithValidConnection() {
+        // Ensure that the connection is re-established
+        app.connect("localhost:33060", 0);
+
+        // Ensure that the method works correctly when connection is valid
+        assertDoesNotThrow(() -> app.Table_display(), "Table_display should run without errors for a valid connection.");
+    }
 
 }
 
