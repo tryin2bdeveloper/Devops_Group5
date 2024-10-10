@@ -1,7 +1,5 @@
 package com.napier.devops;
 
-import com.mysql.cj.xdevapi.Table;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,19 +58,15 @@ public class App {
     public static List<Country> getPopulatedCountries(Connection con, String key, String value, int limit) {
         String Country_query = "SELECT country.Code, country.Name, country.Continent, country.Region, country.Population, city.Name AS Capital " +
                 "FROM country JOIN city ON country.Capital = city.ID ";
-
         if (key != null && value != null) {
             Country_query += "WHERE country." + key + " = '" + value + "' ";
         }
-
         // Ensure a positive limit value for the query
         if (limit > 0) {
             Country_query += "ORDER BY country.Population DESC LIMIT " + limit;
-
         } else {
             Country_query += "ORDER BY country.Population DESC"; // No limit if zero or negative
         }
-
         return getCountryList(con, Country_query);
     }
 
@@ -162,41 +156,66 @@ public class App {
     }
 
     public static void printCapitals(List<Capital> capitals, String header){
-        System.out.println("\n\n######## " + header + " ########");
-        System.out.println("+-----------------------------------+-----------------------------------------+------------+");
-        System.out.printf("|%-33s | %-39s | %-10s |\n",
-                "Name","Country Name","Population");
-        System.out.println("+-----------------------------------+-----------------------------------------+------------+");
-
-        for(Capital capital : capitals){
+        if (capitals.isEmpty()) {
+            System.out.println("No countries found.");
+        } else {
+            System.out.println("\n\n######## " + header + " ########");
+            System.out.println("+-----------------------------------+-----------------------------------------+------------+");
             System.out.printf("|%-33s | %-39s | %-10s |\n",
-                    capital.getCapital(), capital.getName(), capital.getPopulation());
+                    "Name","Country Name","Population");
+            System.out.println("+-----------------------------------+-----------------------------------------+------------+");
+
+            for(Capital capital : capitals){
+                System.out.printf("|%-33s | %-39s | %-10s |\n",
+                        capital.getCapital(), capital.getName(), capital.getPopulation());
+            }
+            System.out.println("+-----------------------------------+-----------------------------------------+------------+");
+            System.out.println(capitals.size() + " countries found.");
         }
-        System.out.println("+-----------------------------------+-----------------------------------------+------------+");
     }
 
     // Function to print countries in a table format
     public static void printCountries(List<Country> countries, String header) {
-        System.out.println("\n\n######## " + header + " ########");
-        System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
-        System.out.printf("| %-12s | %-39s | %-13s | %-27s | %-10s | %-33s |\n",
-                "Country Code", "Country Name", "Continent", "Region", "Population", "Capital");
-        System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
-
-        for (Country country : countries) {
-            System.out.printf("| %-12s | %-39s | %-13s | %-27s | %-10s | %-33s |\n",
-                    country.getCountryCode(), country.getName(), country.getContinent(),
-                    country.getRegion(), country.getPopulation(), country.getCapital());
-        }
-        System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
         // Check if countries were retrieved
         if (countries.isEmpty()) {
             System.out.println("No countries found.");
         } else {
+            System.out.println("\n\n######## " + header + " ########");
+            System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
+            System.out.printf("| %-12s | %-39s | %-13s | %-27s | %-10s | %-33s |\n",
+                    "Country Code", "Country Name", "Continent", "Region", "Population", "Capital");
+            System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
+
+            for (Country country : countries) {
+                System.out.printf("| %-12s | %-39s | %-13s | %-27s | %-10s | %-33s |\n",
+                        country.getCountryCode(), country.getName(), country.getContinent(),
+                        country.getRegion(), country.getPopulation(), country.getCapital());
+            }
+            System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
             System.out.println(countries.size() + " countries found.");
         }
     }
 
+    public static void printCities(List<City> cities, String header) {
+        // Check if countries were retrieved
+        if (cities.isEmpty()) {
+            System.out.println("No countries found.");
+        } else {
+            System.out.println("\n\n######## " + header + " ########");
+            System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
+            System.out.printf("| %-34s | %-39s | %-27s | %-10s |\n",
+                    "City Name", "Country Name", "District", "Population");
+            System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
+
+            for (City city : cities) {
+                System.out.printf("| %-34s | %-39s | %-27s | %-10s |\n",
+                        city.getName(), city.getCountryName(), city.getDistrict(), city.getPopulation());
+            }
+
+            System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
+            System.out.println(cities.size() + " countries found.");
+        }
+    }
 
     // Helper function to execute the query and return a list of cities
     private static List<City> getCityList(Connection con, String sql_query) {
@@ -222,28 +241,6 @@ public class App {
     }
 
     // Function to print cities in a table format
-    public static void printCities(List<City> cities, String header) {
-        System.out.println("\n\n######## " + header + " ########");
-        System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
-        System.out.printf("| %-34s | %-39s | %-27s | %-10s |\n",
-                "City Name", "Country Name", "District", "Population");
-        System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
-
-        for (City city : cities) {
-            System.out.printf("| %-34s | %-39s | %-27s | %-10s |\n",
-                    city.getName(), city.getCountryName(), city.getDistrict(), city.getPopulation());
-        }
-
-        System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
-
-        // Check if countries were retrieved
-        if (cities.isEmpty()) {
-            System.out.println("No countries found.");
-        } else {
-            System.out.println(cities.size() + " countries found.");
-        }
-    }
-
     public void Table_display(){
         List<Country> countryByWorld = getPopulatedCountries(con, null, null, 0); // Fetch top 10 populated countries
         printCountries(countryByWorld, "---------------------Most populated countries [World]---------------------");
