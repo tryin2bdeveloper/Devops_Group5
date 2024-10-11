@@ -22,7 +22,10 @@ jobs:
         run: |
           docker build -t database ./db 
           docker run --name Unit -dp 33060:3306 database
-          mvn -Dtest=com.napier.devops.AppTest test     
+          mvn -Dtest=com.napier.devops.AppTest test
+          docker stop Unit
+          docker rm Unit
+          docker image rm database       
 
   IntegrationTests:
     name: Integration Tests
@@ -39,10 +42,12 @@ jobs:
           distribution: 'adopt'
       - name: Integration Tests
         run: |
+          docker build -t data ./db 
+          docker run --name Integration -dp 33060:3306 data
           mvn -Dtest=com.napier.devops.AppIntegrationTest test
-          docker stop Unit
-          docker rm Unit
-          docker image rm database                   
+          docker stop Integration
+          docker rm Integration
+          docker image rm data                    
 
   build:
     name: Build and Start Using docker-compose
