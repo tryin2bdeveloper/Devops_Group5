@@ -6,7 +6,7 @@ on:
       - develop
 jobs:
   UnitTests:
-    name: Integration Tests
+    name: Unit Tests
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
@@ -22,10 +22,7 @@ jobs:
         run: |
           docker build -t database ./db 
           docker run --name Unit -dp 33060:3306 database
-          mvn -Dtest=com.napier.devops.AppTest test
-          docker stop Unit
-          docker rm Unit
-          docker image rm database       
+          mvn -Dtest=com.napier.devops.AppTest test     
 
   IntegrationTests:
     name: Integration Tests
@@ -42,12 +39,10 @@ jobs:
           distribution: 'adopt'
       - name: Integration Tests
         run: |
-          docker build -t database ./db 
-          docker run --name Integration -dp 33060:3306 database
           mvn -Dtest=com.napier.devops.AppIntegrationTest test
-          docker stop Integration
-          docker rm Integration
-          docker image rm database                    
+          docker stop Unit
+          docker rm Unit
+          docker image rm database                   
 
   build:
     name: Build and Start Using docker-compose
