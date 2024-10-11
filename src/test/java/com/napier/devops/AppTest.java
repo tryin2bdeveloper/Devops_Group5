@@ -28,6 +28,11 @@ public class AppTest
         }
     }
 
+    @AfterAll
+    public void tearDown() {
+        app.disconnect();
+    }
+
     @Test
     void testPrintCountriesWithNull()
     {
