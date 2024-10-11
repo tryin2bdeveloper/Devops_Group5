@@ -67,56 +67,73 @@ public class App {
     }
 
     public static List<Country> getPopulatedCountries(Connection con, String key, String value, int limit) {
-        String Country_query = "SELECT country.Code, country.Name, country.Continent, country.Region, country.Population, city.Name AS Capital " +
-                "FROM country JOIN city ON country.Capital = city.ID ";
-        if (key != null && value != null) {
-            Country_query += "WHERE country." + key + " = '" + value + "' ";
+        // Validate that limit is a positive number
+        if (limit < 0) {
+            System.out.println("Limit must be a positive integer.");
+            return new ArrayList<>();  // Return an empty list if limit is invalid
+        }else{
+            // Construct the base query
+            String Country_query = "SELECT country.Code, country.Name, country.Continent, country.Region, country.Population, city.Name AS Capital " +
+                    "FROM country JOIN city ON country.Capital = city.ID ";
+            // Add conditions if key and value are provided
+            if (key != null && value != null) {
+                Country_query += "WHERE country." + key + " = '" + value + "' ";
+            }
+            // Append ORDER BY clause and limit if required
+            Country_query += "ORDER BY country.Population DESC";
+            if (limit > 0) {
+                Country_query += " LIMIT " + limit;
+            }
+            // Execute the query and return the result
+            return getCountryList(con, Country_query);
         }
-        // Ensure a positive limit value for the query
-        if (limit > 0) {
-            Country_query += "ORDER BY country.Population DESC LIMIT " + limit;
-        } else {
-            Country_query += "ORDER BY country.Population DESC"; // No limit if zero or negative
-        }
-        return getCountryList(con, Country_query);
     }
 
     public static List<City> getPopulatedCity(Connection con, String key, String value, int limit) {
-        String sql_query = "SELECT city.Name, country.Name AS CountryName, city.District, city.Population " +
-                "FROM city JOIN country ON city.CountryCode = country.Code ";
 
-        if (key != null && value != null) {
-            if (key.equals("Name") || key.equals("Continent") || key.equals("Region")) {
-                sql_query += "WHERE country." + key + " = '" + value + "' ";
-            } else {
-                sql_query += "WHERE city." + key + " = '" + value + "' ";
+        if (limit < 0) {
+            System.out.println("Limit must be a positive integer.");
+            return new ArrayList<>();  // Return an empty list if limit is invalid
+        }else{
+            String sql_query = "SELECT city.Name, country.Name AS CountryName, city.District, city.Population " +
+                    "FROM city JOIN country ON city.CountryCode = country.Code ";
+            if (key != null && value != null) {
+                if (key.equals("Name") || key.equals("Continent") || key.equals("Region")) {
+                    sql_query += "WHERE country." + key + " = '" + value + "' ";
+                } else if(limit ==0){
+                    sql_query += "WHERE city." + key + " = '" + value + "' ";
+                }
             }
+            if (limit > 0) {
+                sql_query += "ORDER BY city.Population DESC LIMIT " + limit;
+            }else if (limit == 0) {
+                sql_query += "ORDER BY city.Population DESC";
+            }
+            return getCityList(con, sql_query);
         }
-        if (limit > 0) {
-            sql_query += "ORDER BY city.Population DESC LIMIT " + limit;
-        }else {
-          sql_query += "ORDER BY city.Population DESC";
-        }
-        return getCityList(con, sql_query);
     }
 
     public static List<Capital> getPopulatedCapital(Connection con, String key, String value, int limit) {
-        String Capital_query = "SELECT city.Name AS capital, country.Name , country.Population " +
-                "FROM country JOIN city ON country.Capital = city.ID ";
+        if (limit < 0) {
+            System.out.println("Limit must be a positive integer.");
+            return new ArrayList<>();  // Return an empty list if limit is invalid
+        }else{
+            String Capital_query = "SELECT city.Name AS capital, country.Name , country.Population " +
+                    "FROM country JOIN city ON country.Capital = city.ID ";
 
-        if (key != null && value != null) {
-            Capital_query += "WHERE country." + key + " = '" + value + "' ";
+            if (key != null && value != null) {
+                Capital_query += "WHERE country." + key + " = '" + value + "' ";
+            }
+
+            // Ensure a positive limit value for the query
+            if (limit > 0) {
+                Capital_query += "ORDER BY country.Population DESC LIMIT " + limit;
+
+            } else if (limit ==0) {
+                Capital_query += "ORDER BY country.Population DESC"; // No limit if zero or negative
+            }
+            return getCapitalList(con, Capital_query);
         }
-
-        // Ensure a positive limit value for the query
-        if (limit > 0) {
-            Capital_query += "ORDER BY country.Population DESC LIMIT " + limit;
-
-        } else {
-            Capital_query += "ORDER BY country.Population DESC"; // No limit if zero or negative
-        }
-
-        return getCapitalList(con, Capital_query);
     }
 
     public static List<Capital> getCapitalList(Connection con, String Capital_query){
@@ -125,22 +142,24 @@ public class App {
         if (con == null) {
             System.out.println("No database connection.");
             return capitals;  // Return an empty list if there's no connection
-        }
+        }else {
+            if (Capital_query != null) {
+                try{
+                    Statement stmt = con.createStatement();
+                    ResultSet rset = stmt.executeQuery(Capital_query);
 
-        try{
-            Statement stmt = con.createStatement();
-            ResultSet rset = stmt.executeQuery(Capital_query);
+                    while (rset.next()){
+                        String countryName = rset.getString("Name");
+                        int population = rset.getInt("Population");
+                        String capitalName = rset.getString("Capital");
 
-            while (rset.next()){
-                String countryName = rset.getString("Name");
-                int population = rset.getInt("Population");
-                String capitalName = rset.getString("Capital");
-
-                Capital capital = new Capital(countryName, population, capitalName);
-                capitals.add(capital);
+                        Capital capital = new Capital(countryName, population, capitalName);
+                        capitals.add(capital);
+                    }
+                } catch (SQLException e) {
+                    System.out.println("SQL Exception: " + e.getMessage());
+                }
             }
-        } catch (SQLException e) {
-            System.out.println("SQL Exception: " + e.getMessage());
         }
         return capitals;
     }
@@ -149,30 +168,34 @@ public class App {
     private static List<Country> getCountryList(Connection con, String Country_query) {
         List<Country> countries = new ArrayList<>();
 
-        if (con == null) {
-            System.out.println("No database connection.");
-            return countries;  // Return an empty list if there's no connection
-        }
+        if (Country_query == null) {
+           System.out.println("There is no value in variable");
+        }else{
+            if (con != null) {
+                try {
+                    Statement stmt = con.createStatement();
+                    ResultSet rset = stmt.executeQuery(Country_query);
 
-        try {
-            Statement stmt = con.createStatement();
-            ResultSet rset = stmt.executeQuery(Country_query);
+                    // Populate country list
+                    while (rset.next()) {
+                        String countryCode = rset.getString("Code");
+                        String countryName = rset.getString("Name");
+                        String continent = rset.getString("Continent");
+                        String region = rset.getString("Region");
+                        int population = rset.getInt("Population");
+                        String capital = rset.getString("Capital");
 
-            // Populate country list
-            while (rset.next()) {
-                String countryCode = rset.getString("Code");
-                String countryName = rset.getString("Name");
-                String continent = rset.getString("Continent");
-                String region = rset.getString("Region");
-                int population = rset.getInt("Population");
-                String capital = rset.getString("Capital");
-
-                Country country = new Country(countryCode, countryName, continent, region, population, capital);
-                countries.add(country);
+                        Country country = new Country(countryCode, countryName, continent, region, population, capital);
+                        countries.add(country);
+                    }
+                } catch (SQLException e) {
+                    System.out.println("SQL Exception: " + e.getMessage());
+                }
             }
-
-        } catch (SQLException e) {
-            System.out.println("SQL Exception: " + e.getMessage());
+            else{
+                System.out.println("No database connection.");
+                return countries;
+            }
         }
         return countries;
     }
@@ -180,27 +203,31 @@ public class App {
     // Helper function to execute the query and return a list of cities
     private static List<City> getCityList(Connection con, String sql_query) {
         List<City> cities = new ArrayList<>();
-
         if (con == null) {
             System.out.println("No database connection.");
             return cities;  // Return an empty list if there's no connection
-        }
-        try {
-            Statement stmt = con.createStatement();
-            ResultSet rset = stmt.executeQuery(sql_query);
+        }else{
+            if (sql_query != null) {
+                try {
+                    Statement stmt = con.createStatement();
+                    ResultSet rset = stmt.executeQuery(sql_query);
 
-            // Populate city list (From Largest to Lowest)
-            while (rset.next()) {
-                String name = rset.getString("Name");
-                String countryName = rset.getString("CountryName"); // Country name from joined country table
-                String district = rset.getString("District");
-                int population = rset.getInt("Population");
+                    // Populate city list (From Largest to Lowest)
+                    while (rset.next()) {
+                        String name = rset.getString("Name");
+                        String countryName = rset.getString("CountryName"); // Country name from joined country table
+                        String district = rset.getString("District");
+                        int population = rset.getInt("Population");
 
-                City city = new City(name, countryName, district, population);
-                cities.add(city);
+                        City city = new City(name, countryName, district, population);
+                        cities.add(city);
+                    }
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+            }else {
+                System.out.println("No SQL query.");
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
         }
         return cities;
     }

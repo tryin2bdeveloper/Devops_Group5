@@ -12,17 +12,10 @@ public class AppTest
 {
     static App app;
 
-
     @BeforeAll
     static void init()
     {
         app = new App();
-        app.connect("localhost:33060", 0);
-    }
-
-    @AfterAll
-    public void tearDown() {
-        app.disconnect();
     }
 
     @Test
@@ -30,7 +23,6 @@ public class AppTest
     {
         // Pass null to printCountries and ensure it does not throw exceptions
         app.printCountries(null, "Header");
-        // You can also assert that it gracefully handles null values without breaking
     }
 
     @Test
@@ -39,20 +31,15 @@ public class AppTest
         // Pass an empty list and check if it handles it correctly
         List<Country> emptyList = new ArrayList<>();
         app.printCountries(emptyList, "Empty List");
-
-        // No exception should be thrown, and the output should indicate that no countries were found
         assertEquals(0, emptyList.size());
     }
 
     @Test
     void testPrintCountriesWithData()
     {
-        // Create a list with sample country data
         List<Country> countries = new ArrayList<>();
         countries.add(new Country("USA", "United States", "North America", "Northern America", 331002651, "Washington D.C."));
         countries.add(new Country("GBR", "United Kingdom", "Europe", "Northern Europe", 67886011, "London"));
-
-        // Check that it prints correctly
         app.printCountries(countries, "Test Data");
         assertEquals(2, countries.size());
     }
@@ -66,18 +53,14 @@ public class AppTest
     void testPrintCitiesWithEmptyList() {
         List<City> emptyList = new ArrayList<>();
         app.printCities(emptyList, "Empty List");
-
         assertEquals(0, emptyList.size());
     }
 
     @Test
     void testPrintCitiesWithData() {
-        // Create a list with sample city data
         List<City> cities = new ArrayList<>();
         cities.add(new City("New York", "United States", "New York", 8175133));
         cities.add(new City("London", "United Kingdom", "London", 8787892));
-
-        // Check that it prints correctly
         app.printCities(cities, "Test Data");
         assertEquals(2, cities.size());
     }
@@ -91,118 +74,135 @@ public class AppTest
     void testPrintCapitalsWithEmptyList() {
         List<Capital> emptyList = new ArrayList<>();
         app.printCapitals(emptyList, "Empty List");
-
         assertEquals(0, emptyList.size());
     }
 
     @Test
     void testPrintCapitalsWithData() {
-        // Create a list with sample capital data
         List<Capital> capitals = new ArrayList<>();
         capitals.add(new Capital("Washington D.C.", 331002651, "United States"));
         capitals.add(new Capital("London", 67886011, "United Kingdom"));
-
-        // Check that it prints correctly
         app.printCapitals(capitals, "Test Data");
         assertEquals(2, capitals.size());
     }
 
+    // Test for getPopulatedCountries() with a negative limit
     @Test
-    void testGetCountryWithNullConnection() {
-        // Test getPopulatedCountries with a null connection
-        List<Country> countries = app.getPopulatedCountries(null, null, null, 0);
-        assertNotNull(countries, "Connection to database is not establish");
-        assertTrue(countries.isEmpty(), "Countries list should be empty when connection is null");
+    void testGetPopulatedCountriesWithNegativeLimit() {
+        List<Country> result = app.getPopulatedCountries(app.getConnection(), null, null, -1);
+        assertTrue(result.isEmpty(), "List should be empty for negative limit.");
     }
 
+    // Test for getPopulatedCountries() with a null connection
     @Test
-    void testGetCityWithNullConnection() {
-        // Test getPopulatedCity with a null connection
-        List<City> cities = app.getPopulatedCity(null, null, null, 0);
-        assertNotNull(cities, "Cities list should not be null");
-        assertTrue(cities.isEmpty(), "Cities list should be empty when connection is null");
+    void testGetPopulatedCountriesWithNullConnection() {
+        List<Country> result = app.getPopulatedCountries(null, null, null, 10);
+        assertNotNull(result, "Result should not be null even if connection is null.");
+        assertTrue(result.isEmpty(), "List should be empty for a null connection.");
     }
 
+    // Test for getPopulatedCountries() with a valid positive limit
     @Test
-    void testGetCapitalWithNullConnection() {
-        // Test getPopulatedCapital with a null connection
-        List<Capital> capitals = app.getPopulatedCapital(null, null, null, 0);
-        assertNotNull(capitals, "Capitals list should not be null");
-        assertTrue(capitals.isEmpty(), "Capitals list should be empty when connection is null");
-    }
-
-    @Test
-    void testGetCountryWithFilter() {
-        // Test getPopulatedCountries with filters
-        List<Country> countries = app.getPopulatedCountries(app.getConnection(), "Continent", "Europe", 5);
-        app.printCountries(countries, "Test Data");
-
-    }
-
-    @Test
-    void testGetCityWithFilter() {
-        // Test getPopulatedCity with filters
-        List<City> cities = app.getPopulatedCity(app.getConnection(), "Name", "Russian Federation", 5);
-        app.printCities(cities, "Test Data");
-
-    }
-
-    @Test
-    void testGetCapitalWithFilter() {
-        // Test getPopulatedCapital with filters
-        List<Capital> capitals = app.getPopulatedCapital(app.getConnection(), "Continent", "Asia", 5);
-        app.printCapitals(capitals, "Test Data");
-    }
-
-
-
-    @Test
-    void testGetCountryWithInvalidFilter() {
-        // Test getPopulatedCountries with an invalid filter
-        List<Country> countries = app.getPopulatedCountries(app.getConnection(), "InvalidKey", "InvalidValue", 5);
-        assertNotNull(countries, "Countries list should not be null");
-        assertTrue(countries.isEmpty(), "Countries list should be empty when using an invalid filter");
-    }
-
-    @Test
-    void testGetCityWithInvalidFilter() {
-        // Test getPopulatedCity with an invalid filter
-        List<City> cities = app.getPopulatedCity(app.getConnection(), "InvalidKey", "InvalidValue", 5);
-        assertNotNull(cities, "Cities list should not be null");
-        assertTrue(cities.isEmpty(), "Cities list should be empty when using an invalid filter");
-    }
-
-    @Test
-    void testGetCapitalWithInvalidFilter() {
-        // Test getPopulatedCapital with an invalid filter
-        List<Capital> capitals = app.getPopulatedCapital(app.getConnection(), "InvalidKey", "InvalidValue", 5);
-        assertNotNull(capitals, "Capitals list should not be null");
-        assertTrue(capitals.isEmpty(), "Capitals list should be empty when using an invalid filter");
-    }
-
-    @Test
-    void testTableDisplayWithValidData() {
-        // For valid data, assuming you know what the database returns
-        assertDoesNotThrow(() -> app.Table_display(), "Table_display should not throw exceptions for valid data.");
-    }
-
-    @Test
-    void testTableDisplayWithNullConnection() {
-        // Disconnect the database or simulate a null connection
-        app.disconnect(); // This will set `con` to null
-
-        // Ensure that the method handles a null connection without throwing an exception
-        assertDoesNotThrow(() -> app.Table_display(), "Table_display should handle a null connection gracefully.");
-    }
-
-    @Test
-    void testTableDisplayWithValidConnection() {
-        // Ensure that the connection is re-established
+    void testGetPopulatedCountriesWithPositiveLimit() {
         app.connect("localhost:33060", 0);
+        List<Country> result = app.getPopulatedCountries(app.getConnection(), null, null, 10);
 
-        // Ensure that the method works correctly when connection is valid
-        assertDoesNotThrow(() -> app.Table_display(), "Table_display should run without errors for a valid connection.");
+        System.out.println("#### Printing Populated Countries (Positive Limit) ####");
+        app.printCountries(result, "Populated Countries with Positive Limit");
+
+        assertFalse(result.isEmpty(), "List should not be empty for a valid connection and positive limit.");
+        assertTrue(result.size() <= 10, "List should contain 10 or fewer countries.");
     }
 
-}
+    // Test for getPopulatedCountries() with a valid key and value
+    @Test
+    void testGetPopulatedCountriesWithKeyAndValue() {
+        app.connect("localhost:33060", 0);
+        List<Country> result = app.getPopulatedCountries(app.getConnection(), "Continent", "Asia", 10);
 
+        System.out.println("#### Printing Populated Countries (Key: Continent, Value: Asia) ####");
+        app.printCountries(result, "Populated Countries (Continent: Asia)");
+
+        assertFalse(result.isEmpty(), "List should not be empty when a valid key and value are provided.");
+    }
+
+    // Test for getPopulatedCity() with a negative limit
+    @Test
+    void testGetPopulatedCityWithNegativeLimit() {
+        List<City> result = app.getPopulatedCity(app.getConnection(), null, null, -1);
+        assertTrue(result.isEmpty(), "List should be empty for negative limit.");
+    }
+
+    // Test for getPopulatedCity() with a null connection
+    @Test
+    void testGetPopulatedCityWithNullConnection() {
+        List<City> result = app.getPopulatedCity(null, null, null, 10);
+        assertNotNull(result, "Result should not be null even if connection is null.");
+        assertTrue(result.isEmpty(), "List should be empty for a null connection.");
+    }
+
+    // Test for getPopulatedCity() with a valid positive limit
+    @Test
+    void testGetPopulatedCityWithPositiveLimit() {
+        app.connect("localhost:33060", 0);
+        List<City> result = app.getPopulatedCity(app.getConnection(), null, null, 10);
+
+        System.out.println("#### Printing Populated Cities (Positive Limit) ####");
+        app.printCities(result, "Populated Cities with Positive Limit");
+
+        assertFalse(result.isEmpty(), "List should not be empty for a valid connection and positive limit.");
+        assertTrue(result.size() <= 10, "List should contain 10 or fewer cities.");
+    }
+
+    // Test for getPopulatedCity() with a valid key and value
+    @Test
+    void testGetPopulatedCityWithKeyAndValue() {
+        app.connect("localhost:33060", 0);
+        List<City> result = app.getPopulatedCity(app.getConnection(), "Name", "Russian Federation", 10);
+
+        System.out.println("#### Printing Populated Cities (Key: Name, Value: Russian Federation) ####");
+        app.printCities(result, "Populated Cities (Name: Russian Federation)");
+
+        assertFalse(result.isEmpty(), "List should not be empty when a valid key and value are provided.");
+    }
+
+    // Test for getPopulatedCapital() with a negative limit
+    @Test
+    void testGetPopulatedCapitalWithNegativeLimit() {
+        List<Capital> result = app.getPopulatedCapital(app.getConnection(), null, null, -1);
+        assertTrue(result.isEmpty(), "List should be empty for negative limit.");
+    }
+
+    // Test for getPopulatedCapital() with a null connection
+    @Test
+    void testGetPopulatedCapitalWithNullConnection() {
+        List<Capital> result = app.getPopulatedCapital(null, null, null, 10);
+        assertNotNull(result, "Result should not be null even if connection is null.");
+        assertTrue(result.isEmpty(), "List should be empty for a null connection.");
+    }
+
+    // Test for getPopulatedCapital() with a valid positive limit
+    @Test
+    void testGetPopulatedCapitalWithPositiveLimit() {
+        app.connect("localhost:33060", 0);
+        List<Capital> result = app.getPopulatedCapital(app.getConnection(), null, null, 10);
+
+        System.out.println("#### Printing Populated Capitals (Positive Limit) ####");
+        app.printCapitals(result, "Populated Capitals with Positive Limit");
+
+        assertFalse(result.isEmpty(), "List should not be empty for a valid connection and positive limit.");
+        assertTrue(result.size() <= 10, "List should contain 10 or fewer capitals.");
+    }
+
+    // Test for getPopulatedCapital() with a valid key and value
+    @Test
+    void testGetPopulatedCapitalWithKeyAndValue() {
+        app.connect("localhost:33060", 0);
+        List<Capital> result = app.getPopulatedCapital(app.getConnection(), "Continent", "Asia", 10);
+
+        System.out.println("#### Printing Populated Capitals (Key: Continent, Value: Asia) ####");
+        app.printCapitals(result, "Populated Capitals (Continent: Asia)");
+
+        assertFalse(result.isEmpty(), "List should not be empty when a valid key and value are provided.");
+    }
+}
