@@ -8,11 +8,6 @@
     <artifactId>devops_employees</artifactId>
     <version>0.1.0.3</version>
 
-    <properties>
-        <maven.compiler.source>10</maven.compiler.source>
-        <maven.compiler.target>10</maven.compiler.target>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>mysql</groupId>
@@ -26,6 +21,11 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <properties>
+        <maven.compiler.source>10</maven.compiler.source>
+        <maven.compiler.target>10</maven.compiler.target>
+    </properties>
 
     <build>
         <plugins>
@@ -105,3 +105,4 @@
         </plugins>
     </build>
 </project>
+
