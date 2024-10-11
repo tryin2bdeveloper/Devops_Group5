@@ -205,4 +205,13 @@ public class AppTest
 
         assertFalse(result.isEmpty(), "List should not be empty when a valid key and value are provided.");
     }
+
+    @Test
+    void testTableDisplay() {
+        app.connect("localhost:33060", 0); // Make sure the connection is valid
+
+        // Call Table_display to ensure it doesn't throw any exceptions
+        assertDoesNotThrow(() -> app.Table_display(), "Table_display should not throw exceptions");
+        app.disconnect();
+    }
 }
