@@ -92,6 +92,7 @@ public class AppTest
         assertEquals(0, emptyList.size());
     }
 
+    // Test for getPopulatedCapital()
     @Test
     void testPrintCapitalsWithData() {
         List<Capital> capitals = new ArrayList<>();
