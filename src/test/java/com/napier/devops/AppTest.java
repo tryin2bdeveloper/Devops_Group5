@@ -16,6 +16,7 @@ public class AppTest
     static void init()
     {
         app = new App();
+        app.connect("localhost:33060", 0); // Make sure the connection is valid
     }
 
     @Test
@@ -104,7 +105,6 @@ public class AppTest
     // Test for getPopulatedCountries() with a valid positive limit
     @Test
     void testGetPopulatedCountriesWithPositiveLimit() {
-        app.connect("localhost:33060", 0);
         List<Country> result = app.getPopulatedCountries(app.getConnection(), null, null, 10);
 
         System.out.println("#### Printing Populated Countries (Positive Limit) ####");
@@ -117,12 +117,9 @@ public class AppTest
     // Test for getPopulatedCountries() with a valid key and value
     @Test
     void testGetPopulatedCountriesWithKeyAndValue() {
-        app.connect("localhost:33060", 0);
         List<Country> result = app.getPopulatedCountries(app.getConnection(), "Continent", "Asia", 10);
-
         System.out.println("#### Printing Populated Countries (Key: Continent, Value: Asia) ####");
         app.printCountries(result, "Populated Countries (Continent: Asia)");
-
         assertFalse(result.isEmpty(), "List should not be empty when a valid key and value are provided.");
     }
 
@@ -144,12 +141,9 @@ public class AppTest
     // Test for getPopulatedCity() with a valid positive limit
     @Test
     void testGetPopulatedCityWithPositiveLimit() {
-        app.connect("localhost:33060", 0);
         List<City> result = app.getPopulatedCity(app.getConnection(), null, null, 10);
-
         System.out.println("#### Printing Populated Cities (Positive Limit) ####");
         app.printCities(result, "Populated Cities with Positive Limit");
-
         assertFalse(result.isEmpty(), "List should not be empty for a valid connection and positive limit.");
         assertTrue(result.size() <= 10, "List should contain 10 or fewer cities.");
     }
@@ -157,12 +151,9 @@ public class AppTest
     // Test for getPopulatedCity() with a valid key and value
     @Test
     void testGetPopulatedCityWithKeyAndValue() {
-        app.connect("localhost:33060", 0);
         List<City> result = app.getPopulatedCity(app.getConnection(), "Name", "Russian Federation", 10);
-
         System.out.println("#### Printing Populated Cities (Key: Name, Value: Russian Federation) ####");
         app.printCities(result, "Populated Cities (Name: Russian Federation)");
-
         assertFalse(result.isEmpty(), "List should not be empty when a valid key and value are provided.");
     }
 
@@ -184,12 +175,9 @@ public class AppTest
     // Test for getPopulatedCapital() with a valid positive limit
     @Test
     void testGetPopulatedCapitalWithPositiveLimit() {
-        app.connect("localhost:33060", 0);
         List<Capital> result = app.getPopulatedCapital(app.getConnection(), null, null, 10);
-
         System.out.println("#### Printing Populated Capitals (Positive Limit) ####");
         app.printCapitals(result, "Populated Capitals with Positive Limit");
-
         assertFalse(result.isEmpty(), "List should not be empty for a valid connection and positive limit.");
         assertTrue(result.size() <= 10, "List should contain 10 or fewer capitals.");
     }
@@ -197,21 +185,15 @@ public class AppTest
     // Test for getPopulatedCapital() with a valid key and value
     @Test
     void testGetPopulatedCapitalWithKeyAndValue() {
-        app.connect("localhost:33060", 0);
         List<Capital> result = app.getPopulatedCapital(app.getConnection(), "Continent", "Asia", 10);
-
         System.out.println("#### Printing Populated Capitals (Key: Continent, Value: Asia) ####");
         app.printCapitals(result, "Populated Capitals (Continent: Asia)");
-
         assertFalse(result.isEmpty(), "List should not be empty when a valid key and value are provided.");
     }
 
     @Test
     void testTableDisplay() {
-        app.connect("localhost:33060", 0); // Make sure the connection is valid
-
         // Call Table_display to ensure it doesn't throw any exceptions
         assertDoesNotThrow(() -> app.Table_display(), "Table_display should not throw exceptions");
-        app.disconnect();
     }
 }
