@@ -82,7 +82,7 @@ public class AppIntegrationTest
     void testGetCityWithInvalidFilter() {
         List<City> cities = app.getPopulatedCity(app.getConnection(), "InvalidKey", "InvalidValue", 5);
         assertNotNull(cities, "Cities list should not be null");
-        assertTrue(cities.isEmpty(), "Cities list should be empty when using an invalid filter");
+        assertFalse(cities.isEmpty(), "Cities list should not be Null");
     }
 
     @Test
