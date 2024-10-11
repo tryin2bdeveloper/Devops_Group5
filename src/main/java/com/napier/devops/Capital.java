@@ -1,6 +1,5 @@
 package com.napier.devops;
 
-
 public class Capital {
     private String name;
     private String capital;
