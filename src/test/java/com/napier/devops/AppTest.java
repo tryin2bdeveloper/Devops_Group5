@@ -1,6 +1,8 @@
 package com.napier.devops;
 
 import org.junit.jupiter.api.*;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,14 @@ public class AppTest
     {
         app = new App();
         app.connect("localhost:33060", 0); // Make sure the connection is valid
+    }
+
+    @BeforeEach
+    public void setUp() throws SQLException {
+        // Ensure the connection is active before each test
+        if (app.getConnection() == null || app.getConnection().isClosed()) {
+            app.connect("localhost:33060", 0);  // Reconnect if the connection is closed or null
+        }
     }
 
     @Test
