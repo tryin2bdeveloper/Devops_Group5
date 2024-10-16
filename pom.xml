@@ -115,13 +115,13 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.7</version>
                 <executions>
-                    <!-- Prepare JaCoCo agent before tests -->
+                    <!-- Ensure this prepares the agent during the 'initialize' phase -->
                     <execution>
                         <goals>
-                            <goal>prepare-agent</goal>
+                            <goal>prepare-agent</goal> <!-- This attaches the JaCoCo agent -->
                         </goals>
                     </execution>
-                    <!-- Generate coverage report after tests -->
+                    <!-- Generate the report after the tests have run -->
                     <execution>
                         <id>report</id>
                         <phase>test</phase>
@@ -131,13 +131,38 @@
                         <configuration>
                             <outputDirectory>${project.build.directory}/jacoco-report</outputDirectory>
                             <reports>
-                                <report>html</report>
-                                <report>xml</report> <!-- Generate XML report for Codecov -->
+                                <report>xml</report> <!-- Required for Codecov -->
                             </reports>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin><plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.7</version>
+            <executions>
+                <!-- Ensure this prepares the agent during the 'initialize' phase -->
+                <execution>
+                    <goals>
+                        <goal>prepare-agent</goal> <!-- This attaches the JaCoCo agent -->
+                    </goals>
+                </execution>
+                <!-- Generate the report after the tests have run -->
+                <execution>
+                    <id>report</id>
+                    <phase>test</phase>
+                    <goals>
+                        <goal>report</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${project.build.directory}/jacoco-report</outputDirectory>
+                        <reports>
+                            <report>xml</report> <!-- Required for Codecov -->
+                        </reports>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
         </plugins>
     </build>
 </project>

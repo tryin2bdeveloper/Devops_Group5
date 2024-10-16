@@ -70,13 +70,12 @@ jobs:
           docker stop world
           docker rm world
           docker image rm database
-      - orbs:
-          codecov: codecov/codecov@4.0.1
-        workflows:
-          upload-to-codecov:
-            jobs:
-              - checkout
-              - codecov/upload # optional (default = false)
+      - name: CodeCov
+        uses: codecov/codecov-action@v2
+        with:
+          directory: ./target/site/jacoco
+          flags: Integration Tests # optional
+          verbose: true # optional (default = false)
 
   build:
     name: Build and Start Using docker compose
