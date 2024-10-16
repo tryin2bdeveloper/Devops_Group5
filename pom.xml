@@ -106,7 +106,7 @@
                 <configuration>
                     <forkCount>1</forkCount>
                     <reuseForks>true</reuseForks>
-                    <argLine>-Xmx1024m</argLine> <!-- Increase memory -->
+                    <argLine>-Xmx1024m</argLine>
                 </configuration>
             </plugin>
             <plugin>
