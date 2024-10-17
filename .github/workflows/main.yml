@@ -95,8 +95,9 @@ jobs:
       - name: Upload to CodeCov
         uses: codecov/codecov-action@v2
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ secrets.CODECOV_TOKEN }} # Make sure to set the token in GitHub Secrets
           files: ./target/jacoco.exec # Path to JaCoCo exec file
+          directory: ./target/site/jacoco # Directory for HTML report
           flags: IntegrationTests # optional
           verbose: true # optional
 
