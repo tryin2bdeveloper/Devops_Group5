@@ -429,30 +429,29 @@ public class App {
             System.out.println("No result found in variable");
         } else {
             System.out.println("\n\n######## " + header + " ########");
-            System.out.println("+--------------------------------------------+-------------------------+-------------------------+-------------------------+-------------------------+-------------------------+");
-            System.out.printf("|%-33s | %-20s | %-25s | %-25s | %-25s | %-25s |\n",
+            System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+");
+            System.out.printf("| %-33s | %-15s | %-25s | %-25s |\n",
                     "Name",
                     "Total Population",
                     "Population Live In Cities",
-                    "Percentage In Cities",
-                    "Population Not Live In Cities",
-                    "Percentage Not In Cities");
-            System.out.println("+--------------------------------------------+-------------------------+-------------------------+-------------------------+-------------------------+-------------------------+");
+                    "Population Not Live In Cities");
+            System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+");
 
             for (Population population : populations) {
-                System.out.printf("|%-33s | %-20d | %-25d | %-25.2f | %-25d | %-25.2f |\n",
+                System.out.printf("| %-33s | %,16d | %,15d [ %.2f%% ] | %,18d [ %.2f%% ] |\n",
                         population.getName(),
-                        String.format("%,d", population.getTotalPopulation()),
-                        String.format("%,d", population.getPopulationInCities()),
-                        population.getPercentageInCities(),
-                        String.format("%,d", population.getPopulationNotInCities()),
-                        population.getPercentageNotInCities());
+                        population.getTotalPopulation(),          // Population formatted with commas
+                        population.getPopulationInCities(),       // Population in cities formatted with commas
+                        population.getPercentageInCities(),       // Percentage in cities with '%'
+                        population.getPopulationNotInCities(),    // Population not in cities formatted with commas
+                        population.getPercentageNotInCities());   // Percentage not in cities with '%'
             }
 
-            System.out.println("+--------------------------------------------+-------------------------+-------------------------+-------------------------+-------------------------+-------------------------+");
+            System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+");
             System.out.println(populations.size() + " RESULTS FOUND IN THIS REPORT");
         }
     }
+
 
     // Function to display various populated countries, cities, and capitals in table format
     public void Table_display() {
