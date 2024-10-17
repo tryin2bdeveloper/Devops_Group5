@@ -21,7 +21,7 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      # Build and run the database as in the first workflow
+      # Build and run the database for Unit Tests
       - name: Build Database Docker Image
         run: docker build -t database ./db
 
@@ -63,6 +63,7 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
+      # Build and run the database for Integration Tests
       - name: Build Database Docker Image
         run: docker build -t database ./db
 
@@ -96,9 +97,10 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./target/jacoco.exec # Path to JaCoCo exec file
-          flags: IntegrationTests # optional
-          verbose: true # optional
+          files: ./target/site/jacoco/jacoco.xml  # Correct JaCoCo report file path
+          flags: IntegrationTests # Optional
+          verbose: true
+          fail_ci_if_error: true  # Fail if Codecov upload fails
 
   BuildAndRun:
     name: Build and Start Using Docker Compose
