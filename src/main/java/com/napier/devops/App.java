@@ -145,7 +145,6 @@ public class App {
         }
     }
 
-
     /**
      * Retrieves a list of capital cities from the database based on the provided SQL query.
      *
@@ -375,6 +374,70 @@ public class App {
         }
     }
 
+    public static List<Language> getLanguages(Connection con) {
+        if (con == null) {
+            System.out.println("No connection found.");
+            return new ArrayList<>();
+        } else {
+            // Correcting the SQL query syntax
+            String que = "SELECT countrylanguage.Language, SUM(country.Population) AS Population " +
+                    "FROM countrylanguage " +
+                    "JOIN country ON countrylanguage.CountryCode = country.Code " +
+                    "WHERE countrylanguage.Language IN ('Chinese', 'English', 'Hindi', 'Spanish', 'Arabic') " +
+                    "GROUP BY countrylanguage.Language " +
+                    "ORDER BY Population DESC";
+            return getLanguageList(con, que);
+        }
+    }
+
+    public static List<Language> getLanguageList(Connection con, String que) {
+        List<Language> languages = new ArrayList<>();
+        if (con == null) {
+            System.out.println("No connection found.");
+        } else {
+            if (que != null) {
+                try {
+                    Statement stmt = con.createStatement();
+                    ResultSet rset = stmt.executeQuery(que);
+
+                    while (rset.next()) {
+                        String language = rset.getString("Language");
+                        int population = rset.getInt("Population");
+
+                        Language lang = new Language(language, population);
+                        languages.add(lang);  // Add the Language object to the list
+                    }
+                } catch (SQLException e) {
+                    // Log an error message if there is an SQL exception
+                    System.out.println("SQL Error: " + e.getMessage());
+                }
+            } else {
+                System.out.println("No SQL query.");
+            }
+        }
+        return languages;
+    }
+
+    // Method to print the table output
+    public static void printLanguageTable(List<Language> languages) {
+        if (languages == null || languages.isEmpty()) {
+            System.out.println("No results found.");
+        } else {
+            System.out.println("+-------------------+------------------+");
+            System.out.printf("| %-17s | %-16s |\n", "Language", "Population");
+            System.out.println("+-------------------+------------------+");
+
+            // Print each language and its population in table format
+            for (Language lang : languages) {
+                System.out.printf("| %-17s | %,16d |\n", lang.getLanguage(), lang.getPopulation());
+            }
+
+            System.out.println("+-------------------+------------------+");
+            System.out.println(languages.size() + " results found.");
+        }
+    }
+
+
     public static List<Population> getPopulation(Connection con, String key, String value) {
         if (con == null) {
             System.out.println("There is no database connection");
@@ -398,6 +461,7 @@ public class App {
             return getPopulationList(con, pop_query);
         }
     }
+
 
     public static List<Population> getPopulationList(Connection con, String pop_query) {
         List<Population> populations = new ArrayList<>();
@@ -537,6 +601,9 @@ public class App {
         printPopulationEach(City_Population, "---------------------Population Report for City---------------------");
         List<Population> District_Population = getPopulation(con, "city.District", "Zuid-Holland");
         printPopulationEach(District_Population, "---------------------Population Report for District---------------------");
+
+        List<Language> languages = getLanguages(con);
+        printLanguageTable(languages);
     }
 
 // Need to run world.sql database before running App

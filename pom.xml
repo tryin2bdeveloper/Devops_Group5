@@ -106,7 +106,6 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.7</version>
                 <executions>
-                    <!-- Prepare the JaCoCo agent in the 'initialize' phase -->
                     <execution>
                         <id>prepare-agent</id>
                         <goals>
@@ -114,20 +113,12 @@
                         </goals>
                         <phase>initialize</phase>
                     </execution>
-                    <!-- Generate the JaCoCo report after the tests run, in the 'verify' phase -->
                     <execution>
                         <id>report</id>
-                        <phase>verify</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/jacoco-report</outputDirectory>
-                            <reports>
-                                <report>xml</report> <!-- Required for Codecov integration -->
-                                <report>html</report> <!-- Optional, for local review -->
-                            </reports>
-                        </configuration>
+                        <phase>verify</phase> <!-- Ensures reports are generated post-testing -->
                     </execution>
                 </executions>
             </plugin>
