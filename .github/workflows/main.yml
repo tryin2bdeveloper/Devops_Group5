@@ -70,11 +70,12 @@ jobs:
           docker stop world
           docker rm world
           docker image rm database
-      - name: CodeCov
+      - name: Upload to CodeCov
         uses: codecov/codecov-action@v2
         with:
-          directory: ./target/site/jacoco
-          flags: Integration Tests # optional
+          files: ./target/jacoco.exec # Path to JaCoCo exec file
+          directory: ./target/site/jacoco # Directory for report
+          flags: IntegrationTests # optional
           verbose: true # optional (default = false)
 
   build:
