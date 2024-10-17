@@ -62,8 +62,6 @@ jobs:
           docker stop world
           docker rm world
           docker image rm database
-      - name: Build and Run Tests
-        run: mvn clean install
 
       - name: Verify JaCoCo Report
         run: |
