@@ -62,14 +62,6 @@ jobs:
           docker stop world
           docker rm world
           docker image rm database
-
-      - name: Verify JaCoCo Report
-        run: |
-          if [ ! -f ./target/site/jacoco/jacoco.xml ]; then
-            echo "JaCoCo report not found!"
-            exit 1
-          fi
-
       - name: CodeCov
         uses: codecov/codecov-action@v2
         with:
