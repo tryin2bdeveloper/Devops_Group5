@@ -375,15 +375,24 @@ public class App {
         }
     }
 
-    public static List<Population> getPopulation(Connection con, String key) {
+    public static List<Population> getPopulation(Connection con, String key, String value) {
         if (con == null) {
             System.out.println("There is no database connection");
             return new ArrayList<>();  // Return an empty list if no connection
         } else {
-            String pop_query = "SELECT " + key + " AS Name, SUM(country.Population) AS Total_Population, SUM(city.Population) AS Population_Live_In_Cities " +
-                    "FROM country JOIN city ON country.Code = city.CountryCode ";
+            String pop_query = "SELECT ";
             if (key != null) {
-                pop_query += "GROUP BY country." + key;
+                pop_query += key + " AS Name, SUM(country.Population) AS Total_Population, " +
+                        "SUM(city.Population) AS Population_Live_In_Cities " +
+                        "FROM country JOIN city ON country.Code = city.CountryCode ";
+                if (value != null) {
+                    pop_query += "WHERE " + key + " = '" + value + "' ";
+                }
+                pop_query += "GROUP BY " + key; // Group by after WHERE
+            } else {
+                pop_query += "'World' AS Name, SUM(country.Population) AS Total_Population, " +
+                        "SUM(city.Population) AS Population_Live_In_Cities " +
+                        "FROM country JOIN city ON country.Code = city.CountryCode ";
             }
             // Call the getPopulationList method and return the result
             return getPopulationList(con, pop_query);
@@ -439,23 +448,20 @@ public class App {
 
             for (Population population : populations) {
                 System.out.printf("| %-33s | %,16d | %,15d [ %.2f%% ] | %,18d [ %.2f%% ] |\n",
-                        population.getName(),
+                        population.getName() != null ? population.getName() : "World", ////Population.getName() is null it will print "World" if not it will print available values.
                         population.getTotalPopulation(),          // Population formatted with commas
                         population.getPopulationInCities(),       // Population in cities formatted with commas
                         population.getPercentageInCities(),       // Percentage in cities with '%'
                         population.getPopulationNotInCities(),    // Population not in cities formatted with commas
                         population.getPercentageNotInCities());   // Percentage not in cities with '%'
             }
-
             System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+");
             System.out.println(populations.size() + " RESULTS FOUND IN THIS REPORT");
         }
     }
 
-
     // Function to display various populated countries, cities, and capitals in table format
     public void Table_display() {
-
         ////Most populated countries by world, contient, region [ DESC]
         List<Country> countryByWorld = getPopulatedCountries(con, null, null, 0); // Fetch top 10 populated countries
         printCountries(countryByWorld, "---------------------Most populated countries [World]---------------------");
@@ -512,14 +518,25 @@ public class App {
         List<Capital>TopCapitalByRegion = getPopulatedCapital(con, "Region","Caribbean",5);
         printCapitals(TopCapitalByRegion, "---------------------Top 5 populated Capital [Region][Caribbean]---------------------");
 
-        List<Population> Population_of_Continent = getPopulation(con, "Continent");
+        List<Population> Population_of_Continent = getPopulation(con, "country.Continent", null);
         printPopulationEach(Population_of_Continent, "---------------------Population Report for Each Continent---------------------");
-        List<Population> Population_of_Cont = getPopulation(con, "Continent");
-        printPopulationEach(Population_of_Cont, "---------------------Population Report for Each Continent---------------------");
-        List<Population> Population_of_Continet = getPopulation(con, "Continent");
-        printPopulationEach(Population_of_Continet, "---------------------Population Report for Each Continent---------------------");
-        List<Population> Population_of_Contint = getPopulation(con, "Continent");
-        printPopulationEach(Population_of_Contint, "---------------------Population Report for Each Continent---------------------");
+        List<Population> Population_of_Region = getPopulation(con, "country.Region", null);
+        printPopulationEach(Population_of_Region, "---------------------Population Report for Each Region---------------------");
+        List<Population> Population_of_Country = getPopulation(con, "country.Name", null);
+        printPopulationEach(Population_of_Country, "---------------------Population Report for Each Country---------------------");
+
+        List<Population> World_Population = getPopulation(con, null, null);
+        printPopulationEach(World_Population, "---------------------Population Of World---------------------");
+        List<Population> Continent_Population = getPopulation(con, "country.Continent", "North America");
+        printPopulationEach(Continent_Population, "---------------------Population Report of Continent ---------------------");
+        List<Population> Region_Population = getPopulation(con, "country.Region", "Caribbean ");
+        printPopulationEach(Region_Population, "---------------------Population Report for Region---------------------");
+        List<Population> Country_Population = getPopulation(con, "country.Name", "Albania");
+        printPopulationEach(Country_Population, "---------------------Population Report for Country---------------------");
+        List<Population> City_Population = getPopulation(con, "city.Name", "Eindhoven");
+        printPopulationEach(City_Population, "---------------------Population Report for City---------------------");
+        List<Population> District_Population = getPopulation(con, "city.District", "Zuid-Holland");
+        printPopulationEach(District_Population, "---------------------Population Report for District---------------------");
     }
 
 // Need to run world.sql database before running App
