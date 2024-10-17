@@ -17,6 +17,25 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
+
+      # Build and run the database as in the first workflow
+      - name: Build Database Docker Image
+        run: docker build -t database ./db
+
+      - name: Start Database Container for Unit Tests
+        run: docker run --name unit-database -d -p 33060:3306 database
+
+      - name: Wait for Database to Initialize
+        run: |
+          echo "Waiting for database to start..."
+          for i in {1..10}; do
+            if docker exec unit-database mysqladmin ping -h "localhost" --silent; then
+              echo "Database is up!"
+              break
+            fi
+            echo "Waiting for the database..."
+            sleep 5
+          done
       - name: Unit Tests
         run: mvn -Dtest=com.napier.devops.AppTest test
       - name: CodeCov
