@@ -93,7 +93,7 @@ jobs:
           docker image rm database
 
       - name: Upload to CodeCov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # Make sure to set the token in GitHub Secrets
           files: ./target/jacoco.exec # Path to JaCoCo exec file
