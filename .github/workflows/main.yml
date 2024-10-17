@@ -62,16 +62,13 @@ jobs:
           docker stop world
           docker rm world
           docker image rm database
-      - name: Check for Coverage Report
-        run: |
-          ls -la ./target/site/jacoco
       - name: CodeCov
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-          directory: ./target/site/jacoco
+          directory: ./target/site/jacoco/jacoco.xml
           flags: Integration Tests # optional
-          verbose: false # optional (default = false)
+          verbose: true # optional (default = false)
   build:
     name: Build and Start Using docker compose
     runs-on: ubuntu-20.04
