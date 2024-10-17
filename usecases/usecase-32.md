@@ -35,8 +35,8 @@ The report is produced and ready for review to analyst.
 Data requested by the analyst does not exist.
 
 ### SUB-VARIATIONS
-None.
+None
 
 ## SCHEDULE
-Due Date: 4th Oct 2024
+Due Date: Release 1.0
 

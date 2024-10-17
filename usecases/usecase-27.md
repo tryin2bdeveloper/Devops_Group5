@@ -1,4 +1,4 @@
-### USE CASE: 27 Continent Population Report Generation
+### USE CASE: 27 Generate to Continent Population Report 
 
 ### CHARACTERISTIC INFORMATION
 ## Goal in Context
@@ -28,14 +28,14 @@ A report request is submitted for continent-level population data.
 ### MAIN SUCCESS SCENARIO
 The analyst receives a request for continent population data.
 The system gathers population data for each continent.
-The system is sorted and clearly displayed for develop to data.
-The report is produced and ready for review to analyst.
+The system processes the data, sorting and displaying it clearly.
+The report is produced and ready for review by the analyst.
 
 ### EXTENSIONS
 Data requested by the analyst does not exist.
 
 ### SUB-VARIATIONS
-None.
+None
 
 ## SCHEDULE
 Due Date: Release 1.0
