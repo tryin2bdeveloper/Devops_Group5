@@ -28,7 +28,8 @@ A request is submitted for country-specific data within a region.
 ### MAIN SUCCESS SCENARIO
 The request for country population within a region is received.
 The system collects the population data for those countries.
-The data is presented clearly and sorted for review.
+The system is sorted and clearly displayed for develop to data.
+The report is produced and ready for review to analyst.
 
 ### EXTENSIONS
 Data requested by the analyst does not exist.

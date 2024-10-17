@@ -28,7 +28,7 @@ A request is entered for district population data.
 ### MAIN SUCCESS SCENARIO
 The request for district-level data is made.
 The system gathers district population figures.
-The system is sorted and presented for database analysis.
+The system is sorted and presented for database analysis of develop.
 
 ### EXTENSIONS
 Data requested by the analyst does not exist.

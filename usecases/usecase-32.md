@@ -29,6 +29,7 @@ A request is made to produce a language distribution for report.
 The request for language population data is made.
 The system gathers the language-speaking population data.
 The developer is sorted, formatted, and ready for database.
+The report is produced and ready for review to analyst.
 
 ### EXTENSIONS
 Data requested by the analyst does not exist.
