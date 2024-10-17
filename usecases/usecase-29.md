@@ -28,7 +28,8 @@ A request for regional population data is entered.
 ### MAIN SUCCESS SCENARIO
 The analyst receives the request for regional data.
 The system gathers population data for the specified regions.
-The report is sorted, generated, and ready for develop.
+The system is sorted and clearly displayed for develop to data.
+The report is produced and ready for review to analyst.
 
 ### EXTENSIONS
 Data requested by the analyst does not exist.

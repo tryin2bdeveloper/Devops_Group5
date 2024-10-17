@@ -28,8 +28,8 @@ A report request is submitted for continent-level population data.
 ### MAIN SUCCESS SCENARIO
 The analyst receives a request for continent population data.
 The system gathers population data for each continent.
-The data is sorted and clearly displayed for develop.
-The report is produced and ready for review.
+The system is sorted and clearly displayed for develop to data.
+The report is produced and ready for review to analyst.
 
 ### EXTENSIONS
 Data requested by the analyst does not exist.

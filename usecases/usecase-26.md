@@ -28,8 +28,8 @@ A report request is submitted for the data output needed by the analysts.
 ### MAIN SUCCESS SCENARIO
 The analyst receives a request for population data.
 The system gathers the required population data for both city dwellers and non-city dwellers in all countries.
-The data is sorted and displayed clearly.
-The final report is produced and ready for review.
+The system is sorted and displayed clearly for all countries data.
+The final report is produced and ready for review to analyst.
 
 ### EXTENSIONS
 Data requested by the analyst does not exist.
