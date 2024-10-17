@@ -114,7 +114,6 @@
                         </goals>
                         <phase>initialize</phase>
                     </execution>
-
                     <!-- Generate the JaCoCo report after the tests run, in the 'verify' phase -->
                     <execution>
                         <id>report</id>
