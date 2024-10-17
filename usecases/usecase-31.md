@@ -1,4 +1,4 @@
-### USE CASE: 31 District Population Report
+### USE CASE: 31 Generate to City Population Report
 
 ### CHARACTERISTIC INFORMATION
 ## Goal in Context

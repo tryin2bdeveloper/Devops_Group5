@@ -1,4 +1,4 @@
-### USE CASE: 27 Continent Population Report Generation
+### USE CASE: 27 Generate to Continent Population Report 
 
 ### CHARACTERISTIC INFORMATION
 ## Goal in Context

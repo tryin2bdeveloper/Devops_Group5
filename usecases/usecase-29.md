@@ -1,4 +1,4 @@
-### USE CASE: 29  Generate Country Population Report
+### USE CASE: 29  Generate to Country Population Report
 
 ### CHARACTERISTIC INFORMATION
 ## Goal in Context

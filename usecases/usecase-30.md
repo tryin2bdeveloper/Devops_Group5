@@ -1,4 +1,4 @@
-### USE CASE: 30 Generate Population of a District
+### USE CASE: 30 Generate to Population of a District
 
 ### CHARACTERISTIC INFORMATION
 ## Goal in Context

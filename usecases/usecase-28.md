@@ -1,4 +1,4 @@
-### USE CASE: 28 Generation for Continent Population Report 
+### USE CASE: 28 Generate to Region Population Report 
 
 ### CHARACTERISTIC INFORMATION
 ## Goal in Context

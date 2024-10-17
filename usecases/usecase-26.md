@@ -1,4 +1,4 @@
-### USE CASE: 26 Population Report Generation for All Countries
+### USE CASE: 26 Generate to Population Report for All Countries on The World
 
 ### CHARACTERISTIC INFORMATION
 ## Goal in Context
