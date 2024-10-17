@@ -57,7 +57,8 @@ jobs:
         run: |
           docker build -t database ./db 
           docker run --name world -dp 33060:3306 database
-          mvn -Dtest=com.napier.devops.AppIntegrationTest test          
+          mvn -Dtest=com.napier.devops.AppIntegrationTest test    
+          mvn jacoco:report
           docker stop world
           docker rm world
           docker image rm database
