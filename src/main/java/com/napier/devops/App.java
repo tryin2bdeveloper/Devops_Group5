@@ -124,20 +124,23 @@ public class App {
         if (limit < 0) {
             System.out.println("Limit must be a positive integer.");
             return new ArrayList<>();  // Return an empty list if limit is invalid
-        }else{
+        } else {
             // Construct the base query
-            String Capital_query = "SELECT city.Name AS capital, country.Name , country.Population " +
+            String Capital_query = "SELECT city.Name AS capital, country.Name, country.Population " +
                     "FROM country JOIN city ON country.Capital = city.ID ";
+
             // If the key is "Name", "Continent", or "Region", filter using the country table
             if (key != null && value != null) {
                 Capital_query += "WHERE country." + key + " = '" + value + "' ";
             }
+
             // Ensure a positive limit value for the query and add some necessary text
             if (limit > 0) {
                 Capital_query += "ORDER BY country.Population DESC LIMIT " + limit;
-            } else if (limit ==0) {
-                Capital_query += "ORDER BY country.Population DESC"; // No limit if zero or negative
+            } else if (limit == 0) {
+                Capital_query += "ORDER BY country.Population DESC"; // No limit if zero
             }
+
             return getCapitalList(con, Capital_query);
         }
     }
@@ -303,7 +306,7 @@ public class App {
 
             // Loop through each capital and print its details
             for (Capital capital : capitals) {
-                System.out.printf("|%-33s | %-39s | %-10s |\n", capital.getCapital(), capital.getName(), capital.getPopulation());
+                System.out.printf("|%-33s | %-39s | %-10s |\n", capital.getCapital(), capital.getName(), String.format("%,d", capital.getPopulation()));
             }
 
             // Print the footer and count of capitals
@@ -334,7 +337,7 @@ public class App {
             for (Country country : countries) {
                 System.out.printf("| %-12s | %-39s | %-13s | %-27s | %-10s | %-33s |\n",
                         country.getCountryCode(), country.getName(), country.getContinent(),
-                        country.getRegion(), country.getPopulation(), country.getCapital());
+                        country.getRegion(), String.format("%,d", country.getPopulation()), country.getCapital());
             }
 
             // Print the footer and count of countries
@@ -362,7 +365,7 @@ public class App {
 
             // Loop through each city and print its details
             for (City city : cities) {
-                System.out.printf("| %-34s | %-39s | %-27s | %-10s |\n", city.getName(), city.getCountryName(), city.getDistrict(), city.getPopulation());
+                System.out.printf("| %-34s | %-39s | %-27s | %-10s |\n", city.getName(), city.getCountryName(), city.getDistrict(), String.format("%,d", city.getPopulation()));
             }
 
             // Print the footer and count of cities
@@ -371,9 +374,158 @@ public class App {
         }
     }
 
+    public static List<Language> getLanguages(Connection con) {
+        if (con == null) {
+            System.out.println("No connection found.");
+            return new ArrayList<>();
+        } else {
+            // Correcting the SQL query syntax
+            String que = "SELECT countrylanguage.Language, SUM(country.Population) AS Population " +
+                    "FROM countrylanguage " +
+                    "JOIN country ON countrylanguage.CountryCode = country.Code " +
+                    "WHERE countrylanguage.Language IN ('Chinese', 'English', 'Hindi', 'Spanish', 'Arabic') " +
+                    "GROUP BY countrylanguage.Language " +
+                    "ORDER BY Population DESC";
+            return getLanguageList(con, que);
+        }
+    }
+
+    public static List<Language> getLanguageList(Connection con, String que) {
+        List<Language> languages = new ArrayList<>();
+        if (con == null) {
+            System.out.println("No connection found.");
+        } else {
+            if (que != null) {
+                try {
+                    Statement stmt = con.createStatement();
+                    ResultSet rset = stmt.executeQuery(que);
+
+                    while (rset.next()) {
+                        String language = rset.getString("Language");
+                        int population = rset.getInt("Population");
+
+                        Language lang = new Language(language, population);
+                        languages.add(lang);  // Add the Language object to the list
+                    }
+                } catch (SQLException e) {
+                    // Log an error message if there is an SQL exception
+                    System.out.println("SQL Error: " + e.getMessage());
+                }
+            } else {
+                System.out.println("No SQL query.");
+            }
+        }
+        return languages;
+    }
+
+    // Method to print the table output
+    public static void printLanguageTable(List<Language> languages) {
+        if (languages == null || languages.isEmpty()) {
+            System.out.println("No results found.");
+        } else {
+            System.out.println("+-------------------+------------------+");
+            System.out.printf("| %-17s | %-16s |\n", "Language", "Population");
+            System.out.println("+-------------------+------------------+");
+
+            // Print each language and its population in table format
+            for (Language lang : languages) {
+                System.out.printf("| %-17s | %,16d |\n", lang.getLanguage(), lang.getPopulation());
+            }
+
+            System.out.println("+-------------------+------------------+");
+            System.out.println(languages.size() + " results found.");
+        }
+    }
+
+
+    public static List<Population> getPopulation(Connection con, String key, String value) {
+        if (con == null) {
+            System.out.println("There is no database connection");
+            return new ArrayList<>();  // Return an empty list if no connection
+        } else {
+            String pop_query = "SELECT ";
+            if (key != null) {
+                pop_query += key + " AS Name, SUM(country.Population) AS Total_Population, " +
+                        "SUM(city.Population) AS Population_Live_In_Cities " +
+                        "FROM country JOIN city ON country.Code = city.CountryCode ";
+                if (value != null) {
+                    pop_query += "WHERE " + key + " = '" + value + "' ";
+                }
+                pop_query += "GROUP BY " + key; // Group by after WHERE
+            } else {
+                pop_query += "'World' AS Name, SUM(country.Population) AS Total_Population, " +
+                        "SUM(city.Population) AS Population_Live_In_Cities " +
+                        "FROM country JOIN city ON country.Code = city.CountryCode ";
+            }
+            // Call the getPopulationList method and return the result
+            return getPopulationList(con, pop_query);
+        }
+    }
+
+
+    public static List<Population> getPopulationList(Connection con, String pop_query) {
+        List<Population> populations = new ArrayList<>();
+        if (con == null) {
+            System.out.println("There is no database connection");
+            return populations;
+        } else {
+            if (pop_query != null) {
+                try {
+                    Statement stmt = con.createStatement();
+                    ResultSet rset = stmt.executeQuery(pop_query);
+                    while (rset.next()) {
+                        String name = rset.getString("Name");
+                        long totalPopulation = rset.getLong("Total_Population"); // Use long
+                        long populationInCities = rset.getLong("Population_Live_In_Cities"); // Use long
+                        long populationNotInCities = totalPopulation - populationInCities;
+
+                        // Calculate percentages correctly using double to avoid integer division
+                        double percentageInCities = totalPopulation > 0 ? ((double) populationInCities / totalPopulation) * 100 : 0;
+                        double percentageNotInCities = totalPopulation > 0 ? ((double) populationNotInCities / totalPopulation) * 100 : 0;
+
+                        Population population = new Population(name, totalPopulation, populationNotInCities, populationInCities, percentageInCities, percentageNotInCities);
+                        populations.add(population);
+                    }
+                } catch (SQLException e) {
+                    // Log an error message if there is an SQL exception
+                    System.out.println("SQL Error: " + e.getMessage());
+                }
+            } else {
+                System.out.println("No SQL query.");
+            }
+            return populations;
+        }
+    }
+
+    public static void printPopulationEach(List<Population> populations, String header) {
+        if (populations == null || populations.isEmpty()) {
+            System.out.println("No result found in variable");
+        } else {
+            System.out.println("\n\n######## " + header + " ########");
+            System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+");
+            System.out.printf("| %-33s | %-15s | %-25s | %-25s |\n",
+                    "Name",
+                    "Total Population",
+                    "Population Live In Cities",
+                    "Population Not Live In Cities");
+            System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+");
+
+            for (Population population : populations) {
+                System.out.printf("| %-33s | %,16d | %,15d [ %.2f%% ] | %,18d [ %.2f%% ] |\n",
+                        population.getName() != null ? population.getName() : "World", ////Population.getName() is null it will print "World" if not it will print available values.
+                        population.getTotalPopulation(),          // Population formatted with commas
+                        population.getPopulationInCities(),       // Population in cities formatted with commas
+                        population.getPercentageInCities(),       // Percentage in cities with '%'
+                        population.getPopulationNotInCities(),    // Population not in cities formatted with commas
+                        population.getPercentageNotInCities());   // Percentage not in cities with '%'
+            }
+            System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+");
+            System.out.println(populations.size() + " RESULTS FOUND IN THIS REPORT");
+        }
+    }
+
     // Function to display various populated countries, cities, and capitals in table format
     public void Table_display() {
-
         ////Most populated countries by world, contient, region [ DESC]
         List<Country> countryByWorld = getPopulatedCountries(con, null, null, 0); // Fetch top 10 populated countries
         printCountries(countryByWorld, "---------------------Most populated countries [World]---------------------");
@@ -429,6 +581,29 @@ public class App {
         printCapitals(TopCapitalByContinent, "---------------------Top 5 populated Capital [Continent][]---------------------");
         List<Capital>TopCapitalByRegion = getPopulatedCapital(con, "Region","Caribbean",5);
         printCapitals(TopCapitalByRegion, "---------------------Top 5 populated Capital [Region][Caribbean]---------------------");
+
+        List<Population> Population_of_Continent = getPopulation(con, "country.Continent", null);
+        printPopulationEach(Population_of_Continent, "---------------------Population Report for Each Continent---------------------");
+        List<Population> Population_of_Region = getPopulation(con, "country.Region", null);
+        printPopulationEach(Population_of_Region, "---------------------Population Report for Each Region---------------------");
+        List<Population> Population_of_Country = getPopulation(con, "country.Name", null);
+        printPopulationEach(Population_of_Country, "---------------------Population Report for Each Country---------------------");
+
+        List<Population> World_Population = getPopulation(con, null, null);
+        printPopulationEach(World_Population, "---------------------Population Of World---------------------");
+        List<Population> Continent_Population = getPopulation(con, "country.Continent", "North America");
+        printPopulationEach(Continent_Population, "---------------------Population Report of Continent ---------------------");
+        List<Population> Region_Population = getPopulation(con, "country.Region", "Caribbean ");
+        printPopulationEach(Region_Population, "---------------------Population Report for Region---------------------");
+        List<Population> Country_Population = getPopulation(con, "country.Name", "Albania");
+        printPopulationEach(Country_Population, "---------------------Population Report for Country---------------------");
+        List<Population> City_Population = getPopulation(con, "city.Name", "Eindhoven");
+        printPopulationEach(City_Population, "---------------------Population Report for City---------------------");
+        List<Population> District_Population = getPopulation(con, "city.District", "Zuid-Holland");
+        printPopulationEach(District_Population, "---------------------Population Report for District---------------------");
+
+        List<Language> languages = getLanguages(con);
+        printLanguageTable(languages);
     }
 
 // Need to run world.sql database before running App
