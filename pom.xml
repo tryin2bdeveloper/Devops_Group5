@@ -99,6 +99,70 @@
                     <target>17</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+                    <forkCount>1</forkCount>
+                    <reuseForks>true</reuseForks>
+                    <argLine>-Xmx1024m</argLine>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
+                <executions>
+                    <!-- Ensure this prepares the agent during the 'initialize' phase -->
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal> <!-- This attaches the JaCoCo agent -->
+                        </goals>
+                    </execution>
+                    <!-- Generate the report after the tests have run -->
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/jacoco-report</outputDirectory>
+                            <reports>
+                                <report>xml</report> <!-- Required for Codecov -->
+                            </reports>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin><plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.7</version>
+            <executions>
+                <!-- Ensure this prepares the agent during the 'initialize' phase -->
+                <execution>
+                    <goals>
+                        <goal>prepare-agent</goal> <!-- This attaches the JaCoCo agent -->
+                    </goals>
+                </execution>
+                <!-- Generate the report after the tests have run -->
+                <execution>
+                    <id>report</id>
+                    <phase>test</phase>
+                    <goals>
+                        <goal>report</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${project.build.directory}/jacoco-report</outputDirectory>
+                        <reports>
+                            <report>xml</report> <!-- Required for Codecov -->
+                        </reports>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
         </plugins>
     </build>
 </project>
