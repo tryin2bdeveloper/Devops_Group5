@@ -1,4 +1,5 @@
 name: A workflow for my Hello World App
+
 on:
   push:
     branches:
@@ -39,7 +40,7 @@ jobs:
             sleep 5
           done
 
-      - name: Unit Tests
+      - name: Run Unit Tests
         run: mvn -Dtest=com.napier.devops.AppTest test
 
       - name: Stop and Clean up Docker (Unit Tests)
@@ -61,25 +62,47 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-      - name: Integration Tests and CodeCov
+
+      - name: Build Database Docker Image
+        run: docker build -t database ./db
+
+      - name: Start Database Container for Integration Tests
+        run: docker run --name world -dp 33060:3306 database
+
+      - name: Wait for Database to Initialize
         run: |
-          docker build -t database ./db 
-          docker run --name world -dp 33060:3306 database
+          echo "Waiting for database to start..."
+          for i in {1..10}; do
+            if docker exec world mysqladmin ping -h "localhost" --silent; then
+              echo "Database is up!"
+              break
+            fi
+            echo "Waiting for the database..."
+            sleep 5
+          done
+
+      - name: Run Integration Tests and Generate JaCoCo Report
+        run: |
           mvn -Dtest=com.napier.devops.AppIntegrationTest test
           mvn jacoco:report
+
+      - name: Stop and Clean up Docker (Integration Tests)
+        run: |
           docker stop world
           docker rm world
           docker image rm database
+
       - name: Upload to CodeCov
         uses: codecov/codecov-action@v2
         with:
+          token: ${{ secrets.CODECOV_TOKEN }} # Make sure to set the token in GitHub Secrets
           files: ./target/jacoco.exec # Path to JaCoCo exec file
-          directory: ./target/site/jacoco # Directory for report
+          directory: ./target/site/jacoco # Directory for HTML report
           flags: IntegrationTests # optional
-          verbose: true # optional (default = false)
+          verbose: true # optional
 
-  build:
-    name: Build and Start Using docker compose
+  BuildAndRun:
+    name: Build and Start Using Docker Compose
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
@@ -91,7 +114,8 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-      - name: Package and Run docker compose
+
+      - name: Package Application and Run with Docker Compose
         run: |
           mvn package -DskipTests
           docker compose up --abort-on-container-exit
