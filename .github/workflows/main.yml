@@ -62,6 +62,9 @@ jobs:
           docker stop world
           docker rm world
           docker image rm database
+      - name: Check for Coverage Report
+        run: |
+          ls -la ./target/site/jacoco
       - name: CodeCov
         uses: codecov/codecov-action@v2
         with:
