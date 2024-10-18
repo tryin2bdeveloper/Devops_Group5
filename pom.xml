@@ -6,7 +6,7 @@
 
     <groupId>com.napier.devops</groupId>
     <artifactId>devopsethods</artifactId>
-    <version>0.1.0.1</version>
+    <version>0.1.0.3</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -49,6 +49,17 @@
 
     <build>
         <plugins>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <!-- skip building the default-jar-->
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Maven Assembly Plugin for creating a JAR with dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

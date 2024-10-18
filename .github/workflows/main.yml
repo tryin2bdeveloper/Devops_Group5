@@ -1,10 +1,16 @@
-name: A workflow for my Hello World App
+name: Workflow for Deploy Latest Release
 
 on:
   push:
     branches:
       - master
-      - develop
+
+# Define permissions at the workflow level
+permissions:
+  contents: write  # Allows writing to the repository, needed for releases
+  issues: read     # Optional, adjust as needed
+  pull-requests: read  # Optional, adjust as needed
+  actions: read    # Optional, adjust as needed
 
 jobs:
   UnitTests:
@@ -43,11 +49,12 @@ jobs:
       - name: Run Unit Tests
         run: mvn -Dtest=com.napier.devops.AppTest test
 
-      - name: Stop and Clean up Docker (Unit Tests)
-        run: |
-          docker stop unit-database
-          docker rm unit-database
-          docker image rm database
+      - name: CodeCov
+        uses: codecov/codecov-action@v4
+        with:
+          directory: ./target/site/jacoco
+          flags: Unit Tests # optional
+          verbose: true     # optional (default = false)
 
   IntegrationTests:
     name: Integration Tests
@@ -63,50 +70,28 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - name: Build Database Docker Image
-        run: docker build -t database ./db
-
-      - name: Start Database Container for Integration Tests
-        run: docker run --name world -dp 33060:3306 database
-
-      - name: Wait for Database to Initialize
+      - name: Integration Tests and CodeCov
         run: |
-          echo "Waiting for database to start..."
-          for i in {1..10}; do
-            if docker exec world mysqladmin ping -h "localhost" --silent; then
-              echo "Database is up!"
-              break
-            fi
-            echo "Waiting for the database..."
-            sleep 5
-          done
-
-      - name: Run Integration Tests and Generate JaCoCo Report
-        run: |
-          mvn -Dtest=com.napier.devops.AppIntegrationTest test
-          mvn jacoco:report
-
-      - name: Stop and Clean up Docker (Integration Tests)
-        run: |
-          docker stop world
-          docker rm world
+          docker build -t database ./db 
+          docker run --name employees -dp 33060:3306 database
+          mvn -Dtest=com.napier.devops.AppIntegrationTest test          
+          docker stop employees
+          docker rm employees
           docker image rm database
 
-      - name: Upload to CodeCov
+      - name: CodeCov
         uses: codecov/codecov-action@v4
         with:
-          token: ${{ secrets.CODECOV_TOKEN }} # Make sure to set the token in GitHub Secrets
-          files: ./target/jacoco.exec # Path to JaCoCo exec file
-          directory: ./target/site/jacoco # Directory for HTML report
-          flags: IntegrationTests # optional
-          verbose: true # optional
+          directory: ./target/site/jacoco
+          flags: Integration Tests # optional
+          verbose: true            # optional (default = false)
 
-  BuildAndRun:
-    name: Build and Start Using Docker Compose
+  BuildAndRelease:
+    name: Build Run in Docker and Deploy Release
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
       - name: Set up JDK 17
@@ -115,7 +100,16 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - name: Package Application and Run with Docker Compose
+      - name: Package and Run Docker Compose
         run: |
           mvn package -DskipTests
           docker compose up --abort-on-container-exit
+
+      - name: Automatic Release
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          automatic_release_tag: "latest"
+          files: |
+            ./target/*.jar
