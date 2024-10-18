@@ -91,10 +91,11 @@ jobs:
         run: |
           mvn package -DskipTests
           docker compose up --abort-on-container-exit
-      - uses: "marvinpinto/action-automatic-releases@latest"
+      - name: Automatic Release
+        uses: marvinpinto/action-automatic-releases@latest
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          repo_token: "${{ secrets.PAT_TOKEN }}"  # Use PAT for permissions
           prerelease: false
-          automatic_release_tag: "latest"
+          automatic_release_tag: "v0.1.0"
           files: |
             ./target/*.jar
