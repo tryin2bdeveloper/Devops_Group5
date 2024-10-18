@@ -420,24 +420,26 @@ public class App {
             System.out.println("+-----------------------------------+-----------------------------------------+------------+");
             System.out.println(capitals.size() + " countries found.");
 
-            // File Output to Markdown
-            try {
-                new File("./reports/").mkdir();
-                BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
+            if (report != null) {
+                // File Output to Markdown
+                try {
+                    new File("./reports/").mkdir();
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
 
-                writer.write("### " + header + "\n\n");
-                writer.write("| Capital | Country Name | Population |\n");
-                writer.write("| --- | --- | --- |\n");
+                    writer.write("### " + header + "\n\n");
+                    writer.write("| Capital | Country Name | Population |\n");
+                    writer.write("| --- | --- | --- |\n");
 
-                for (Capital capital : capitals) {
-                    writer.write("| " + capital.getCapital() + " | " + capital.getName() + " | " + String.format("%,d", capital.getPopulation()) + " |\n");
+                    for (Capital capital : capitals) {
+                        writer.write("| " + capital.getCapital() + " | " + capital.getName() + " | " + String.format("%,d", capital.getPopulation()) + " |\n");
+                    }
+
+                    writer.write("\n" + capitals.size() + " capitals found.\n");
+                    writer.close();
+                    System.out.println("Report written to ./reports/ As" + report + ".md");
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-
-                writer.write("\n" + capitals.size() + " capitals found.\n");
-                writer.close();
-                System.out.println("Report written to ./reports/" + report + ".md");
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -470,26 +472,27 @@ public class App {
             System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
             System.out.println(countries.size() + " countries found.");
 
-            // File Output to Markdown
-            try {
-                new File("./reports/").mkdir();
-                BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
+            if (report != null) {
+                try {
+                    new File("./reports/").mkdir();
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
 
-                writer.write("### " + header + "\n\n");
-                writer.write("| Country Code | Country Name | Continent | Region | Population | Capital |\n");
-                writer.write("| --- | --- | --- | --- | --- | --- |\n");
+                    writer.write("### " + header + "\n\n");
+                    writer.write("| Country Code | Country Name | Continent | Region | Population | Capital |\n");
+                    writer.write("| --- | --- | --- | --- | --- | --- |\n");
 
-                for (Country country : countries) {
-                    writer.write("| " + country.getCountryCode() + " | " + country.getName() + " | "
-                            + country.getContinent() + " | " + country.getRegion() + " | "
-                            + String.format("%,d", country.getPopulation()) + " | " + country.getCapital() + " |\n");
+                    for (Country country : countries) {
+                        writer.write("| " + country.getCountryCode() + " | " + country.getName() + " | "
+                                + country.getContinent() + " | " + country.getRegion() + " | "
+                                + String.format("%,d", country.getPopulation()) + " | " + country.getCapital() + " |\n");
+                    }
+
+                    writer.write("\n" + countries.size() + " countries found.\n");
+                    writer.close();
+                    System.out.println("Report written to ./reports/" + report + ".md");
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-
-                writer.write("\n" + countries.size() + " countries found.\n");
-                writer.close();
-                System.out.println("Report written to ./reports/" + report + ".md");
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -519,25 +522,26 @@ public class App {
             System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
             System.out.println(cities.size() + " cities found.");
 
-            // File Output to Markdown
-            try {
-                new File("./reports/").mkdir();
-                BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
+            if (report != null) {
+                try {
+                    new File("./reports/").mkdir();
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
 
-                writer.write("### " + header + "\n\n");
-                writer.write("| City Name | Country Name | District | Population |\n");
-                writer.write("| --- | --- | --- | --- |\n");
+                    writer.write("### " + header + "\n\n");
+                    writer.write("| City Name | Country Name | District | Population |\n");
+                    writer.write("| --- | --- | --- | --- |\n");
 
-                for (City city : cities) {
-                    writer.write("| " + city.getName() + " | " + city.getCountryName() + " | "
-                            + city.getDistrict() + " | " + String.format("%,d", city.getPopulation()) + " |\n");
+                    for (City city : cities) {
+                        writer.write("| " + city.getName() + " | " + city.getCountryName() + " | "
+                                + city.getDistrict() + " | " + String.format("%,d", city.getPopulation()) + " |\n");
+                    }
+
+                    writer.write("\n" + cities.size() + " cities found.\n");
+                    writer.close();
+                    System.out.println("Report written to ./reports/" + report + ".md");
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-
-                writer.write("\n" + cities.size() + " cities found.\n");
-                writer.close();
-                System.out.println("Report written to ./reports/" + report + ".md");
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -568,26 +572,27 @@ public class App {
             System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+");
             System.out.println(populations.size() + " RESULTS FOUND IN THIS REPORT");
 
-            // File Output to Markdown
-            try {
-                new File("./reports/").mkdir();
-                BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
+            if (report != null) {
+                try {
+                    new File("./reports/").mkdir();
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
 
-                writer.write("### " + header + "\n\n");
-                writer.write("| Name | Total Population | Population Live In Cities | Population Not Live In Cities |\n");
-                writer.write("| --- | --- | --- | --- |\n");
+                    writer.write("### " + header + "\n\n");
+                    writer.write("| Name | Total Population | Population Live In Cities | Population Not Live In Cities |\n");
+                    writer.write("| --- | --- | --- | --- |\n");
 
-                for (Population population : populations) {
-                    writer.write("| " + (population.getName() != null ? population.getName() : "World") + " | "
-                            + String.format("%,d", population.getTotalPopulation()) + " | "
-                            + String.format("%,d [ %.2f%% ]", population.getPopulationInCities(), population.getPercentageInCities()) + " | "
-                            + String.format("%,d [ %.2f%% ]", population.getPopulationNotInCities(), population.getPercentageNotInCities()) + " |\n");
+                    for (Population population : populations) {
+                        writer.write("| " + (population.getName() != null ? population.getName() : "World") + " | "
+                                + String.format("%,d", population.getTotalPopulation()) + " | "
+                                + String.format("%,d [ %.2f%% ]", population.getPopulationInCities(), population.getPercentageInCities()) + " | "
+                                + String.format("%,d [ %.2f%% ]", population.getPopulationNotInCities(), population.getPercentageNotInCities()) + " |\n");
+                    }
+                    writer.write("\n" + populations.size() + " RESULTS FOUND IN THIS REPORT\n");
+                    writer.close();
+                    System.out.println("Report written to ./reports/" + report + ".md");
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                writer.write("\n" + populations.size() + " RESULTS FOUND IN THIS REPORT\n");
-                writer.close();
-                System.out.println("Report written to ./reports/" + report + ".md");
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -609,24 +614,25 @@ public class App {
             System.out.println("+-------------------+------------------+");
             System.out.println(languages.size() + " results found.");
 
-            // File Output to Markdown
-            try {
-                new File("./reports/").mkdir();
-                BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
+            if (report != null) {
+                try {
+                    new File("./reports/").mkdir();
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
 
-                writer.write("### Language Population Report\n\n");
-                writer.write("| Language | Population |\n");
-                writer.write("| --- | --- |\n");
+                    writer.write("### Language Population Report\n\n");
+                    writer.write("| Language | Population |\n");
+                    writer.write("| --- | --- |\n");
 
-                for (Language lang : languages) {
-                    writer.write("| " + lang.getLanguage() + " | " + String.format("%,d", lang.getPopulation()) + " |\n");
+                    for (Language lang : languages) {
+                        writer.write("| " + lang.getLanguage() + " | " + String.format("%,d", lang.getPopulation()) + " |\n");
+                    }
+
+                    writer.write("\n" + languages.size() + " results found.\n");
+                    writer.close();
+                    System.out.println("Report written to ./reports/" + report + ".md");
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-
-                writer.write("\n" + languages.size() + " results found.\n");
-                writer.close();
-                System.out.println("Report written to ./reports/" + report + ".md");
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -708,12 +714,11 @@ public class App {
         printPopulationEach(City_Population, "---------------------Population Report for City---------------------","City Population");
         List<Population> District_Population = getPopulation(con, "city.District", "Zuid-Holland");
         printPopulationEach(District_Population, "---------------------Population Report for District---------------------","District Population");
+        List<Population> Region_Population = getPopulation(con, "country.Region", "Southern Europe");
+        printPopulationEach(Region_Population, "---------------------Population Report for Region---------------------"," Region Population");
 
         List<Language> languages = getLanguages(con);
         printLanguageTable(languages, "Language Report");
-
-        List<Population> Region_Population = getPopulation(con, "country.Region", "Southern Europe");
-        printPopulationEach(Region_Population, "---------------------Population Report for Region---------------------"," Region Population");
     }
 
 // Need to run world.sql database before running App

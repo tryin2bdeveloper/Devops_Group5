@@ -37,7 +37,7 @@ public class AppTest
     void testPrintCountriesWithNull()
     {
         // Pass null to printCountries and ensure it does not throw exceptions
-        app.printCountries(null, "Header");
+        app.printCountries(null, "Header",null);
     }
 
     @Test
@@ -45,7 +45,7 @@ public class AppTest
     {
         // Pass an empty list and check if it handles it correctly
         List<Country> emptyList = new ArrayList<>();
-        app.printCountries(emptyList, "Empty List");
+        app.printCountries(emptyList, "Empty List", null);
         assertEquals(0, emptyList.size());
     }
 
@@ -55,19 +55,19 @@ public class AppTest
         List<Country> countries = new ArrayList<>();
         countries.add(new Country("USA", "United States", "North America", "Northern America", 331002651, "Washington D.C."));
         countries.add(new Country("GBR", "United Kingdom", "Europe", "Northern Europe", 67886011, "London"));
-        app.printCountries(countries, "Test Data");
+        app.printCountries(countries, "Test Data",null);
         assertEquals(2, countries.size());
     }
 
     @Test
     void testPrintCitiesWithNull() {
-        app.printCities(null, "Header");
+        app.printCities(null, "Header",null);
     }
 
     @Test
     void testPrintCitiesWithEmptyList() {
         List<City> emptyList = new ArrayList<>();
-        app.printCities(emptyList, "Empty List");
+        app.printCities(emptyList, "Empty List", null);
         assertEquals(0, emptyList.size());
     }
 
@@ -76,19 +76,19 @@ public class AppTest
         List<City> cities = new ArrayList<>();
         cities.add(new City("New York", "United States", "New York", 8175133));
         cities.add(new City("London", "United Kingdom", "London", 8787892));
-        app.printCities(cities, "Test Data");
+        app.printCities(cities, "Test Data", null);
         assertEquals(2, cities.size());
     }
 
     @Test
     void testPrintCapitalsWithNull() {
-        app.printCapitals(null, "Header");
+        app.printCapitals(null, "Header", null);
     }
 
     @Test
     void testPrintCapitalsWithEmptyList() {
         List<Capital> emptyList = new ArrayList<>();
-        app.printCapitals(emptyList, "Empty List");
+        app.printCapitals(emptyList, "Empty List", null);
         assertEquals(0, emptyList.size());
     }
 
@@ -98,7 +98,7 @@ public class AppTest
         List<Capital> capitals = new ArrayList<>();
         capitals.add(new Capital("Washington D.C.", 331002651, "United States"));
         capitals.add(new Capital("London", 67886011, "United Kingdom"));
-        app.printCapitals(capitals, "Test Data");
+        app.printCapitals(capitals, "Test Data", null);
         assertEquals(2, capitals.size());
     }
 
@@ -123,7 +123,7 @@ public class AppTest
         List<Country> result = app.getPopulatedCountries(app.getConnection(), null, null, 10);
 
         System.out.println("#### Printing Populated Countries (Positive Limit) ####");
-        app.printCountries(result, "Populated Countries with Positive Limit");
+        app.printCountries(result, "Populated Countries with Positive Limit", null);
 
         assertFalse(result.isEmpty(), "List should not be empty for a valid connection and positive limit.");
         assertTrue(result.size() <= 10, "List should contain 10 or fewer countries.");
@@ -134,7 +134,7 @@ public class AppTest
     void testGetPopulatedCountriesWithKeyAndValue() {
         List<Country> result = app.getPopulatedCountries(app.getConnection(), "Continent", "Asia", 10);
         System.out.println("#### Printing Populated Countries (Key: Continent, Value: Asia) ####");
-        app.printCountries(result, "Populated Countries (Continent: Asia)");
+        app.printCountries(result, "Populated Countries (Continent: Asia)",null);
         assertFalse(result.isEmpty(), "List should not be empty when a valid key and value are provided.");
     }
 
@@ -158,7 +158,7 @@ public class AppTest
     void testGetPopulatedCityWithPositiveLimit() {
         List<City> result = app.getPopulatedCity(app.getConnection(), null, null, 10);
         System.out.println("#### Printing Populated Cities (Positive Limit) ####");
-        app.printCities(result, "Populated Cities with Positive Limit");
+        app.printCities(result, "Populated Cities with Positive Limit",null);
         assertFalse(result.isEmpty(), "List should not be empty for a valid connection and positive limit.");
         assertTrue(result.size() <= 10, "List should contain 10 or fewer cities.");
     }
@@ -168,7 +168,7 @@ public class AppTest
     void testGetPopulatedCityWithKeyAndValue() {
         List<City> result = app.getPopulatedCity(app.getConnection(), "Name", "Russian Federation", 10);
         System.out.println("#### Printing Populated Cities (Key: Name, Value: Russian Federation) ####");
-        app.printCities(result, "Populated Cities (Name: Russian Federation)");
+        app.printCities(result, "Populated Cities (Name: Russian Federation)", null);
         assertFalse(result.isEmpty(), "List should not be empty when a valid key and value are provided.");
     }
 
@@ -192,7 +192,7 @@ public class AppTest
     void testGetPopulatedCapitalWithPositiveLimit() {
         List<Capital> result = app.getPopulatedCapital(app.getConnection(), null, null, 10);
         System.out.println("#### Printing Populated Capitals (Positive Limit) ####");
-        app.printCapitals(result, "Populated Capitals with Positive Limit");
+        app.printCapitals(result, "Populated Capitals with Positive Limit", null);
         assertFalse(result.isEmpty(), "List should not be empty for a valid connection and positive limit.");
         assertTrue(result.size() <= 10, "List should contain 10 or fewer capitals.");
     }
@@ -202,7 +202,7 @@ public class AppTest
     void testGetPopulatedCapitalWithKeyAndValue() {
         List<Capital> result = app.getPopulatedCapital(app.getConnection(), "Continent", "Asia", 10);
         System.out.println("#### Printing Populated Capitals (Key: Continent, Value: Asia) ####");
-        app.printCapitals(result, "Populated Capitals (Continent: Asia)");
+        app.printCapitals(result, "Populated Capitals (Continent: Asia)" ,null);
         assertFalse(result.isEmpty(), "List should not be empty when a valid key and value are provided.");
     }
 
