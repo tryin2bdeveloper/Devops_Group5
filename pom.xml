@@ -6,7 +6,7 @@
 
     <groupId>com.napier.devops</groupId>
     <artifactId>devopsethods</artifactId>
-    <version>0.1.0.1</version>
+    <version>0.1.0.3</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -49,6 +49,17 @@
 
     <build>
         <plugins>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <!-- skip building the default-jar-->
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Maven Assembly Plugin for creating a JAR with dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -104,30 +115,19 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.7</version>
+                <version>0.8.12</version>
                 <executions>
-                    <!-- Prepare the JaCoCo agent in the 'initialize' phase -->
                     <execution>
-                        <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
-                        <phase>initialize</phase>
                     </execution>
-                    <!-- Generate the JaCoCo report after the tests run, in the 'verify' phase -->
                     <execution>
                         <id>report</id>
-                        <phase>verify</phase>
+                        <phase>test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/jacoco-report</outputDirectory>
-                            <reports>
-                                <report>xml</report> <!-- Required for Codecov integration -->
-                                <report>html</report> <!-- Optional, for local review -->
-                            </reports>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
