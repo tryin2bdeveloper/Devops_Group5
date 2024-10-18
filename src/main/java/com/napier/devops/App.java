@@ -1,5 +1,9 @@
 package com.napier.devops;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -497,10 +501,11 @@ public class App {
         }
     }
 
-    public static void printPopulationEach(List<Population> populations, String header) {
+    public static void printPopulationEach(List<Population> populations, String header, String report) {
         if (populations == null || populations.isEmpty()) {
             System.out.println("No result found in variable");
         } else {
+            // Console Output
             System.out.println("\n\n######## " + header + " ########");
             System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+");
             System.out.printf("| %-33s | %-15s | %-25s | %-25s |\n",
@@ -512,17 +517,40 @@ public class App {
 
             for (Population population : populations) {
                 System.out.printf("| %-33s | %,16d | %,15d [ %.2f%% ] | %,18d [ %.2f%% ] |\n",
-                        population.getName() != null ? population.getName() : "World", ////Population.getName() is null it will print "World" if not it will print available values.
-                        population.getTotalPopulation(),          // Population formatted with commas
-                        population.getPopulationInCities(),       // Population in cities formatted with commas
-                        population.getPercentageInCities(),       // Percentage in cities with '%'
-                        population.getPopulationNotInCities(),    // Population not in cities formatted with commas
-                        population.getPercentageNotInCities());   // Percentage not in cities with '%'
+                        population.getName() != null ? population.getName() : "World",
+                        population.getTotalPopulation(),
+                        population.getPopulationInCities(),
+                        population.getPercentageInCities(),
+                        population.getPopulationNotInCities(),
+                        population.getPercentageNotInCities());
             }
             System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+");
             System.out.println(populations.size() + " RESULTS FOUND IN THIS REPORT");
+
+            // File Output to Markdown
+            try {
+                new File("./reports/").mkdir();
+                BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/population_report.md")));
+
+                writer.write("### " + header + "\n\n");
+                writer.write("| Name | Total Population | Population Live In Cities | Population Not Live In Cities |\n");
+                writer.write("| --- | --- | --- | --- |\n");
+
+                for (Population population : populations) {
+                    writer.write("| " + (population.getName() != null ? population.getName() : "World") + " | "
+                            + String.format("%,d", population.getTotalPopulation()) + " | "
+                            + String.format("%,d [ %.2f%% ]", population.getPopulationInCities(), population.getPercentageInCities()) + " | "
+                            + String.format("%,d [ %.2f%% ]", population.getPopulationNotInCities(), population.getPercentageNotInCities()) + " |\n");
+                }
+                writer.write("\n" + populations.size() + " RESULTS FOUND IN THIS REPORT\n");
+                writer.close();
+                System.out.println("Report written to ./reports/" + report + ".md");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
+
 
     // Function to display various populated countries, cities, and capitals in table format
     public void Table_display() {
@@ -583,24 +611,24 @@ public class App {
         printCapitals(TopCapitalByRegion, "---------------------Top 5 populated Capital [Region][Caribbean]---------------------");
 
         List<Population> Population_of_Continent = getPopulation(con, "country.Continent", null);
-        printPopulationEach(Population_of_Continent, "---------------------Population Report for Each Continent---------------------");
+        printPopulationEach(Population_of_Continent, "---------------------Population Report for Each Continent---------------------", "");
         List<Population> Population_of_Region = getPopulation(con, "country.Region", null);
-        printPopulationEach(Population_of_Region, "---------------------Population Report for Each Region---------------------");
+        printPopulationEach(Population_of_Region, "---------------------Population Report for Each Region---------------------","");
         List<Population> Population_of_Country = getPopulation(con, "country.Name", null);
-        printPopulationEach(Population_of_Country, "---------------------Population Report for Each Country---------------------");
+        printPopulationEach(Population_of_Country, "---------------------Population Report for Each Country---------------------","");
 
         List<Population> World_Population = getPopulation(con, null, null);
-        printPopulationEach(World_Population, "---------------------Population Of World---------------------");
+        printPopulationEach(World_Population, "---------------------Population Of World---------------------","");
         List<Population> Continent_Population = getPopulation(con, "country.Continent", "North America");
-        printPopulationEach(Continent_Population, "---------------------Population Report of Continent ---------------------");
+        printPopulationEach(Continent_Population, "---------------------Population Report of Continent ---------------------","");
         List<Population> Region_Population = getPopulation(con, "country.Region", "Caribbean ");
-        printPopulationEach(Region_Population, "---------------------Population Report for Region---------------------");
+        printPopulationEach(Region_Population, "---------------------Population Report for Region---------------------","");
         List<Population> Country_Population = getPopulation(con, "country.Name", "Albania");
-        printPopulationEach(Country_Population, "---------------------Population Report for Country---------------------");
+        printPopulationEach(Country_Population, "---------------------Population Report for Country---------------------","Country Population");
         List<Population> City_Population = getPopulation(con, "city.Name", "Eindhoven");
-        printPopulationEach(City_Population, "---------------------Population Report for City---------------------");
+        printPopulationEach(City_Population, "---------------------Population Report for City---------------------","City Population");
         List<Population> District_Population = getPopulation(con, "city.District", "Zuid-Holland");
-        printPopulationEach(District_Population, "---------------------Population Report for District---------------------");
+        printPopulationEach(District_Population, "---------------------Population Report for District---------------------","District Population");
 
         List<Language> languages = getLanguages(con);
         printLanguageTable(languages);
