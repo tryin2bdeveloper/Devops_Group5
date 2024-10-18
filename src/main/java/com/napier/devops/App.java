@@ -1,5 +1,9 @@
 package com.napier.devops;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -287,93 +291,6 @@ public class App {
         return cities;
     }
 
-    /**
-     * Prints a list of capitals in a table format.
-     *
-     * @param capitals The list of Capital objects to be printed.
-     * @param header   A string to be printed as the header of the table.
-     */
-    public static void printCapitals(List<Capital> capitals, String header) {
-        // Check if the capitals list is null
-        if (capitals == null) {
-            System.out.println("No countries found.");  // Output message if no capitals are found
-        } else {
-            // Print the header and table format
-            System.out.println("\n\n######## " + header + " ########");
-            System.out.println("+-----------------------------------+-----------------------------------------+------------+");
-            System.out.printf("|%-33s | %-39s | %-10s |\n", "Name", "Country Name", "Population");
-            System.out.println("+-----------------------------------+-----------------------------------------+------------+");
-
-            // Loop through each capital and print its details
-            for (Capital capital : capitals) {
-                System.out.printf("|%-33s | %-39s | %-10s |\n", capital.getCapital(), capital.getName(), String.format("%,d", capital.getPopulation()));
-            }
-
-            // Print the footer and count of capitals
-            System.out.println("+-----------------------------------+-----------------------------------------+------------+");
-            System.out.println(capitals.size() + " countries found.");
-        }
-    }
-
-    /**
-     * Prints a list of countries in a table format.
-     *
-     * @param countries The list of Country objects to be printed.
-     * @param header    A string to be printed as the header of the table.
-     */
-    public static void printCountries(List<Country> countries, String header) {
-        // Check if the countries list is null
-        if (countries == null) {
-            System.out.println("No countries found.");  // Output message if no countries are found
-        } else {
-            // Print the header and table format
-            System.out.println("\n\n######## " + header + " ########");
-            System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
-            System.out.printf("| %-12s | %-39s | %-13s | %-27s | %-10s | %-33s |\n",
-                    "Country Code", "Country Name", "Continent", "Region", "Population", "Capital");
-            System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
-
-            // Loop through each country and print its details
-            for (Country country : countries) {
-                System.out.printf("| %-12s | %-39s | %-13s | %-27s | %-10s | %-33s |\n",
-                        country.getCountryCode(), country.getName(), country.getContinent(),
-                        country.getRegion(), String.format("%,d", country.getPopulation()), country.getCapital());
-            }
-
-            // Print the footer and count of countries
-            System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
-            System.out.println(countries.size() + " countries found.");
-        }
-    }
-
-    /**
-     * Prints a list of cities in a table format.
-     *
-     * @param cities  The list of City objects to be printed.
-     * @param header  A string to be printed as the header of the table.
-     */
-    public static void printCities(List<City> cities, String header) {
-        // Check if the cities list is null
-        if (cities == null) {
-            System.out.println("No countries found.");  // Output message if no cities are found
-        } else {
-            // Print the header and table format
-            System.out.println("\n\n######## " + header + " ########");
-            System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
-            System.out.printf("| %-34s | %-39s | %-27s | %-10s |\n", "City Name", "Country Name", "District", "Population");
-            System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
-
-            // Loop through each city and print its details
-            for (City city : cities) {
-                System.out.printf("| %-34s | %-39s | %-27s | %-10s |\n", city.getName(), city.getCountryName(), city.getDistrict(), String.format("%,d", city.getPopulation()));
-            }
-
-            // Print the footer and count of cities
-            System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
-            System.out.println(cities.size() + " countries found.");
-        }
-    }
-
     public static List<Language> getLanguages(Connection con) {
         if (con == null) {
             System.out.println("No connection found.");
@@ -416,25 +333,6 @@ public class App {
             }
         }
         return languages;
-    }
-
-    // Method to print the table output
-    public static void printLanguageTable(List<Language> languages) {
-        if (languages == null || languages.isEmpty()) {
-            System.out.println("No results found.");
-        } else {
-            System.out.println("+-------------------+------------------+");
-            System.out.printf("| %-17s | %-16s |\n", "Language", "Population");
-            System.out.println("+-------------------+------------------+");
-
-            // Print each language and its population in table format
-            for (Language lang : languages) {
-                System.out.printf("| %-17s | %,16d |\n", lang.getLanguage(), lang.getPopulation());
-            }
-
-            System.out.println("+-------------------+------------------+");
-            System.out.println(languages.size() + " results found.");
-        }
     }
 
 
@@ -497,10 +395,158 @@ public class App {
         }
     }
 
-    public static void printPopulationEach(List<Population> populations, String header) {
+    /**
+     * Prints a list of capitals in a table format and writes to a markdown file.
+     *
+     * @param capitals The list of Capital objects to be printed.
+     * @param header   A string to be printed as the header of the table.
+     * @param report   The name of the markdown file to be created.
+     */
+    public static void printCapitals(List<Capital> capitals, String header, String report) {
+        // Check if the capitals list is null or empty
+        if (capitals == null || capitals.isEmpty()) {
+            System.out.println("No countries found.");
+        } else {
+            // Console Output
+            System.out.println("\n\n######## " + header + " ########");
+            System.out.println("+-----------------------------------+-----------------------------------------+------------+");
+            System.out.printf("|%-33s | %-39s | %-10s |\n", "Name", "Country Name", "Population");
+            System.out.println("+-----------------------------------+-----------------------------------------+------------+");
+
+            for (Capital capital : capitals) {
+                System.out.printf("|%-33s | %-39s | %-10s |\n", capital.getCapital(), capital.getName(), String.format("%,d", capital.getPopulation()));
+            }
+
+            System.out.println("+-----------------------------------+-----------------------------------------+------------+");
+            System.out.println(capitals.size() + " countries found.");
+
+            // File Output to Markdown
+            try {
+                new File("./reports/").mkdir();
+                BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
+
+                writer.write("### " + header + "\n\n");
+                writer.write("| Capital | Country Name | Population |\n");
+                writer.write("| --- | --- | --- |\n");
+
+                for (Capital capital : capitals) {
+                    writer.write("| " + capital.getCapital() + " | " + capital.getName() + " | " + String.format("%,d", capital.getPopulation()) + " |\n");
+                }
+
+                writer.write("\n" + capitals.size() + " capitals found.\n");
+                writer.close();
+                System.out.println("Report written to ./reports/" + report + ".md");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Prints a list of countries in a table format and writes to a markdown file.
+     *
+     * @param countries The list of Country objects to be printed.
+     * @param header    A string to be printed as the header of the table.
+     * @param report    The name of the markdown file to be created.
+     */
+    public static void printCountries(List<Country> countries, String header, String report) {
+        // Check if the countries list is null or empty
+        if (countries == null || countries.isEmpty()) {
+            System.out.println("No countries found.");
+        } else {
+            // Console Output
+            System.out.println("\n\n######## " + header + " ########");
+            System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
+            System.out.printf("| %-12s | %-39s | %-13s | %-27s | %-10s | %-33s |\n",
+                    "Country Code", "Country Name", "Continent", "Region", "Population", "Capital");
+            System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
+
+            for (Country country : countries) {
+                System.out.printf("| %-12s | %-39s | %-13s | %-27s | %-10s | %-33s |\n",
+                        country.getCountryCode(), country.getName(), country.getContinent(),
+                        country.getRegion(), String.format("%,d", country.getPopulation()), country.getCapital());
+            }
+
+            System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
+            System.out.println(countries.size() + " countries found.");
+
+            // File Output to Markdown
+            try {
+                new File("./reports/").mkdir();
+                BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
+
+                writer.write("### " + header + "\n\n");
+                writer.write("| Country Code | Country Name | Continent | Region | Population | Capital |\n");
+                writer.write("| --- | --- | --- | --- | --- | --- |\n");
+
+                for (Country country : countries) {
+                    writer.write("| " + country.getCountryCode() + " | " + country.getName() + " | "
+                            + country.getContinent() + " | " + country.getRegion() + " | "
+                            + String.format("%,d", country.getPopulation()) + " | " + country.getCapital() + " |\n");
+                }
+
+                writer.write("\n" + countries.size() + " countries found.\n");
+                writer.close();
+                System.out.println("Report written to ./reports/" + report + ".md");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Prints a list of cities in a table format and writes to a markdown file.
+     *
+     * @param cities  The list of City objects to be printed.
+     * @param header  A string to be printed as the header of the table.
+     * @param report  The name of the markdown file to be created.
+     */
+    public static void printCities(List<City> cities, String header, String report) {
+        // Check if the cities list is null or empty
+        if (cities == null || cities.isEmpty()) {
+            System.out.println("No cities found.");
+        } else {
+            // Console Output
+            System.out.println("\n\n######## " + header + " ########");
+            System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
+            System.out.printf("| %-34s | %-39s | %-27s | %-10s |\n", "City Name", "Country Name", "District", "Population");
+            System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
+
+            for (City city : cities) {
+                System.out.printf("| %-34s | %-39s | %-27s | %-10s |\n", city.getName(), city.getCountryName(), city.getDistrict(), String.format("%,d", city.getPopulation()));
+            }
+
+            System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
+            System.out.println(cities.size() + " cities found.");
+
+            // File Output to Markdown
+            try {
+                new File("./reports/").mkdir();
+                BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
+
+                writer.write("### " + header + "\n\n");
+                writer.write("| City Name | Country Name | District | Population |\n");
+                writer.write("| --- | --- | --- | --- |\n");
+
+                for (City city : cities) {
+                    writer.write("| " + city.getName() + " | " + city.getCountryName() + " | "
+                            + city.getDistrict() + " | " + String.format("%,d", city.getPopulation()) + " |\n");
+                }
+
+                writer.write("\n" + cities.size() + " cities found.\n");
+                writer.close();
+                System.out.println("Report written to ./reports/" + report + ".md");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void printPopulationEach(List<Population> populations, String header, String report) {
         if (populations == null || populations.isEmpty()) {
             System.out.println("No result found in variable");
         } else {
+            // Console Output
             System.out.println("\n\n######## " + header + " ########");
             System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+");
             System.out.printf("| %-33s | %-15s | %-25s | %-25s |\n",
@@ -512,98 +558,162 @@ public class App {
 
             for (Population population : populations) {
                 System.out.printf("| %-33s | %,16d | %,15d [ %.2f%% ] | %,18d [ %.2f%% ] |\n",
-                        population.getName() != null ? population.getName() : "World", ////Population.getName() is null it will print "World" if not it will print available values.
-                        population.getTotalPopulation(),          // Population formatted with commas
-                        population.getPopulationInCities(),       // Population in cities formatted with commas
-                        population.getPercentageInCities(),       // Percentage in cities with '%'
-                        population.getPopulationNotInCities(),    // Population not in cities formatted with commas
-                        population.getPercentageNotInCities());   // Percentage not in cities with '%'
+                        population.getName() != null ? population.getName() : "World",
+                        population.getTotalPopulation(),
+                        population.getPopulationInCities(),
+                        population.getPercentageInCities(),
+                        population.getPopulationNotInCities(),
+                        population.getPercentageNotInCities());
             }
             System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+");
             System.out.println(populations.size() + " RESULTS FOUND IN THIS REPORT");
+
+            // File Output to Markdown
+            try {
+                new File("./reports/").mkdir();
+                BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
+
+                writer.write("### " + header + "\n\n");
+                writer.write("| Name | Total Population | Population Live In Cities | Population Not Live In Cities |\n");
+                writer.write("| --- | --- | --- | --- |\n");
+
+                for (Population population : populations) {
+                    writer.write("| " + (population.getName() != null ? population.getName() : "World") + " | "
+                            + String.format("%,d", population.getTotalPopulation()) + " | "
+                            + String.format("%,d [ %.2f%% ]", population.getPopulationInCities(), population.getPercentageInCities()) + " | "
+                            + String.format("%,d [ %.2f%% ]", population.getPopulationNotInCities(), population.getPercentageNotInCities()) + " |\n");
+                }
+                writer.write("\n" + populations.size() + " RESULTS FOUND IN THIS REPORT\n");
+                writer.close();
+                System.out.println("Report written to ./reports/" + report + ".md");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
+
+    // Method to print the table output
+    public static void printLanguageTable(List<Language> languages, String report) {
+        if (languages == null || languages.isEmpty()) {
+            System.out.println("No results found.");
+        } else {
+            // Console Output
+            System.out.println("+-------------------+------------------+");
+            System.out.printf("| %-17s | %-16s |\n", "Language", "Population");
+            System.out.println("+-------------------+------------------+");
+
+            for (Language lang : languages) {
+                System.out.printf("| %-17s | %,16d |\n", lang.getLanguage(), lang.getPopulation());
+            }
+
+            System.out.println("+-------------------+------------------+");
+            System.out.println(languages.size() + " results found.");
+
+            // File Output to Markdown
+            try {
+                new File("./reports/").mkdir();
+                BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
+
+                writer.write("### Language Population Report\n\n");
+                writer.write("| Language | Population |\n");
+                writer.write("| --- | --- |\n");
+
+                for (Language lang : languages) {
+                    writer.write("| " + lang.getLanguage() + " | " + String.format("%,d", lang.getPopulation()) + " |\n");
+                }
+
+                writer.write("\n" + languages.size() + " results found.\n");
+                writer.close();
+                System.out.println("Report written to ./reports/" + report + ".md");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 
     // Function to display various populated countries, cities, and capitals in table format
     public void Table_display() {
         ////Most populated countries by world, contient, region [ DESC]
         List<Country> countryByWorld = getPopulatedCountries(con, null, null, 0); // Fetch top 10 populated countries
-        printCountries(countryByWorld, "---------------------Most populated countries [World]---------------------");
+        printCountries(countryByWorld, "---------------------Most populated countries [World]---------------------", "Most Populated Country [World]");
         List<Country> countryByContinent = getPopulatedCountries(con, "Continent", "Europe", 0); // Fetch top 10 populated countries
-        printCountries(countryByContinent, "---------------------Most populated countries [Continent] [Europe]---------------------");
+        printCountries(countryByContinent, "---------------------Most populated countries [Continent] [Europe]---------------------", "Most Populated Country [Continent] [Europe]" );
         List<Country> countryByRegion = getPopulatedCountries(con, "Region", "Southern and Central Asia", 0); // Fetch top 10 populated countries
-        printCountries(countryByRegion, "---------------------World most populated countries [Region] [Southern and Central Asia]---------------------");
+        printCountries(countryByRegion, "---------------------World most populated countries [Region] [Southern and Central Asia]---------------------", "Most Populated Country [Region] [Southern and Central Asia]" );
 
         ////Top N populated countries by world, continent, region
         List<Country> Top_10_ByWorld = getPopulatedCountries(con, null, null, 10); // Fetch top 10 populated countries
-        printCountries(Top_10_ByWorld, "---------------------Top 10 most populated countries [World]---------------------");
+        printCountries(Top_10_ByWorld, "---------------------Top 10 most populated countries [World]---------------------","Top 10 Most Populated Countries [World]");
         List<Country> Top_10_ByContinent = getPopulatedCountries(con, "Continent", "North America", 10); // Fetch top 10 populated countries
-        printCountries(Top_10_ByContinent, "---------------------Top 10 most populated countries [Continent][North America ]---------------------");
+        printCountries(Top_10_ByContinent, "---------------------Top 10 most populated countries [Continent][North America ]---------------------","Top 10 Most Populated Countries [Continent]");
         List<Country> Top_10_ByRegion = getPopulatedCountries(con, "Region", "Caribbean", 10); // Fetch top 10 populated countries
-        printCountries(Top_10_ByRegion, "---------------------Top 10 most populated countries [Region][Caribbean]---------------------");
+        printCountries(Top_10_ByRegion, "---------------------Top 10 most populated countries [Region][Caribbean]---------------------","Top 10 Most Populated Countries [Region]");
 
         //// Most populated cities by world, continent, region, country, district [DESC]
         List<City> cityByWorld = getPopulatedCity(con, null, null, 0);
-        printCities(cityByWorld, "---------------------Most populated cities [World]---------------------");
+        printCities(cityByWorld, "---------------------Most populated cities [World]---------------------", "Most Populated City [World]");
         List<City> cityByContinent = getPopulatedCity(con, "Continent", "Africa", 0);
-        printCities(cityByContinent, "---------------------Most populated cities [Continent][Africa]---------------------");
+        printCities(cityByContinent, "---------------------Most populated cities [Continent][Africa]---------------------", "Most Populated City [Continent]");
         List<City> cityByRegion = getPopulatedCity(con, "Region", "Middle East", 0);
-        printCities(cityByRegion, "---------------------Most populated cities [Region][Middle East]---------------------");
+        printCities(cityByRegion, "---------------------Most populated cities [Region][Middle East]---------------------", "Most Populated City [Region]");
         List<City> cityByCountry = getPopulatedCity(con, "Name","Russian Federation",0);
-        printCities(cityByCountry, "---------------------Most populated cities [Country][Russia]---------------------");
+        printCities(cityByCountry, "---------------------Most populated cities [Country][Russia]---------------------", "Most Populated City [Country]");
         List<City> cityByDistrict = getPopulatedCity(con, "District","Gelderland",0);
-        printCities(cityByDistrict, "---------------------Most populated cities [District][Gelderland]---------------------");
+        printCities(cityByDistrict, "---------------------Most populated cities [District][Gelderland]---------------------","Most Populated City [District]");
 
         ////Top N populated cities by world, continent, region, country, district
         List<City> TopByWorld = getPopulatedCity(con, null,null,10);
-        printCities(TopByWorld, "---------------------Top 10 populated cities [World]---------------------");
+        printCities(TopByWorld, "---------------------Top 10 populated cities [World]---------------------", "Top 10 Most Populated City [World]");
         List<City> TopByContinent = getPopulatedCity(con, "Continent","Asia",10);
-        printCities(TopByContinent, "---------------------Top 10 populated cities [Continent][Asia]---------------------");
+        printCities(TopByContinent, "---------------------Top 10 populated cities [Continent][Asia]---------------------", "Top 10 Most Populated City [Continent]");
         List<City> TopByRegion = getPopulatedCity(con, "Region","British Islands",10);
-        printCities(TopByRegion, "---------------------Top 10 populated cities [Region][British Islands]---------------------");
+        printCities(TopByRegion, "---------------------Top 10 populated cities [Region][British Islands]---------------------", "Top 10 Most Populated City [Region]");
         List<City> TopByCountry = getPopulatedCity(con, "Name","Myanmar",10);
-        printCities(TopByCountry, "---------------------Top 10 populated cities [Country][Myanmar]---------------------");
+        printCities(TopByCountry, "---------------------Top 10 populated cities [Country][Myanmar]---------------------", "Top 10 Most Populated City [Country]");
         List<City> TopByDistrict = getPopulatedCity(con, "District","México",10);
-        printCities(TopByDistrict, "---------------------Top 10 populated cities [District][México]---------------------");
+        printCities(TopByDistrict, "---------------------Top 10 populated cities [District][México]---------------------", "Top 10 Most Populated City [District]");
 
         //// Most populated capital cities by world, continent, region [DESC]
         List<Capital>CapitalByWorld = getPopulatedCapital(con, null,null,0);
-        printCapitals(CapitalByWorld, "---------------------Most populated Capital [World]---------------------");
+        printCapitals(CapitalByWorld, "---------------------Most populated Capital [World]---------------------", "Most Populated Capital [World]");
         List<Capital>CapitalByContinent = getPopulatedCapital(con, "Continent","South America",0);
-        printCapitals(CapitalByContinent, "---------------------Most populated Capital [Continent][]---------------------");
+        printCapitals(CapitalByContinent, "---------------------Most populated Capital [Continent][]---------------------", "Most Populated Capital [Continent]");
         List<Capital>CapitalByRegion = getPopulatedCapital(con, "Region","Polynesia",0);
-        printCapitals(CapitalByRegion, "---------------------Most populated Capital [Region][Polynesia]---------------------");
+        printCapitals(CapitalByRegion, "---------------------Most populated Capital [Region][Polynesia]---------------------", "Most Populated Capital [Region]");
 
         ////Top N populated capital cities by world, continent, region
         List<Capital>TopCapitalByWorld = getPopulatedCapital(con, null,null,5);
-        printCapitals(TopCapitalByWorld, "---------------------Top 5 populated cities [Continent][]---------------------");
+        printCapitals(TopCapitalByWorld, "---------------------Top 5 populated cities [Continent][]---------------------", "Top 5 Most Populated Capital [World]");
         List<Capital>TopCapitalByContinent = getPopulatedCapital(con, "Continent","North America",5);
-        printCapitals(TopCapitalByContinent, "---------------------Top 5 populated Capital [Continent][]---------------------");
+        printCapitals(TopCapitalByContinent, "---------------------Top 5 populated Capital [Continent][]---------------------", "Top 5 Most Populated Capital [Continent]");
         List<Capital>TopCapitalByRegion = getPopulatedCapital(con, "Region","Caribbean",5);
-        printCapitals(TopCapitalByRegion, "---------------------Top 5 populated Capital [Region][Caribbean]---------------------");
+        printCapitals(TopCapitalByRegion, "---------------------Top 5 populated Capital [Region][Caribbean]---------------------", "Top 5 Most Populated Capital [Region]");
 
         List<Population> Population_of_Continent = getPopulation(con, "country.Continent", null);
-        printPopulationEach(Population_of_Continent, "---------------------Population Report for Each Continent---------------------");
+        printPopulationEach(Population_of_Continent, "---------------------Population Report for Each Continent---------------------", "Each Continent Population Report");
         List<Population> Population_of_Region = getPopulation(con, "country.Region", null);
-        printPopulationEach(Population_of_Region, "---------------------Population Report for Each Region---------------------");
+        printPopulationEach(Population_of_Region, "---------------------Population Report for Each Region---------------------","Each Region Population Report");
         List<Population> Population_of_Country = getPopulation(con, "country.Name", null);
-        printPopulationEach(Population_of_Country, "---------------------Population Report for Each Country---------------------");
+        printPopulationEach(Population_of_Country, "---------------------Population Report for Each Country---------------------","Each Country Population Report");
 
         List<Population> World_Population = getPopulation(con, null, null);
-        printPopulationEach(World_Population, "---------------------Population Of World---------------------");
+        printPopulationEach(World_Population, "---------------------Population Of World---------------------","World Population");
         List<Population> Continent_Population = getPopulation(con, "country.Continent", "North America");
-        printPopulationEach(Continent_Population, "---------------------Population Report of Continent ---------------------");
-        List<Population> Region_Population = getPopulation(con, "country.Region", "Caribbean ");
-        printPopulationEach(Region_Population, "---------------------Population Report for Region---------------------");
+        printPopulationEach(Continent_Population, "---------------------Population Report of Continent ---------------------","Continent Population ");
         List<Population> Country_Population = getPopulation(con, "country.Name", "Albania");
-        printPopulationEach(Country_Population, "---------------------Population Report for Country---------------------");
+        printPopulationEach(Country_Population, "---------------------Population Report for Country---------------------","Country Population");
         List<Population> City_Population = getPopulation(con, "city.Name", "Eindhoven");
-        printPopulationEach(City_Population, "---------------------Population Report for City---------------------");
+        printPopulationEach(City_Population, "---------------------Population Report for City---------------------","City Population");
         List<Population> District_Population = getPopulation(con, "city.District", "Zuid-Holland");
-        printPopulationEach(District_Population, "---------------------Population Report for District---------------------");
+        printPopulationEach(District_Population, "---------------------Population Report for District---------------------","District Population");
 
         List<Language> languages = getLanguages(con);
-        printLanguageTable(languages);
+        printLanguageTable(languages, "Language Report");
+
+        List<Population> Region_Population = getPopulation(con, "country.Region", "Southern Europe");
+        printPopulationEach(Region_Population, "---------------------Population Report for Region---------------------"," Region Population");
     }
 
 // Need to run world.sql database before running App
