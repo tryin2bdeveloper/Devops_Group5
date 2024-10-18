@@ -92,6 +92,7 @@ jobs:
           mvn package -DskipTests
           docker compose up --abort-on-container-exit
       - name: Automatic Release
+        permissions: write-all
         uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
