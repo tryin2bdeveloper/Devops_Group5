@@ -158,4 +158,5 @@ public class AppIntegrationTest
             assertTrue(population.getPopulationInCities() > 0, "Population in city should be greater than 0 for a valid city");
         }
     }
+
 }

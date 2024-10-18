@@ -312,4 +312,33 @@ public class AppTest
         assertEquals(1277558000, peking.getPopulation()); // Check the population
     }
 
+    @Test
+    void testLanguage() {
+        // Retrieve the list of languages
+        List<Language> languages = app.getLanguages(app.getConnection());
+
+        // Validate that the list is not null
+        assertNotNull(languages);
+
+        // Check the size of all list
+        assertEquals(5, languages.size());
+
+        // Validate the expected languages and populations
+        assertEquals("Chinese", languages.get(0).getLanguage());
+        assertEquals(1968265500, languages.get(0).getPopulation());
+
+        assertEquals("Hindi", languages.get(1).getLanguage());
+        assertEquals(1046303000, languages.get(1).getPopulation());
+
+        assertEquals("Spanish", languages.get(2).getLanguage());
+        assertEquals(750296800, languages.get(2).getPopulation());
+
+        assertEquals("English", languages.get(3).getLanguage());
+        assertEquals(627418300, languages.get(3).getPopulation());
+
+        assertEquals("Arabic", languages.get(4).getLanguage());
+        assertEquals(552045100, languages.get(4).getPopulation());
+    }
+
+
 }
