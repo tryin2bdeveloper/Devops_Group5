@@ -68,9 +68,6 @@ body:
         - video/mp4
         - text/plain
         - application/zip
-      multiple: true
-    validations:
-      required: false
   - type: checkboxes
     id: terms
     attributes:
