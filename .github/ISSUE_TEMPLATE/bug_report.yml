@@ -56,11 +56,26 @@ body:
       label: Relevant log output
       description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
       render: shell
+  - type: file
+    id: screenshots
+    attributes:
+      label: Screenshots or Logs
+      description: You can upload screenshots, videos, or log files that demonstrate the issue.
+      accept:
+        - image/png
+        - image/jpeg
+        - image/gif
+        - video/mp4
+        - text/plain
+        - application/zip
+      multiple: true
+    validations:
+    required: false
   - type: checkboxes
     id: terms
     attributes:
       label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com).
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/tryin2bdeveloper/Devops_Group5/blob/b3d874a84de42a4bc8b67d3735f9e3d757bee2ed/Code_Of_Conduct.md).
       options:
         - label: I agree to follow this project's Code of Conduct
           required: true
