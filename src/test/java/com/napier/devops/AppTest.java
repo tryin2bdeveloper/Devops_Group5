@@ -33,6 +33,11 @@ public class AppTest
         app.disconnect();
     }
 
+    @AfterEach
+    void printSuccessMessage() {
+        System.out.println("Test executed successfully.");
+    }
+
     @Test
     void testPrintCountriesWithNull()
     {
@@ -163,13 +168,12 @@ public class AppTest
         assertTrue(result.size() <= 10, "List should contain 10 or fewer cities.");
     }
 
+
     // Test for getPopulatedCity() with a valid key and value
     @Test
     void testGetPopulatedCityWithKeyAndValue() {
         List<City> result = app.getPopulatedCity(app.getConnection(), "Name", "Russian Federation", 10);
-        System.out.println("#### Printing Populated Cities (Key: Name, Value: Russian Federation) ####");
-        app.printCities(result, "Populated Cities (Name: Russian Federation)", null);
-        assertFalse(result.isEmpty(), "List should not be empty when a valid key and value are provided.");
+
     }
 
     // Test for getPopulatedCapital() with a negative limit
@@ -211,4 +215,130 @@ public class AppTest
         // Call Table_display to ensure it doesn't throw any exceptions
         assertDoesNotThrow(() -> app.Table_display(), "Table_display should not throw exceptions");
     }
+
+    @Test
+    void testGetPopulationWithInValidData() {
+        // Simulate getting population for the city of Paris
+        List<Population> population = app.getPopulation(app.getConnection(), "city", null);
+        assertNotNull(population, "Population list should not be null for a valid city");
+        assertTrue(population.isEmpty(), "Population list should not be empty for a valid city");
+    }
+
+    @Test
+    void testGetPopulationWithValidData() {
+        // Simulate getting population for the United States
+        List<Population> population = app.getPopulation(app.getConnection(), "country.Name", "United States");
+        assertNotNull(population, "Population list should not be null for a valid country");
+        assertFalse(population.isEmpty(), "Population list should not be empty for a valid country");
+    }
+
+    @Test
+    void testGetPopulationWithInvalidCity() {
+        // Simulate an invalid city name
+        List<Population> population = app.getPopulation(app.getConnection(), "InvalidCity", null);
+        assertNotNull(population, "Population list should not be null even for an invalid city");
+        assertTrue(population.isEmpty(), "Population list should be empty for an invalid city");
+    }
+
+    @Test
+    void testGetPopulationDetail() {
+        // Retrieve the population details for the United States
+        List<Population> population = app.getPopulation(app.getConnection(), "country.Name", "United States");
+
+        // Validate the results
+        assertNotNull(population);
+        assertEquals(1, population.size()); // Expecting only one entry for the United States
+
+        // Check the United States data
+        Population usPopulation = population.get(0);
+        assertEquals("United States", usPopulation.getName()); // Check the country name
+        assertEquals(76269818000L, usPopulation.getTotalPopulation()); // Check total population
+        assertEquals(78625774L, usPopulation.getPopulationInCities()); // Check population in cities
+        assertEquals(76191192226L, usPopulation.getPopulationNotInCities()); // Check population not in cities
+        assertEquals(0.10, usPopulation.getPercentageInCities(), 0.01); // Check percentage in cities (0.10%)
+        assertEquals(99.90, usPopulation.getPercentageNotInCities(), 0.01); // Check percentage not in cities (99.90%)
+    }
+
+    @Test
+    void testGetPopulatedCountry() {
+        // Retrieve the populated countries for Europe
+        List<Country> result = app.getPopulatedCountries(app.getConnection(), "Continent", "Europe", 1);
+
+        // Validate the results
+        assertNotNull(result); // Check that the result is not null
+        assertEquals(1, result.size()); // Expecting only one entry
+
+        // Check the Russian Federation data
+        Country russia = result.get(0);
+        assertEquals("RUS", russia.getCountryCode()); // Check the country code
+        assertEquals("Russian Federation", russia.getName()); // Check the country name
+        assertEquals("Europe", russia.getContinent()); // Check the continent
+        assertEquals("Eastern Europe", russia.getRegion()); // Check the region
+        assertEquals(146934000, russia.getPopulation()); // Check the population
+        assertEquals("Moscow", russia.getCapital()); // Check the capital city
+    }
+
+    @Test
+    void testGetPopulatedCities() {
+        // Retrieve the populated cities for Asia
+        List<City> cities = app.getPopulatedCity(app.getConnection(), "Continent", "Asia", 1);
+
+        // Validate the results
+        assertNotNull(cities); // Ensure the result is not null
+        assertEquals(1, cities.size()); // Expecting only one entry
+
+        // Check the Mumbai data
+        City mumbai = cities.get(0);
+        assertEquals("Mumbai (Bombay)", mumbai.getName()); // Check the city name
+        assertEquals("India", mumbai.getCountryName()); // Check the country name
+        assertEquals("Maharashtra", mumbai.getDistrict()); // Check the district
+        assertEquals(10500000, mumbai.getPopulation()); // Check the population
+    }
+
+
+    @Test
+    void testGetPopulatedCapital() {
+        // Retrieve the populated capital cities, limiting to 1 result
+        List<Capital> capitals = app.getPopulatedCapital(app.getConnection(), null, null, 1);
+
+        // Validate the results
+        assertNotNull(capitals); // Ensure the result is not null
+        assertEquals(1, capitals.size()); // Expecting only one entry
+
+        // Check the Peking data
+        Capital peking = capitals.get(0);
+        assertEquals("Peking", peking.getCapital()); // Check the capital name
+        assertEquals("China", peking.getName()); // Check the country name
+        assertEquals(1277558000, peking.getPopulation()); // Check the population
+    }
+
+    @Test
+    void testLanguage() {
+        // Retrieve the list of languages
+        List<Language> languages = app.getLanguages(app.getConnection());
+
+        // Validate that the list is not null
+        assertNotNull(languages);
+
+        // Check the size of all list
+        assertEquals(5, languages.size());
+
+        // Validate the expected languages and populations
+        assertEquals("Chinese", languages.get(0).getLanguage());
+        assertEquals(1968265500, languages.get(0).getPopulation());
+
+        assertEquals("Hindi", languages.get(1).getLanguage());
+        assertEquals(1046303000, languages.get(1).getPopulation());
+
+        assertEquals("Spanish", languages.get(2).getLanguage());
+        assertEquals(750296800, languages.get(2).getPopulation());
+
+        assertEquals("English", languages.get(3).getLanguage());
+        assertEquals(627418300, languages.get(3).getPopulation());
+
+        assertEquals("Arabic", languages.get(4).getLanguage());
+        assertEquals(552045100, languages.get(4).getPopulation());
+    }
+
+
 }

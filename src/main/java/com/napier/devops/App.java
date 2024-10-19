@@ -123,6 +123,30 @@ public class App {
         }
     }
 
+    public static List<Population> getPopulation(Connection con, String key, String value) {
+        if (con == null) {
+            System.out.println("There is no database connection");
+            return new ArrayList<>();  // Return an empty list if no connection
+        } else {
+            String pop_query = "SELECT ";
+            if (key != null) {
+                pop_query += key + " AS Name, SUM(country.Population) AS Total_Population, " +
+                        "SUM(city.Population) AS Population_Live_In_Cities " +
+                        "FROM country JOIN city ON country.Code = city.CountryCode ";
+                if (value != null) {
+                    pop_query += "WHERE " + key + " = '" + value + "' ";
+                }
+                pop_query += "GROUP BY " + key; // Group by after WHERE
+            } else {
+                pop_query += "'World' AS Name, SUM(country.Population) AS Total_Population, " +
+                        "SUM(city.Population) AS Population_Live_In_Cities " +
+                        "FROM country JOIN city ON country.Code = city.CountryCode ";
+            }
+            // Call the getPopulationList method and return the result
+            return getPopulationList(con, pop_query);
+        }
+    }
+
     public static List<Capital> getPopulatedCapital(Connection con, String key, String value, int limit) {
         // Validate that limit must be a positive number
         if (limit < 0) {
@@ -146,6 +170,23 @@ public class App {
             }
 
             return getCapitalList(con, Capital_query);
+        }
+    }
+
+    public static List<Language> getLanguages(Connection con) {
+        //Connection must not be null
+        if (con == null) {
+            System.out.println("No connection found.");
+            return new ArrayList<>();
+        } else {
+            // SQL query for language report
+            String que = "SELECT countrylanguage.Language, SUM(country.Population) AS Population " +
+                    "FROM countrylanguage " +
+                    "JOIN country ON countrylanguage.CountryCode = country.Code " +
+                    "WHERE countrylanguage.Language IN ('Chinese', 'English', 'Hindi', 'Spanish', 'Arabic') " +
+                    "GROUP BY countrylanguage.Language " +
+                    "ORDER BY Population DESC";
+            return getLanguageList(con, que);
         }
     }
 
@@ -291,109 +332,82 @@ public class App {
         return cities;
     }
 
-    public static List<Language> getLanguages(Connection con) {
-        if (con == null) {
-            System.out.println("No connection found.");
-            return new ArrayList<>();
-        } else {
-            // Correcting the SQL query syntax
-            String que = "SELECT countrylanguage.Language, SUM(country.Population) AS Population " +
-                    "FROM countrylanguage " +
-                    "JOIN country ON countrylanguage.CountryCode = country.Code " +
-                    "WHERE countrylanguage.Language IN ('Chinese', 'English', 'Hindi', 'Spanish', 'Arabic') " +
-                    "GROUP BY countrylanguage.Language " +
-                    "ORDER BY Population DESC";
-            return getLanguageList(con, que);
-        }
-    }
-
+    /**
+     * Retrieves a list of languages and their populations from the database.
+     *
+     * @param con The connection object to the database.
+     * @param que The SQL query string to retrieve language data.
+     * @return A list of Language objects populated from the query results.
+     */
     public static List<Language> getLanguageList(Connection con, String que) {
-        List<Language> languages = new ArrayList<>();
-        if (con == null) {
-            System.out.println("No connection found.");
+        List<Language> languages = new ArrayList<>(); // Initialize an empty list to store languages
+        if (con == null) { // Check if the database connection is null
+            System.out.println("No connection found."); // Log an error if there's no connection
         } else {
-            if (que != null) {
+            if (que != null) { // Check if the SQL query is provided
                 try {
-                    Statement stmt = con.createStatement();
-                    ResultSet rset = stmt.executeQuery(que);
+                    Statement stmt = con.createStatement(); // Create a statement to execute the SQL query
+                    ResultSet rset = stmt.executeQuery(que); // Execute the query and store the results
 
+                    // Loop through the result set and create Language objects
                     while (rset.next()) {
-                        String language = rset.getString("Language");
-                        int population = rset.getInt("Population");
+                        String language = rset.getString("Language"); // Get the language name
+                        int population = rset.getInt("Population"); // Get the population for that language
 
-                        Language lang = new Language(language, population);
-                        languages.add(lang);  // Add the Language object to the list
+                        Language lang = new Language(language, population); // Create a Language object
+                        languages.add(lang); // Add the Language object to the list
                     }
-                } catch (SQLException e) {
-                    // Log an error message if there is an SQL exception
-                    System.out.println("SQL Error: " + e.getMessage());
+                } catch (SQLException e) { // Catch any SQL exceptions
+                    System.out.println("SQL Error: " + e.getMessage()); // Log the error message
                 }
             } else {
-                System.out.println("No SQL query.");
+                System.out.println("No SQL query."); // Log an error if the SQL query is null
             }
         }
-        return languages;
+        return languages; // Return the list of languages
     }
 
-
-    public static List<Population> getPopulation(Connection con, String key, String value) {
-        if (con == null) {
-            System.out.println("There is no database connection");
-            return new ArrayList<>();  // Return an empty list if no connection
-        } else {
-            String pop_query = "SELECT ";
-            if (key != null) {
-                pop_query += key + " AS Name, SUM(country.Population) AS Total_Population, " +
-                        "SUM(city.Population) AS Population_Live_In_Cities " +
-                        "FROM country JOIN city ON country.Code = city.CountryCode ";
-                if (value != null) {
-                    pop_query += "WHERE " + key + " = '" + value + "' ";
-                }
-                pop_query += "GROUP BY " + key; // Group by after WHERE
-            } else {
-                pop_query += "'World' AS Name, SUM(country.Population) AS Total_Population, " +
-                        "SUM(city.Population) AS Population_Live_In_Cities " +
-                        "FROM country JOIN city ON country.Code = city.CountryCode ";
-            }
-            // Call the getPopulationList method and return the result
-            return getPopulationList(con, pop_query);
-        }
-    }
-
-
+    /**
+     * Retrieves a list of populations from the database based on the provided SQL query.
+     *
+     * @param con The connection object to the database.
+     * @param pop_query The SQL query string to retrieve population data.
+     * @return A list of Population objects populated from the query results.
+     */
     public static List<Population> getPopulationList(Connection con, String pop_query) {
-        List<Population> populations = new ArrayList<>();
-        if (con == null) {
-            System.out.println("There is no database connection");
-            return populations;
+        List<Population> populations = new ArrayList<>(); // Initialize an empty list to store populations
+        if (con == null) { // Check if the database connection is null
+            System.out.println("There is no database connection"); // Log an error message
+            return populations; // Return an empty list
         } else {
-            if (pop_query != null) {
+            if (pop_query != null) { // Check if the SQL query is provided
                 try {
-                    Statement stmt = con.createStatement();
-                    ResultSet rset = stmt.executeQuery(pop_query);
+                    Statement stmt = con.createStatement(); // Create a statement to execute the SQL query
+                    ResultSet rset = stmt.executeQuery(pop_query); // Execute the query and store the results
+                    // Loop through the result set and create Population objects
                     while (rset.next()) {
-                        String name = rset.getString("Name");
-                        long totalPopulation = rset.getLong("Total_Population"); // Use long
-                        long populationInCities = rset.getLong("Population_Live_In_Cities"); // Use long
-                        long populationNotInCities = totalPopulation - populationInCities;
+                        String name = rset.getString("Name"); // Get the country or region name
+                        long totalPopulation = rset.getLong("Total_Population"); // Get total population
+                        long populationInCities = rset.getLong("Population_Live_In_Cities"); // Get population living in cities
+                        long populationNotInCities = totalPopulation - populationInCities; // Calculate population not living in cities
 
                         // Calculate percentages correctly using double to avoid integer division
                         double percentageInCities = totalPopulation > 0 ? ((double) populationInCities / totalPopulation) * 100 : 0;
                         double percentageNotInCities = totalPopulation > 0 ? ((double) populationNotInCities / totalPopulation) * 100 : 0;
 
-                        Population population = new Population(name, totalPopulation, populationNotInCities, populationInCities, percentageInCities, percentageNotInCities);
-                        populations.add(population);
+                        Population population = new Population(name, totalPopulation, populationNotInCities, populationInCities, percentageInCities, percentageNotInCities); // Create a Population object
+                        populations.add(population); // Add the Population object to the list
                     }
-                } catch (SQLException e) {
-                    // Log an error message if there is an SQL exception
-                    System.out.println("SQL Error: " + e.getMessage());
+                } catch (SQLException e) { // Catch any SQL exceptions
+                    System.out.println("SQL Error: " + e.getMessage()); // Log the error message
                 }
             } else {
-                System.out.println("No SQL query.");
+                System.out.println("No SQL query."); // Log an error if the SQL query is null
             }
-            return populations;
+            return populations; // Return the list of populations
         }
     }
+
 
     /**
      * Prints a list of capitals in a table format and writes to a markdown file.
@@ -420,26 +434,24 @@ public class App {
             System.out.println("+-----------------------------------+-----------------------------------------+------------+");
             System.out.println(capitals.size() + " countries found.");
 
-            if (report != null) {
-                // File Output to Markdown
-                try {
-                    new File("./reports/").mkdir();
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
+            // File Output to Markdown
+            try {
+                new File("./reports/").mkdir();
+                BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
 
-                    writer.write("### " + header + "\n\n");
-                    writer.write("| Capital | Country Name | Population |\n");
-                    writer.write("| --- | --- | --- |\n");
+                writer.write("### " + header + "\n\n");
+                writer.write("| Capital | Country Name | Population |\n");
+                writer.write("| --- | --- | --- |\n");
 
-                    for (Capital capital : capitals) {
-                        writer.write("| " + capital.getCapital() + " | " + capital.getName() + " | " + String.format("%,d", capital.getPopulation()) + " |\n");
-                    }
-
-                    writer.write("\n" + capitals.size() + " capitals found.\n");
-                    writer.close();
-                    System.out.println("Report written to ./reports/ As" + report + ".md");
-                } catch (IOException e) {
-                    e.printStackTrace();
+                for (Capital capital : capitals) {
+                    writer.write("| " + capital.getCapital() + " | " + capital.getName() + " | " + String.format("%,d", capital.getPopulation()) + " |\n");
                 }
+
+                writer.write("\n" + capitals.size() + " capitals found.\n");
+                writer.close();
+                System.out.println("Report written to ./reports/" + report + ".md");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -472,27 +484,26 @@ public class App {
             System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
             System.out.println(countries.size() + " countries found.");
 
-            if (report != null) {
-                try {
-                    new File("./reports/").mkdir();
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
+            // File Output to Markdown
+            try {
+                new File("./reports/").mkdir();
+                BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
 
-                    writer.write("### " + header + "\n\n");
-                    writer.write("| Country Code | Country Name | Continent | Region | Population | Capital |\n");
-                    writer.write("| --- | --- | --- | --- | --- | --- |\n");
+                writer.write("### " + header + "\n\n");
+                writer.write("| Country Code | Country Name | Continent | Region | Population | Capital |\n");
+                writer.write("| --- | --- | --- | --- | --- | --- |\n");
 
-                    for (Country country : countries) {
-                        writer.write("| " + country.getCountryCode() + " | " + country.getName() + " | "
-                                + country.getContinent() + " | " + country.getRegion() + " | "
-                                + String.format("%,d", country.getPopulation()) + " | " + country.getCapital() + " |\n");
-                    }
-
-                    writer.write("\n" + countries.size() + " countries found.\n");
-                    writer.close();
-                    System.out.println("Report written to ./reports/" + report + ".md");
-                } catch (IOException e) {
-                    e.printStackTrace();
+                for (Country country : countries) {
+                    writer.write("| " + country.getCountryCode() + " | " + country.getName() + " | "
+                            + country.getContinent() + " | " + country.getRegion() + " | "
+                            + String.format("%,d", country.getPopulation()) + " | " + country.getCapital() + " |\n");
                 }
+
+                writer.write("\n" + countries.size() + " countries found.\n");
+                writer.close();
+                System.out.println("Report written to ./reports/" + report + ".md");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -522,120 +533,148 @@ public class App {
             System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
             System.out.println(cities.size() + " cities found.");
 
-            if (report != null) {
-                try {
-                    new File("./reports/").mkdir();
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
+            // File Output to Markdown
+            try {
+                new File("./reports/").mkdir();
+                BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
 
-                    writer.write("### " + header + "\n\n");
-                    writer.write("| City Name | Country Name | District | Population |\n");
-                    writer.write("| --- | --- | --- | --- |\n");
+                writer.write("### " + header + "\n\n");
+                writer.write("| City Name | Country Name | District | Population |\n");
+                writer.write("| --- | --- | --- | --- |\n");
 
-                    for (City city : cities) {
-                        writer.write("| " + city.getName() + " | " + city.getCountryName() + " | "
-                                + city.getDistrict() + " | " + String.format("%,d", city.getPopulation()) + " |\n");
-                    }
-
-                    writer.write("\n" + cities.size() + " cities found.\n");
-                    writer.close();
-                    System.out.println("Report written to ./reports/" + report + ".md");
-                } catch (IOException e) {
-                    e.printStackTrace();
+                for (City city : cities) {
+                    writer.write("| " + city.getName() + " | " + city.getCountryName() + " | "
+                            + city.getDistrict() + " | " + String.format("%,d", city.getPopulation()) + " |\n");
                 }
+
+                writer.write("\n" + cities.size() + " cities found.\n");
+                writer.close();
+                System.out.println("Report written to ./reports/" + report + ".md");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
+    /**
+     * Prints a list of population details in a table format and writes to a markdown file.
+     *
+     * @param populations  The list of Population objects to be printed.
+     * @param header      A string to be printed as the header of the table.
+     * @param report      The name of the markdown file to be created.
+     */
     public static void printPopulationEach(List<Population> populations, String header, String report) {
+        // Check if the list of populations is null or empty
         if (populations == null || populations.isEmpty()) {
-            System.out.println("No result found in variable");
+            System.out.println("No result found in variable"); // Print a message if no population data is available
         } else {
-            // Console Output
-            System.out.println("\n\n######## " + header + " ########");
-            System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+");
+            // Print the header for the console output
+            System.out.println("\n\n######## " + header + " ########"); // Print the main header
+            System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+"); // Print the table separator
+            // Print the column titles for the console output
             System.out.printf("| %-33s | %-15s | %-25s | %-25s |\n",
                     "Name",
                     "Total Population",
                     "Population Live In Cities",
                     "Population Not Live In Cities");
-            System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+");
+            System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+"); // Print the table separator
 
+            // Iterate over the population list and print each population's details
             for (Population population : populations) {
                 System.out.printf("| %-33s | %,16d | %,15d [ %.2f%% ] | %,18d [ %.2f%% ] |\n",
-                        population.getName() != null ? population.getName() : "World",
+                        population.getName() != null ? population.getName() : "World", // Use "World" if name is null
                         population.getTotalPopulation(),
                         population.getPopulationInCities(),
                         population.getPercentageInCities(),
                         population.getPopulationNotInCities(),
                         population.getPercentageNotInCities());
             }
-            System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+");
-            System.out.println(populations.size() + " RESULTS FOUND IN THIS REPORT");
+            // Print the footer of the console output
+            System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+"); // Print the table separator
+            System.out.println(populations.size() + " RESULTS FOUND IN THIS REPORT"); // Print the total number of results found
 
-            if (report != null) {
-                try {
-                    new File("./reports/").mkdir();
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
+            // File output to a Markdown report
+            try {
+                // Create the reports directory if it doesn't exist
+                new File("./reports/").mkdir();
+                // Create a BufferedWriter to write the report to a Markdown file
+                BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
 
-                    writer.write("### " + header + "\n\n");
-                    writer.write("| Name | Total Population | Population Live In Cities | Population Not Live In Cities |\n");
-                    writer.write("| --- | --- | --- | --- |\n");
+                // Write the header for the Markdown report
+                writer.write("### " + header + "\n\n");
+                writer.write("| Name | Total Population | Population Live In Cities | Population Not Live In Cities |\n");
+                writer.write("| --- | --- | --- | --- |\n");
 
-                    for (Population population : populations) {
-                        writer.write("| " + (population.getName() != null ? population.getName() : "World") + " | "
-                                + String.format("%,d", population.getTotalPopulation()) + " | "
-                                + String.format("%,d [ %.2f%% ]", population.getPopulationInCities(), population.getPercentageInCities()) + " | "
-                                + String.format("%,d [ %.2f%% ]", population.getPopulationNotInCities(), population.getPercentageNotInCities()) + " |\n");
-                    }
-                    writer.write("\n" + populations.size() + " RESULTS FOUND IN THIS REPORT\n");
-                    writer.close();
-                    System.out.println("Report written to ./reports/" + report + ".md");
-                } catch (IOException e) {
-                    e.printStackTrace();
+                // Write each population's details to the Markdown report
+                for (Population population : populations) {
+                    writer.write("| " + (population.getName() != null ? population.getName() : "World") + " | "
+                            + String.format("%,d", population.getTotalPopulation()) + " | "
+                            + String.format("%,d [ %.2f%% ]", population.getPopulationInCities(), population.getPercentageInCities()) + " | "
+                            + String.format("%,d [ %.2f%% ]", population.getPopulationNotInCities(), population.getPercentageNotInCities()) + " |\n");
                 }
+                // Write the total results found at the end of the report
+                writer.write("\n" + populations.size() + " RESULTS FOUND IN THIS REPORT\n");
+                writer.close(); // Close the writer
+                System.out.println("Report written to ./reports/" + report + ".md"); // Print a message indicating where the report is saved
+            } catch (IOException e) {
+                e.printStackTrace(); // Print the stack trace if there's an error writing the report
             }
         }
     }
 
-    // Method to print the table output
+
+
+    /**
+     * Prints a table of languages and their populations in a formatted manner,
+     * and writes the data to a markdown file.
+     *
+     * @param languages The list of Language objects to be printed.
+     * @param report    The name of the markdown file to be created.
+     */
     public static void printLanguageTable(List<Language> languages, String report) {
+        // Check if the list of languages is null or empty
         if (languages == null || languages.isEmpty()) {
-            System.out.println("No results found.");
+            System.out.println("No results found."); // Print message if no results
         } else {
-            // Console Output
+            // Console Output: Print the table header
             System.out.println("+-------------------+------------------+");
             System.out.printf("| %-17s | %-16s |\n", "Language", "Population");
             System.out.println("+-------------------+------------------+");
 
+            // Iterate over the list of languages and print each language's details
             for (Language lang : languages) {
                 System.out.printf("| %-17s | %,16d |\n", lang.getLanguage(), lang.getPopulation());
             }
 
+            // Print the footer of the console output
             System.out.println("+-------------------+------------------+");
-            System.out.println(languages.size() + " results found.");
+            System.out.println(languages.size() + " results found."); // Print total results found
 
-            if (report != null) {
-                try {
-                    new File("./reports/").mkdir();
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
+            // File Output to Markdown: Create report file
+            try {
+                new File("./reports/").mkdir(); // Create the reports directory if it doesn't exist
+                BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + report + ".md")));
 
-                    writer.write("### Language Population Report\n\n");
-                    writer.write("| Language | Population |\n");
-                    writer.write("| --- | --- |\n");
+                // Write the header for the Markdown report
+                writer.write("### Language Population Report\n\n");
+                writer.write("| Language | Population |\n");
+                writer.write("| --- | --- |\n");
 
-                    for (Language lang : languages) {
-                        writer.write("| " + lang.getLanguage() + " | " + String.format("%,d", lang.getPopulation()) + " |\n");
-                    }
-
-                    writer.write("\n" + languages.size() + " results found.\n");
-                    writer.close();
-                    System.out.println("Report written to ./reports/" + report + ".md");
-                } catch (IOException e) {
-                    e.printStackTrace();
+                // Write each language's details to the Markdown report
+                for (Language lang : languages) {
+                    writer.write("| " + lang.getLanguage() + " | " + String.format("%,d", lang.getPopulation()) + " |\n");
                 }
+
+                // Write the total results found at the end of the report
+                writer.write("\n" + languages.size() + " results found.\n");
+                writer.close(); // Close the writer
+                System.out.println("Report written to ./reports/" + report + ".md"); // Print a message indicating where the report is saved
+            } catch (IOException e) {
+                e.printStackTrace(); // Print the stack trace if there's an error writing the report
             }
         }
     }
+
 
 
 
@@ -714,11 +753,12 @@ public class App {
         printPopulationEach(City_Population, "---------------------Population Report for City---------------------","City Population");
         List<Population> District_Population = getPopulation(con, "city.District", "Zuid-Holland");
         printPopulationEach(District_Population, "---------------------Population Report for District---------------------","District Population");
-        List<Population> Region_Population = getPopulation(con, "country.Region", "Southern Europe");
-        printPopulationEach(Region_Population, "---------------------Population Report for Region---------------------"," Region Population");
 
         List<Language> languages = getLanguages(con);
         printLanguageTable(languages, "Language Report");
+
+        List<Population> Region_Population = getPopulation(con, "country.Region", "Southern Europe");
+        printPopulationEach(Region_Population, "---------------------Population Report for Region---------------------"," Region Population");
     }
 
 // Need to run world.sql database before running App
