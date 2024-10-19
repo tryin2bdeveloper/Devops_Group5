@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - develop
 
 # Define permissions at the workflow level
 permissions:
