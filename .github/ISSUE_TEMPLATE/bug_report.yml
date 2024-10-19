@@ -27,13 +27,13 @@ body:
       value: "A bug happened!"
     validations:
       required: true
-  - type: dropdown
+  - type: textarea
     id: expected-outcome
     attributes:
       label: Expected Outcome
       description: What did you expect to happen?
-      options:
-        - ""  # This creates a blank option
+      placeholder: Tell us what you expect to outcome!
+
     validations:
       required: false
   - type: dropdown
