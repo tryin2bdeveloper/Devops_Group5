@@ -56,14 +56,7 @@ body:
       label: Relevant log output
       description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
       render: shell
-  - type: textarea
-    id: screenshots-or-logs
-    attributes:
-      label: Screenshots or Logs
-      description: Please provide any relevant screenshots or logs. If uploading images, do so in the comment section after submitting.
-      placeholder: Copy and paste logs here or describe any screenshots.
-    validations:
-      required: false
+
   - type: checkboxes
     id: terms
     attributes:
