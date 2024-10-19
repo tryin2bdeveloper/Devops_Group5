@@ -1,0 +1,25 @@
+name: Configuration Issue
+description: Report issues related to configuration settings.
+title: "[Configuration]: "
+labels: ["configuration"]
+assignees:
+  - tryin2bdeveloper
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Share details about configuration issues.
+  - type: textarea
+    id: config-issue
+    attributes:
+      label: Configuration Details
+      description: Describe the configuration problem you are facing.
+      placeholder: Provide specific details
+    validations:
+      required: true
+  - type: input
+    id: config-file
+    attributes:
+      label: Configuration File
+      description: Which configuration file are you using?
+      placeholder: e.g., config.yaml

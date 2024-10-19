@@ -1,0 +1,25 @@
+name: Documentation Update
+description: Report missing or outdated documentation.
+title: "[Docs]: "
+labels: ["documentation"]
+assignees:
+  - tryin2bdeveloper
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please describe the documentation issue.
+  - type: textarea
+    id: doc-issue
+    attributes:
+      label: Documentation Problem
+      description: What information is missing or incorrect?
+      placeholder: Describe the issue here
+    validations:
+      required: true
+  - type: input
+    id: affected-pages
+    attributes:
+      label: Affected Pages
+      description: Which docs are affected?
+      placeholder: Include relevant page links
