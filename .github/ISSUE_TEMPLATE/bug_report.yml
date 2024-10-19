@@ -33,7 +33,7 @@ body:
       label: Expected Outcome
       description: What should have happened?
       placeholder: Describe what you expected to happen.
-      value: ""
+      value: "Expected Outcome"
     validations:
       required: true
   - type: dropdown
