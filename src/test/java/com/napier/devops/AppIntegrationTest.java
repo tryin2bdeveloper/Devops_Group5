@@ -61,21 +61,21 @@ public class AppIntegrationTest
     @Test
     void testGetCountryWithFilter() {
         List<Country> countries = app.getPopulatedCountries(app.getConnection(), "Continent", "Europe", 5); // Fetch countries by continent
-        app.printCountries(countries, "Test Data"); // Print the result to the console
+        app.printCountries(countries, "Test Data", null); // Print the result to the console
     }
 
     // Test case: Get cities with a valid filter for name "Russian Federation", expect a populated list
     @Test
     void testGetCityWithFilter() {
         List<City> cities = app.getPopulatedCity(app.getConnection(), "Name", "Russian Federation", 5); // Fetch cities by country name
-        app.printCities(cities, "Test Data"); // Print the result to the console
+        app.printCities(cities, "Test Data", null); // Print the result to the console
     }
 
     // Test case: Get capitals with a valid filter for continent "Asia", expect a populated list
     @Test
     void testGetCapitalWithFilter() {
         List<Capital> capitals = app.getPopulatedCapital(app.getConnection(), "Continent", "Asia", 5); // Fetch capitals by continent
-        app.printCapitals(capitals, "Test Data"); // Print the result to the console
+        app.printCapitals(capitals, "Test Data", null); // Print the result to the console
     }
 
     // Test case: Get countries with an invalid filter, expect an empty list
@@ -101,6 +101,7 @@ public class AppIntegrationTest
         assertNotNull(capitals, "Capitals list should not be null"); // Ensure list is not null
         assertTrue(capitals.isEmpty(), "Capitals list should be empty when using an invalid filter"); // Expect empty list
     }
+
 
     // Test case: Test table display with valid data, should not throw an exception
     @Test
