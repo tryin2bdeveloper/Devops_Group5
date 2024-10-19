@@ -70,7 +70,7 @@ body:
         - application/zip
       multiple: true
     validations:
-    required: false
+      required: false
   - type: checkboxes
     id: terms
     attributes:
