@@ -32,11 +32,12 @@ body:
       label: Version
       description: What version of our software are you running?
       options:
-        - latest (Default)
+        - latest(Default)
         - v0.1-alpha-2 (Edge)
         - v0.1-alpha-4 (Edge)
         - v0.1-alpha-6 (Edge)
         - v0.1-alpha-8 (Edge)
+      default: 0
     validations:
       required: true
   - type: dropdown
@@ -55,11 +56,14 @@ body:
       label: Relevant log output
       description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
       render: shell
-  - type: markdown
+  - type: textarea
+    id: screenshots-or-logs
     attributes:
-      value: |
-        ### Screenshots or Logs
-        Please manually upload screenshots, videos, or log files after submitting this issue. You can drag and drop them into the comment section.
+      label: Screenshots or Logs
+      description: Please provide any relevant screenshots or logs. If uploading images, do so in the comment section after submitting.
+      placeholder: Copy and paste logs here or describe any screenshots.
+    validations:
+      required: false
   - type: checkboxes
     id: terms
     attributes:
