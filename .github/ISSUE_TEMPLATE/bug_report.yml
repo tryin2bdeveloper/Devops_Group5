@@ -37,7 +37,6 @@ body:
         - v0.1-alpha-4 (Edge)
         - v0.1-alpha-6 (Edge)
         - v0.1-alpha-8 (Edge)
-      default: 0
     validations:
       required: true
   - type: dropdown
@@ -56,18 +55,11 @@ body:
       label: Relevant log output
       description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
       render: shell
-  - type: file
-    id: screenshots
+  - type: markdown
     attributes:
-      label: Screenshots or Logs
-      description: You can upload screenshots, videos, or log files that demonstrate the issue.
-      accept:
-        - image/png
-        - image/jpeg
-        - image/gif
-        - video/mp4
-        - text/plain
-        - application/zip
+      value: |
+        ### Screenshots or Logs
+        Please manually upload screenshots, videos, or log files after submitting this issue. You can drag and drop them into the comment section.
   - type: checkboxes
     id: terms
     attributes:
