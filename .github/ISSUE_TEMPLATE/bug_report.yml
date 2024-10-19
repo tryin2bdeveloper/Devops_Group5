@@ -31,11 +31,11 @@ body:
     id: expected-outcome
     attributes:
       label: Expected Outcome
-      description: What did you expect to happen?
-      placeholder: Tell us what you expect to outcome!
-
+      description: What should have happened?
+      placeholder: Describe what you expected to happen.
+      value: ""
     validations:
-      required: false
+      required: true
   - type: dropdown
     id: version
     attributes:
