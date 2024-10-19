@@ -2,7 +2,6 @@ name: Bug Report
 description: File a bug report.
 title: "[Bug]: "
 labels: ["bug", "triage"]
-
 assignees:
   - tryin2bdeveloper
 body:
@@ -14,7 +13,7 @@ body:
     id: contact
     attributes:
       label: Contact Details
-      description: How can we get in touch with you?
+      description: How can we get in touch with you if we need more info?
       placeholder: ex. email@example.com
     validations:
       required: false
@@ -27,24 +26,38 @@ body:
       value: "A bug happened!"
     validations:
       required: true
-  - type: textarea
-    id: expected-outcome
-    attributes:
-      label: Expected Outcome
-      description: What should have happened?
-      placeholder: Describe what you expected to happen.
-      value: "Expected Outcome"
-    validations:
-      required: true
   - type: dropdown
     id: version
     attributes:
       label: Version
       description: What version of our software are you running?
       options:
-        - latest (Default)
-        - 0.1-alpha-2 (Edge)
-        - 0.1-alpha-4 (Edge)
-        - 0.1-alpha-6 (Edge)
+        - 1.0.2 (Default)
+        - 1.0.3 (Edge)
+      default: 0
     validations:
       required: true
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browsers are you seeing the problem on?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com).
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
