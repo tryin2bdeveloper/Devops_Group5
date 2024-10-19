@@ -24,18 +24,18 @@ body:
       label: What happened?
       description: Also tell us, what did you expect to happen?
       placeholder: Tell us what you see!
-      value: "The workflow fails to execute due to unit tests not passing. Specifically, the tests for the authentication module return unexpected results, preventing the build from completing."
+      value: "A bug happened!"
     validations:
       required: true
-  - type: textarea
+  - type: dropdown
     id: expected-outcome
     attributes:
       label: Expected Outcome
-      description: Describe what you expected to happen.
-      placeholder: What should have happened?
-      value: "The unit tests should run successfully, allowing the workflow to proceed without errors and enabling a smooth deployment process."
+      description: What did you expect to happen?
+      options:
+        - ""  # This creates a blank option
     validations:
-      required: true
+      required: false
   - type: dropdown
     id: version
     attributes:
