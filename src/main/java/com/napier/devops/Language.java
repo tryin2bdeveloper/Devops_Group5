@@ -3,13 +3,11 @@ package com.napier.devops;
 public class Language {
     private String language;
     private int population;
-    private long tot_population;
     private int percentage;
 
     public Language(String language, int population, long tot_population, int percentage) {
         this.language = language;
         this.population = population;
-        this.tot_population = tot_population;
         this.percentage = percentage; // Correct assignment
     }
 

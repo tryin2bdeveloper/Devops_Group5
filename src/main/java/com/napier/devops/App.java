@@ -7,8 +7,12 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import static java.lang.System.*;
 
 public class App {
+    private static final Set<String> KEYS = Set.of("Name", "Continent", "Region");
     /**
      * Connection to MySQL database.
      */
@@ -21,24 +25,24 @@ public class App {
             // Load Database driver
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            System.out.println("Could not load SQL driver");
-            System.exit(-1);
+            out.println("Could not load SQL driver");
+            exit(-1);
         }
         int retries = 10;
         for (int i = 0; i < retries; ++i) {
-            System.out.println("Connecting to database...");
+            out.println("Connecting to database...");
             try {
                 // Wait a bit for db to start
                 Thread.sleep(delay);
                 // Connect to database
                 con = DriverManager.getConnection("jdbc:mysql://" + location + "/world?useSSL=false&allowPublicKeyRetrieval=true", "root", "group-5");
-                System.out.println("Successfully connected");
+                out.println("Successfully connected");
                 break;
             } catch (SQLException sqle) {
-                System.out.println("Failed to connect to database attempt ");
-                System.out.println(sqle.getMessage());
+                out.println("Failed to connect to database attempt ");
+                out.println(sqle.getMessage());
             } catch (InterruptedException ie) {
-                System.out.println("Thread interrupted? Should not happen.");
+                out.println("Thread interrupted? Should not happen.");
             }
         }
     }
@@ -62,19 +66,19 @@ public class App {
                 // Close connection
                 con.close();
             } catch (Exception e) {
-                System.out.println("Error closing connection to database");
+                out.println("Error closing connection to database");
             }
         }
         else {
             // If the connection is already null, indicate that no connection was active
-            System.out.println("No database connected");
+            out.println("No database connected");
         }
     }
 
     public static List<Country> getPopulatedCountries(Connection con, String key, String value, int limit) {
         // Validate that limit must be a positive number
         if (limit < 0) {
-            System.out.println("Limit must be a positive integer.");
+            out.println("Limit must be a positive integer.");
             return new ArrayList<>();  // Return an empty list if limit is invalid
         }else{
             // Construct the base query
@@ -97,7 +101,7 @@ public class App {
     public static List<City> getPopulatedCity(Connection con, String key, String value, int limit) {
         // Validate that limit must be a positive number
         if (limit < 0) {
-            System.out.println("Limit must be a positive integer.");
+            out.println("Limit must be a positive integer.");
             return new ArrayList<>();  // Return an empty list if limit is invalid
         }else{
             // Construct the base query
@@ -106,7 +110,7 @@ public class App {
             // Check condition key and value are not add some extra text in query.
             if (key != null && value != null) {
                 // If the key is "Name", "Continent", or "Region", filter using the country table
-                if (key.equals("Name") || key.equals("Continent") || key.equals("Region")) {
+                if (KEYS.contains(key)) {
                     sql_query += "WHERE country." + key + " = '" + value + "' ";
                     // If the key is "Name", "Continent", or "Region", filter using the country table
                 } else if(limit ==0){
@@ -125,7 +129,7 @@ public class App {
 
     public static List<Population> getPopulation(Connection con, String key, String value) {
         if (con == null) {
-            System.out.println("There is no database connection");
+            out.println("There is no database connection");
             return new ArrayList<>();  // Return an empty list if no connection
         } else {
             String pop_query = "SELECT ";
@@ -150,7 +154,7 @@ public class App {
     public static List<Capital> getPopulatedCapital(Connection con, String key, String value, int limit) {
         // Validate that limit must be a positive number
         if (limit < 0) {
-            System.out.println("Limit must be a positive integer.");
+            out.println("Limit must be a positive integer.");
             return new ArrayList<>();  // Return an empty list if limit is invalid
         } else {
             // Construct the base query
@@ -176,7 +180,7 @@ public class App {
     public static List<Language> getLanguages(Connection con) {
         //Connection must not be null
         if (con == null) {
-            System.out.println("No connection found.");
+            out.println("No connection found.");
             return new ArrayList<>();
         } else {
             // SQL query for language report
@@ -204,7 +208,7 @@ public class App {
 
         // Check if the database connection is null
         if (con == null) {
-            System.out.println("No database connection.");
+            out.println("No database connection.");
             return capitals;  // Return an empty list if there's no connection
         } else {
             // Proceed only if the query is not null
@@ -229,7 +233,7 @@ public class App {
                     }
                 } catch (SQLException e) {
                     // Print an error message in case of an SQL exception
-                    System.out.println("SQL Exception: " + e.getMessage());
+                    out.println("SQL Exception: " + e.getMessage());
                 }
             }
         }
@@ -250,7 +254,7 @@ public class App {
 
         // Check if the query is null
         if (Country_query == null) {
-            System.out.println("There is no value in variable");  // Log an error message if the query is missing
+            out.println("There is no value in variable");  // Log an error message if the query is missing
         } else {
             // Check if the database connection is valid
             if (con != null) {
@@ -274,11 +278,11 @@ public class App {
                     }
                 } catch (SQLException e) {
                     // Log an error message if there is an SQL exception
-                    System.out.println("SQL Exception: " + e.getMessage());
+                    out.println("SQL Exception: " + e.getMessage());
                 }
             } else {
                 // Log an error message if the connection is null
-                System.out.println("No database connection.");
+                out.println("No database connection.");
                 return countries;  // Return the empty list if no connection
             }
         }
@@ -299,7 +303,7 @@ public class App {
 
         // Check if the database connection is null
         if (con == null) {
-            System.out.println("No database connection.");  // Log an error if there's no connection
+            out.println("No database connection.");  // Log an error if there's no connection
             return cities;  // Return an empty list
         } else {
             // Check if the SQL query is provided
@@ -322,11 +326,11 @@ public class App {
                     }
                 } catch (SQLException e) {
                     // Log an error message if there is an SQL exception
-                    System.out.println(e.getMessage());
+                    out.println(e.getMessage());
                 }
             } else {
                 // Log an error if the SQL query is null
-                System.out.println("No SQL query.");
+                out.println("No SQL query.");
             }
         }
         // Return the list of cities
@@ -343,7 +347,7 @@ public class App {
     public static List<Language> getLanguageList(Connection con, String que) {
         List<Language> languages = new ArrayList<>(); // Initialize an empty list to store languages
         if (con == null) { // Check if the database connection is null
-            System.out.println("No connection found."); // Log an error if there's no connection
+            out.println("No connection found."); // Log an error if there's no connection
         } else {
             if (que != null) { // Check if the SQL query is provided
                 try {
@@ -362,10 +366,10 @@ public class App {
                         languages.add(lang);
                     }
                 } catch (SQLException e) { // Catch any SQL exceptions
-                    System.out.println("SQL Error: " + e.getMessage()); // Log the error message
+                    out.println("SQL Error: " + e.getMessage()); // Log the error message
                 }
             } else {
-                System.out.println("No SQL query."); // Log an error if the SQL query is null
+                out.println("No SQL query."); // Log an error if the SQL query is null
             }
         }
         return languages; // Return the list of languages
@@ -381,7 +385,7 @@ public class App {
     public static List<Population> getPopulationList(Connection con, String pop_query) {
         List<Population> populations = new ArrayList<>(); // Initialize an empty list to store populations
         if (con == null) { // Check if the database connection is null
-            System.out.println("There is no database connection"); // Log an error message
+            out.println("There is no database connection"); // Log an error message
             return populations; // Return an empty list
         } else {
             if (pop_query != null) { // Check if the SQL query is provided
@@ -403,10 +407,10 @@ public class App {
                         populations.add(population); // Add the Population object to the list
                     }
                 } catch (SQLException e) { // Catch any SQL exceptions
-                    System.out.println("SQL Error: " + e.getMessage()); // Log the error message
+                    out.println("SQL Error: " + e.getMessage()); // Log the error message
                 }
             } else {
-                System.out.println("No SQL query."); // Log an error if the SQL query is null
+                out.println("No SQL query."); // Log an error if the SQL query is null
             }
             return populations; // Return the list of populations
         }
@@ -423,20 +427,20 @@ public class App {
     public static void printCapitals(List<Capital> capitals, String header, String report) {
         // Check if the capitals list is null or empty
         if (capitals == null || capitals.isEmpty()) {
-            System.out.println("No countries found.");
+            out.println("No countries found.");
         } else {
             // Console Output
-            System.out.println("\n\n######## " + header + " ########");
-            System.out.println("+-----------------------------------+-----------------------------------------+------------+");
-            System.out.printf("|%-33s | %-39s | %-10s |\n", "Name", "Country Name", "Population");
-            System.out.println("+-----------------------------------+-----------------------------------------+------------+");
+            out.println("\n\n######## " + header + " ########");
+            out.println("+-----------------------------------+-----------------------------------------+------------+");
+            out.printf("|%-33s | %-39s | %-10s |\n", "Name", "Country Name", "Population");
+            out.println("+-----------------------------------+-----------------------------------------+------------+");
 
             for (Capital capital : capitals) {
-                System.out.printf("|%-33s | %-39s | %-10s |\n", capital.getCapital(), capital.getName(), String.format("%,d", capital.getPopulation()));
+                out.printf("|%-33s | %-39s | %-10s |\n", capital.getCapital(), capital.getName(), String.format("%,d", capital.getPopulation()));
             }
 
-            System.out.println("+-----------------------------------+-----------------------------------------+------------+");
-            System.out.println(capitals.size() + " countries found.");
+            out.println("+-----------------------------------+-----------------------------------------+------------+");
+            out.println(capitals.size() + " countries found.");
 
             // File Output to Markdown
             try {
@@ -453,7 +457,7 @@ public class App {
 
                 writer.write("\n" + capitals.size() + " capitals found.\n");
                 writer.close();
-                System.out.println("Report written to ./reports/" + report + ".md");
+                out.println("Report written to ./reports/" + report + ".md");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -470,23 +474,23 @@ public class App {
     public static void printCountries(List<Country> countries, String header, String report) {
         // Check if the countries list is null or empty
         if (countries == null || countries.isEmpty()) {
-            System.out.println("No countries found.");
+            out.println("No countries found.");
         } else {
             // Console Output
-            System.out.println("\n\n######## " + header + " ########");
-            System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
-            System.out.printf("| %-12s | %-39s | %-13s | %-27s | %-10s | %-33s |\n",
+            out.println("\n\n######## " + header + " ########");
+            out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
+            out.printf("| %-12s | %-39s | %-13s | %-27s | %-10s | %-33s |\n",
                     "Country Code", "Country Name", "Continent", "Region", "Population", "Capital");
-            System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
+            out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
 
             for (Country country : countries) {
-                System.out.printf("| %-12s | %-39s | %-13s | %-27s | %-10s | %-33s |\n",
+                out.printf("| %-12s | %-39s | %-13s | %-27s | %-10s | %-33s |\n",
                         country.getCountryCode(), country.getName(), country.getContinent(),
                         country.getRegion(), String.format("%,d", country.getPopulation()), country.getCapital());
             }
 
-            System.out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
-            System.out.println(countries.size() + " countries found.");
+            out.println("+--------------+-----------------------------------------+---------------+-----------------------------+------------+-----------------------------------+");
+            out.println(countries.size() + " countries found.");
 
             // File Output to Markdown
             try {
@@ -505,7 +509,7 @@ public class App {
 
                 writer.write("\n" + countries.size() + " countries found.\n");
                 writer.close();
-                System.out.println("Report written to ./reports/" + report + ".md");
+                out.println("Report written to ./reports/" + report + ".md");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -522,20 +526,20 @@ public class App {
     public static void printCities(List<City> cities, String header, String report) {
         // Check if the cities list is null or empty
         if (cities == null || cities.isEmpty()) {
-            System.out.println("No cities found.");
+            out.println("No cities found.");
         } else {
             // Console Output
-            System.out.println("\n\n######## " + header + " ########");
-            System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
-            System.out.printf("| %-34s | %-39s | %-27s | %-10s |\n", "City Name", "Country Name", "District", "Population");
-            System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
+            out.println("\n\n######## " + header + " ########");
+            out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
+            out.printf("| %-34s | %-39s | %-27s | %-10s |\n", "City Name", "Country Name", "District", "Population");
+            out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
 
             for (City city : cities) {
-                System.out.printf("| %-34s | %-39s | %-27s | %-10s |\n", city.getName(), city.getCountryName(), city.getDistrict(), String.format("%,d", city.getPopulation()));
+                out.printf("| %-34s | %-39s | %-27s | %-10s |\n", city.getName(), city.getCountryName(), city.getDistrict(), String.format("%,d", city.getPopulation()));
             }
 
-            System.out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
-            System.out.println(cities.size() + " cities found.");
+            out.println("+------------------------------------+-----------------------------------------+-----------------------------+------------+");
+            out.println(cities.size() + " cities found.");
 
             // File Output to Markdown
             try {
@@ -553,7 +557,7 @@ public class App {
 
                 writer.write("\n" + cities.size() + " cities found.\n");
                 writer.close();
-                System.out.println("Report written to ./reports/" + report + ".md");
+                out.println("Report written to ./reports/" + report + ".md");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -570,22 +574,22 @@ public class App {
     public static void printPopulationEach(List<Population> populations, String header, String report) {
         // Check if the list of populations is null or empty
         if (populations == null || populations.isEmpty()) {
-            System.out.println("No result found in variable"); // Print a message if no population data is available
+            out.println("No result found in variable"); // Print a message if no population data is available
         } else {
             // Print the header for the console output
-            System.out.println("\n\n######## " + header + " ########"); // Print the main header
-            System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+"); // Print the table separator
+            out.println("\n\n######## " + header + " ########"); // Print the main header
+            out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+"); // Print the table separator
             // Print the column titles for the console output
-            System.out.printf("| %-33s | %-15s | %-25s | %-25s |\n",
+            out.printf("| %-33s | %-15s | %-25s | %-25s |\n",
                     "Name",
                     "Total Population",
                     "Population Live In Cities",
                     "Population Not Live In Cities");
-            System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+"); // Print the table separator
+            out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+"); // Print the table separator
 
             // Iterate over the population list and print each population's details
             for (Population population : populations) {
-                System.out.printf("| %-33s | %,16d | %,15d [ %.2f%% ] | %,18d [ %.2f%% ] |\n",
+                out.printf("| %-33s | %,16d | %,15d [ %.2f%% ] | %,18d [ %.2f%% ] |\n",
                         population.getName() != null ? population.getName() : "World", // Use "World" if name is null
                         population.getTotalPopulation(),
                         population.getPopulationInCities(),
@@ -594,8 +598,8 @@ public class App {
                         population.getPercentageNotInCities());
             }
             // Print the footer of the console output
-            System.out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+"); // Print the table separator
-            System.out.println(populations.size() + " RESULTS FOUND IN THIS REPORT"); // Print the total number of results found
+            out.println("+-----------------------------------+------------------+---------------------------+-------------------------------+"); // Print the table separator
+            out.println(populations.size() + " RESULTS FOUND IN THIS REPORT"); // Print the total number of results found
 
             // File output to a Markdown report
             try {
@@ -619,7 +623,7 @@ public class App {
                 // Write the total results found at the end of the report
                 writer.write("\n" + populations.size() + " RESULTS FOUND IN THIS REPORT\n");
                 writer.close(); // Close the writer
-                System.out.println("Report written to ./reports/" + report + ".md"); // Print a message indicating where the report is saved
+                out.println("Report written to ./reports/" + report + ".md"); // Print a message indicating where the report is saved
             } catch (IOException e) {
                 e.printStackTrace(); // Print the stack trace if there's an error writing the report
             }
@@ -638,21 +642,21 @@ public class App {
     public static void printLanguageTable(List<Language> languages, String report) {
         // Check if the list of languages is null or empty
         if (languages == null || languages.isEmpty()) {
-            System.out.println("No results found."); // Print message if no results
+            out.println("No results found."); // Print message if no results
         } else {
             // Console Output: Print the table header
-            System.out.println("+-------------------+------------------+------------+");
-            System.out.printf("| %-17s | %-16s | %-10s |\n", "Language", "Population", "Percentage");
-            System.out.println("+-------------------+------------------+------------+");
+            out.println("+-------------------+------------------+------------+");
+            out.printf("| %-17s | %-16s | %-10s |\n", "Language", "Population", "Percentage");
+            out.println("+-------------------+------------------+------------+");
 
             // Iterate over the list of languages and print each language's details
             for (Language lang : languages) {
-                System.out.printf("| %-17s | %,16d | %10d%% |\n", lang.getLanguage(), lang.getPopulation(), lang.getPercentage());
+                out.printf("| %-17s | %,16d | %10d%% |\n", lang.getLanguage(), lang.getPopulation(), lang.getPercentage());
             }
 
             // Print the footer of the console output
-            System.out.println("+-------------------+------------------+------------+");
-            System.out.println(languages.size() + " results found."); // Print total results found
+            out.println("+-------------------+------------------+------------+");
+            out.println(languages.size() + " results found."); // Print total results found
 
             // File Output to Markdown: Create report file
             try {
@@ -672,7 +676,7 @@ public class App {
                 // Write the total results found at the end of the report
                 writer.write("\n" + languages.size() + " results found.\n");
                 writer.close(); // Close the writer
-                System.out.println("Report written to ./reports/" + report + ".md"); // Print a message indicating where the report is saved
+                out.println("Report written to ./reports/" + report + ".md"); // Print a message indicating where the report is saved
             } catch (IOException e) {
                 e.printStackTrace(); // Print the stack trace if there's an error writing the report
             }
@@ -725,18 +729,19 @@ public class App {
         List<Capital>CapitalByWorld = getPopulatedCapital(con, null,null,0);
         printCapitals(CapitalByWorld, "---------------------Most populated Capital [World]---------------------", "Most Populated Capital [World]");
         List<Capital>CapitalByContinent = getPopulatedCapital(con, "Continent","South America",0);
-        printCapitals(CapitalByContinent, "---------------------Most populated Capital [Continent][]---------------------", "Most Populated Capital [Continent]");
+        printCapitals(CapitalByContinent, "---------------------Most populated Capital [Continent][South America]---------------------", "Most Populated Capital [Continent]");
         List<Capital>CapitalByRegion = getPopulatedCapital(con, "Region","Polynesia",0);
         printCapitals(CapitalByRegion, "---------------------Most populated Capital [Region][Polynesia]---------------------", "Most Populated Capital [Region]");
 
         ////Top N populated capital cities by world, continent, region
         List<Capital>TopCapitalByWorld = getPopulatedCapital(con, null,null,5);
-        printCapitals(TopCapitalByWorld, "---------------------Top 5 populated cities [Continent][]---------------------", "Top 5 Most Populated Capital [World]");
+        printCapitals(TopCapitalByWorld, "---------------------Top 5 populated cities [World]---------------------", "Top 5 Most Populated Capital [World]");
         List<Capital>TopCapitalByContinent = getPopulatedCapital(con, "Continent","North America",5);
-        printCapitals(TopCapitalByContinent, "---------------------Top 5 populated Capital [Continent][]---------------------", "Top 5 Most Populated Capital [Continent]");
+        printCapitals(TopCapitalByContinent, "---------------------Top 5 populated Capital [Continent][North America]---------------------", "Top 5 Most Populated Capital [Continent]");
         List<Capital>TopCapitalByRegion = getPopulatedCapital(con, "Region","Caribbean",5);
         printCapitals(TopCapitalByRegion, "---------------------Top 5 populated Capital [Region][Caribbean]---------------------", "Top 5 Most Populated Capital [Region]");
 
+        ////Population output for all Continent, Region and Country
         List<Population> Population_of_Continent = getPopulation(con, "country.Continent", null);
         printPopulationEach(Population_of_Continent, "---------------------Population Report for Each Continent---------------------", "Each Continent Population Report");
         List<Population> Population_of_Region = getPopulation(con, "country.Region", null);
@@ -744,6 +749,7 @@ public class App {
         List<Population> Population_of_Country = getPopulation(con, "country.Name", null);
         printPopulationEach(Population_of_Country, "---------------------Population Report for Each Country---------------------","Each Country Population Report");
 
+        ////Population output for Each
         List<Population> World_Population = getPopulation(con, null, null);
         printPopulationEach(World_Population, "---------------------Population Of World---------------------","World Population");
         List<Population> Continent_Population = getPopulation(con, "country.Continent", "North America");
@@ -754,12 +760,12 @@ public class App {
         printPopulationEach(City_Population, "---------------------Population Report for City---------------------","City Population");
         List<Population> District_Population = getPopulation(con, "city.District", "Zuid-Holland");
         printPopulationEach(District_Population, "---------------------Population Report for District---------------------","District Population");
-
-        List<Language> languages = getLanguages(con);
-        printLanguageTable(languages, "Language Report");
-
         List<Population> Region_Population = getPopulation(con, "country.Region", "Southern Europe");
         printPopulationEach(Region_Population, "---------------------Population Report for Region---------------------"," Region Population");
+
+        ////Language report output
+        List<Language> languages = getLanguages(con);
+        printLanguageTable(languages, "Language Report");
     }
 
 // Need to run world.sql database before running App

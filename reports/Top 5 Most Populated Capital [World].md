@@ -1,4 +1,4 @@
-### ---------------------Top 5 populated cities [Continent][]---------------------
+### ---------------------Top 5 populated cities [World]---------------------
 
 | Capital | Country Name | Population |
 | --- | --- | --- |
