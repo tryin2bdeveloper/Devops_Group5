@@ -1,4 +1,4 @@
-### ---------------------Most populated Capital [Continent][]---------------------
+### ---------------------Most populated Capital [Continent][South America]---------------------
 
 | Capital | Country Name | Population |
 | --- | --- | --- |

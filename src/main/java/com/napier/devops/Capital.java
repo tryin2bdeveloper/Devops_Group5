@@ -1,9 +1,9 @@
 package com.napier.devops;
 
 public class Capital {
-    private String name;
-    private String capital;
-    private int population;
+    private final String name;
+    private final String capital;
+    private final int population;
 
 //    Constructor
     public Capital(String countryName, int  population, String capitalName) {

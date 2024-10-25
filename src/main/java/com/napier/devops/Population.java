@@ -1,12 +1,12 @@
 package com.napier.devops;
 
 public class Population {
-    private String name;
-    private long totalPopulation;
-    private long populationNotInCities;
-    private long populationInCities;
-    private double percentageInCities;
-    private double percentageNotInCities;
+    private final String name;
+    private final long totalPopulation;
+    private final long populationNotInCities;
+    private final long populationInCities;
+    private final double percentageInCities;
+    private final double percentageNotInCities;
 
     // Constructor
     public Population(String name, long totalPopulation, long populationNotInCities, long populationInCities, double percentageInCities, double percentageNotInCities) {

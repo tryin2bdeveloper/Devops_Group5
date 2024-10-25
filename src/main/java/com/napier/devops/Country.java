@@ -3,12 +3,12 @@ package com.napier.devops;
 import java.util.List;
 
 public class Country {
-    private String Code;  // Country Code
-    private String name;         // Country Name
-    private String continent;    // Continent
-    private String region;       // Region
-    private int population;       // Population
-    private String capital;      // Capital
+    private final String Code;  // Country Code
+    private final String name;         // Country Name
+    private final String continent;    // Continent
+    private final String region;       // Region
+    private final int population;       // Population
+    private final String capital;      // Capital
 
     // Constructor to initialize all fields
     public Country(String countryCode, String name, String continent, String region, int population, String capital) {
