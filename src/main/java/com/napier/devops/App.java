@@ -180,7 +180,8 @@ public class App {
             return new ArrayList<>();
         } else {
             // SQL query for language report
-            String que = "SELECT countrylanguage.Language, SUM(country.Population) AS Population " +
+            String que = "SELECT countrylanguage.Language, SUM(country.Population) AS Population, " +
+                    "(SELECT SUM(country.Population) FROM country) AS Total_Population " +
                     "FROM countrylanguage " +
                     "JOIN country ON countrylanguage.CountryCode = country.Code " +
                     "WHERE countrylanguage.Language IN ('Chinese', 'English', 'Hindi', 'Spanish', 'Arabic') " +
@@ -353,9 +354,12 @@ public class App {
                     while (rset.next()) {
                         String language = rset.getString("Language"); // Get the language name
                         int population = rset.getInt("Population"); // Get the population for that language
+                        long tot_population = rset.getLong("Total_Population");
 
-                        Language lang = new Language(language, population); // Create a Language object
-                        languages.add(lang); // Add the Language object to the list
+                        // Calculate percentage with double to avoid integer division
+                        int percentage = (int) ((population / (double) tot_population) * 100);
+                        Language lang = new Language(language, population, tot_population, percentage); // Create a Language object
+                        languages.add(lang);
                     }
                 } catch (SQLException e) { // Catch any SQL exceptions
                     System.out.println("SQL Error: " + e.getMessage()); // Log the error message
@@ -637,17 +641,17 @@ public class App {
             System.out.println("No results found."); // Print message if no results
         } else {
             // Console Output: Print the table header
-            System.out.println("+-------------------+------------------+");
-            System.out.printf("| %-17s | %-16s |\n", "Language", "Population");
-            System.out.println("+-------------------+------------------+");
+            System.out.println("+-------------------+------------------+------------+");
+            System.out.printf("| %-17s | %-16s | %-10s |\n", "Language", "Population", "Percentage");
+            System.out.println("+-------------------+------------------+------------+");
 
             // Iterate over the list of languages and print each language's details
             for (Language lang : languages) {
-                System.out.printf("| %-17s | %,16d |\n", lang.getLanguage(), lang.getPopulation());
+                System.out.printf("| %-17s | %,16d | %10d%% |\n", lang.getLanguage(), lang.getPopulation(), lang.getPercentage());
             }
 
             // Print the footer of the console output
-            System.out.println("+-------------------+------------------+");
+            System.out.println("+-------------------+------------------+------------+");
             System.out.println(languages.size() + " results found."); // Print total results found
 
             // File Output to Markdown: Create report file
@@ -657,12 +661,12 @@ public class App {
 
                 // Write the header for the Markdown report
                 writer.write("### Language Population Report\n\n");
-                writer.write("| Language | Population |\n");
-                writer.write("| --- | --- |\n");
+                writer.write("| Language | Population | Percentage |\n");
+                writer.write("| --- | --- | --- |\n");
 
                 // Write each language's details to the Markdown report
                 for (Language lang : languages) {
-                    writer.write("| " + lang.getLanguage() + " | " + String.format("%,d", lang.getPopulation()) + " |\n");
+                    writer.write("| " + lang.getLanguage() + " | " + String.format("%,d", lang.getPopulation()) + " | " + lang.getPercentage() + "% |\n");
                 }
 
                 // Write the total results found at the end of the report
@@ -674,9 +678,6 @@ public class App {
             }
         }
     }
-
-
-
 
     // Function to display various populated countries, cities, and capitals in table format
     public void Table_display() {
