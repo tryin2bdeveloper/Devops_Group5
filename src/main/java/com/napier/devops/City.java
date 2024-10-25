@@ -1,10 +1,10 @@
 package com.napier.devops;
 
 public class City {
-    private String name;
-    private String countryName;  // New field for Country Name
-    private String district;
-    private int population;
+    private final String name;
+    private final String countryName;  // New field for Country Name
+    private final String district;
+    private final int population;
 
     // Constructor
     public City(String name, String countryName, String district, int population) {

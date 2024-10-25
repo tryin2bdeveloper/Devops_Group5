@@ -46,7 +46,6 @@ public class App {
             }
         }
     }
-
     /**
      * Getter for the database connection.
      *
@@ -55,7 +54,6 @@ public class App {
     public Connection getConnection() {
         return con;  // Return the connection object
     }
-
     /**
      * Disconnect from the MySQL database.
      */
@@ -160,19 +158,16 @@ public class App {
             // Construct the base query
             String Capital_query = "SELECT city.Name AS capital, country.Name, country.Population " +
                     "FROM country JOIN city ON country.Capital = city.ID ";
-
             // If the key is "Name", "Continent", or "Region", filter using the country table
             if (key != null && value != null) {
                 Capital_query += "WHERE country." + key + " = '" + value + "' ";
             }
-
             // Ensure a positive limit value for the query and add some necessary text
             if (limit > 0) {
                 Capital_query += "ORDER BY country.Population DESC LIMIT " + limit;
             } else if (limit == 0) {
                 Capital_query += "ORDER BY country.Population DESC"; // No limit if zero
             }
-
             return getCapitalList(con, Capital_query);
         }
     }
@@ -415,7 +410,6 @@ public class App {
             return populations; // Return the list of populations
         }
     }
-
 
     /**
      * Prints a list of capitals in a table format and writes to a markdown file.
